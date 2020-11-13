@@ -12,7 +12,8 @@ class Player
 public:
 
 	//Constructors
-	Player();
+	/*Player();*/
+	Player(string n, int id, int army);
 	Player(list<string> t, int h);
 	
 
@@ -27,8 +28,12 @@ public:
 	void setPlayerId(int id);
 	int getPlayerId();
 
+	void setPlayerArmySize(int army);
+	int getPlayerArmySize();
+
 private:
-	string name;
+	int armySize;
+	std::string name;
 	int playerId;
 	list<string> territories;
 	int hand;

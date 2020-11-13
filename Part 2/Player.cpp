@@ -8,11 +8,19 @@ using namespace std;
 
 //default cunstructor
 //default cunstructor
-Player::Player() {
+//Player::Player() {
+//
+//	int hand{ 0 };
+//	string name{ "Player" };
+//
+//};
 
-	int hand{ 0 };
-	string name{ "Player" };
+//constructor
+Player::Player(std::string n, int id, int army) {
 
+	playerId = id;
+	name = n;
+	armySize = army;
 };
 
 //contructor 
@@ -91,4 +99,11 @@ void Player::setPlayerId(int id) {
 }
 int Player::getPlayerId() {
 	return playerId;
+}
+
+void Player::setPlayerArmySize(int army) {
+	armySize = army;
+}
+int Player::getPlayerArmySize() {
+	return armySize;
 }
