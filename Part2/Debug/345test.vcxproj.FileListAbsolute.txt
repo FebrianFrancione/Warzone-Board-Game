@@ -1,0 +1,2 @@
+C:\Users\febri\source\repos\345test\Debug\345test.exe
+C:\Users\febri\source\repos\345test\Debug\345test.pdb

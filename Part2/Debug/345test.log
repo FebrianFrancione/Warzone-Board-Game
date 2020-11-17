@@ -1,0 +1,12 @@
+﻿  startupPhase.cpp
+C:\Users\febri\source\repos\345test\startupPhase.cpp(176,18): warning C4244: 'initializing': conversion from '_Rep' to 'unsigned int', possible loss of data
+          with
+          [
+              _Rep=std::chrono::system_clock::rep
+          ]
+C:\Users\febri\source\repos\345test\startupPhase.cpp(217,19): warning C4244: 'initializing': conversion from '_Rep' to 'unsigned int', possible loss of data
+          with
+          [
+              _Rep=std::chrono::system_clock::rep
+          ]
+  345test.vcxproj -> C:\Users\febri\source\repos\345test\Debug\345test.exe
