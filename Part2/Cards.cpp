@@ -1,56 +1,129 @@
 #include "Cards.h"
 #include <iostream>
 #include <string>
+#include <vector>
+#include "Player.h"
 
-using namespace std
+using namespace std;
 
 
 class Card {
-
 public:
-	const string bomb = "Bomb";
-	const string reinforcement = "Reinforcement";
-	const string blockade = "Blockade";
-	const string airlift = "airlift";
-	const string diplomacy = "diplomacy";
+	//const string bomb = "Bomb";
+	//const string reinforcement = "Reinforcement";
+	//const string blockade = "Blockade";
+	//const string airlift = "airlift";
+	//const string diplomacy = "diplomacy";
 
-	//Card mrthods need to be here
+	//Card methods need to be here
 	Card();//default
-	Card(string cardName);//simple ciostructor
+	Card(string type);//simple constructor
 	Card(const Card& obj);//copy
 	~Card();//destructor
+	void play(Deck deck, Player player1, Player player2); // creates an order and adds to list of orders
+	void printCard();
+
+
+	//getters and setters
+	void setType(const string& type) {
+		this->type = type;
+	}
+
+	string getType()const {
+		return this->type;
+	}
 private:
-	string* type;
+	string type;
+};
+
+//inheritance class for cards
+class Bomb : public Card {
+public:
+
+private:
 
 };
 
-//classes functions here
-Card() {
-	this.type = "";
-}
+class Reinforcement : public Card {
+public:
+private:
 
-Card(string cardName) {
-	this.type = cardName;
-}
 
-//copy constructor
-Card(const Card& obj) {
-	// body of constructor
-	cout << "copy constructor allocating ptr" << endl;
-	type = new string;
-	*type = *obj.type; // copy the value using deep copy
-}
+};
+class Blockade : public Card {
+public:
+private:
 
-~Card(void) {
-	cout << "Freeing Card Memory";
-	delete type;
-}
 
-void printCard() {
-	cout << "Here are the cards detail. Card type: " << type << endl;
+};
+class Airlift : public Card {
+public:
+private:
 
-}
+
+};
+class Diplomacy : public Card {
+public:
+private:
+
+};
+
+
+
+
+class Hand {
+public:
+	vector<Card> hand;
+private:
+	int max_cards_in_hand;
+
+};
 
 class Deck {
-	//hasmap
+public:
+	/* draw(Player player);*/
+	 //getter and setter
+	void setCards_in_deck(const vector<Card>& Cards_in_Deck) {
+		this->Cards_in_Deck = Cards_in_Deck;
+	}
+
+	vector<Card> getCards_in_Deck()const {
+		return this->Cards_in_Deck;
+	}
+
+private:
+	vector<Card> Cards_in_Deck;
 };
+
+
+
+
+
+//Card::play(Player player) {
+//}
+//classes functions here
+Card::Card() {
+	type = "";
+}
+Card::Card(string type) {
+	type = type;
+}
+//copy constructor
+Card::Card(const Card& obj) {
+	// body of constructor
+	cout << "copy constructor allocating ptr" << endl;
+	type = obj.type; // copy the value using deep copy
+}
+Card::~Card(void) {
+	cout << "Freeing Card Memory";
+}
+
+void Card::play() {
+
+}
+void Card::printCard() {
+	cout << "Here are the cards detail. Card type: " << type << endl;
+}
+
+//Deck::draw() {
+//}
