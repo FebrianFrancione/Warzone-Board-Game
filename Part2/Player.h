@@ -37,11 +37,12 @@ public:
 
 	vector<string>playerTerritories;
 	list<string> territories;
+	//vector<Hand> hand;
 private:
 	int armySize;
 	std::string name;
 	int playerTurnId;
-	
+
 	int hand;
 	list<string> orders;
 };

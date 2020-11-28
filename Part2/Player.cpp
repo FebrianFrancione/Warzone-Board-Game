@@ -2,6 +2,7 @@ using namespace std;
 #include "Player.h"
 #include <iostream>
 #include <string>
+#include "Cards.h"
 
 
 
@@ -20,11 +21,12 @@ Player::Player(std::string n, int id, int army) {
 	//Player::Player(std::string n, int id, int army, list<string> t, int h) {
 
 
-		name = n;
+	name = n;
 	playerTurnId = id;
 
 	armySize = army;
 	vector<string> playerTerritories;
+	/*vector<Hand> hand;*/
 	//territories = t;
 	//hand = h;
 };
