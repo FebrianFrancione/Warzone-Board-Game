@@ -85,18 +85,57 @@ Diplomacy::Diplomacy() {
 //std::vector<Card> Cards_in_Deck = generateDeck();
 
 
-void Deck::generateDeck() {
-	//generating deck
+Deck::Deck() {
 
-	do {
-
-		game_deck.push_back(new Card());
-		game_deck.push_back(new Bomb());
-		game_deck.push_back(new Reinforcement());
-		game_deck.push_back(new Blockade());
-		game_deck.push_back(new Diplomacy());
-		game_deck.push_back(new Airlift());
-	} while (game_deck.size() < 52);
 }
+std::vector<Card*> Deck::generateDeck(std::vector <Card*> playing_deck, int max_deck_size) {
+	//generating deck
+	while (playing_deck.size() <= max_deck_size) {
+
+		playing_deck.push_back(new Bomb());
+
+		playing_deck.push_back(new Reinforcement());
+
+		playing_deck.push_back(new Blockade());
+
+		playing_deck.push_back(new Diplomacy());
+
+		playing_deck.push_back(new Airlift());
 
 
+		/*	if (max_deck_size - playing_deck.size() < 5) {
+				extra = max_deck_size - playing_deck.size();
+				switch (extra) {
+				case 1:
+					playing_deck.push_back(new Bomb());
+
+					playing_deck.push_back(new Reinforcement());
+
+					playing_deck.push_back(new Blockade());
+
+					playing_deck.push_back(new Diplomacy());
+				case 2:
+					playing_deck.push_back(new Bomb());
+
+					playing_deck.push_back(new Reinforcement());
+
+					playing_deck.push_back(new Blockade());
+				case 3:
+					playing_deck.push_back(new Bomb());
+
+					playing_deck.push_back(new Reinforcement());
+				case 4:
+					playing_deck.push_back(new Bomb());
+				}
+			}*/
+
+
+
+	}
+	while (playing_deck.size() > max_deck_size) {
+		playing_deck.pop_back();
+	}
+
+
+	return playing_deck;
+}

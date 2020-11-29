@@ -74,12 +74,11 @@ private:
 class Deck {
 public:
 	//aiming ot h
-	std::vector<Card*> game_deck;
+
 	Deck();
 	Deck(Deck& otherDeck);
-	void draw(Card hand[]);
-
-	void generateDeck();
+	/*void draw(Card hand[]);*/
+	std::vector<Card*> generateDeck(std::vector <Card*> playing_deck, int max_deck_size);
 
 	/* draw(Player player);*/
 	/*vector<Card> Cards_in_Deck;*/

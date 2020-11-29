@@ -3,26 +3,16 @@
 
 int main() {
 
-	Card card("freedom");
-	cout << card;
-	Bomb card2;
-	cout << card2 << endl;
-	Reinforcement card3;
-	cout << card3 << endl;
-	Blockade card4;
-	cout << card4 << endl;
-	Airlift card5;
-	cout << card5 << endl;
-
 	Deck deck;
+	std::vector <Card*> playing_deck;
+	int max_deck_size = 52;
+	playing_deck = deck.generateDeck(playing_deck, max_deck_size);
+	cout << playing_deck.size() << endl;
 
-	deck.generateDeck();
-	deck.game_deck.size();
-
-	/*for (int j = 0; j < 52; j++) {
-		cout << Cards_in_Deck[j]. << endl;
-	}*/
-
+	for (int i = 0; i < playing_deck.size(); i++) {
+		cout << playing_deck[i]->type << "-";
+	}
+	cout << endl;
 
 
 }
