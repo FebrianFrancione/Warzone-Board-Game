@@ -29,25 +29,25 @@ std::ostream& operator<<(ostream& os, const Card& data)
 }
 
 Bomb::Bomb() {
-	type = "Bomb Card";
+	type = "Bomb Card ";
 }
 
 
 Reinforcement::Reinforcement() {
-	type = "Reinforcement Card";
+	type = "Reinforcement Card ";
 }
 
 Blockade::Blockade() {
-	type = "Blockade Card";
+	type = "Blockade Card ";
 }
 
 
 Airlift::Airlift() {
-	type = "Airlift Card";
+	type = "Airlift Card ";
 }
 
 Diplomacy::Diplomacy() {
-	type = "Diplomacy Card";
+	type = "Diplomacy Card ";
 }
 
 
@@ -110,19 +110,22 @@ std::vector<Card*> Deck::generateDeck(std::vector <Card*> playing_deck, int max_
 	return playing_deck;
 }
 
-void Deck::Draw(std::vector <Card*> deck, std::vector <Card*> player_deck) {
+std::vector<Card*> Deck::Draw(std::vector <Card*> deck, std::vector <Card*> player_deck) {
 	//shuffle the cards
-	for (size_t k = 0; k < deck.size(); k++) {
-		cout << *deck.at(k);
-	}
-	cout << "_______________________________________________" << endl;
+
+	cout << endl << "_______________________________________________" << endl;
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 	std::shuffle(std::begin(deck), deck.end(), std::default_random_engine(seed));
 
-	for (int k = 0; k < deck.size(); k++) {
-		cout << *deck.at(k);
-	}
+	cout << "Deck has been shuffled! " << endl;
 
+
+	//this causes issues in the code
+	int n = deck.size();
+    player_deck.push_back(deck[n-1]);
+    cout << player_deck.size();
+    return player_deck;
+	/*deck.pop_back();*/
 	/*int n = deck.size();*/
 	/*hand.push_back(playing_deck[n - 1]);*/
 	/*cout << player_deck.at(n);

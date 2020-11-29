@@ -8,9 +8,6 @@
 #include <algorithm>
 #include "Player.h"
 
-
-
-
 class Card {
 
 public:
@@ -89,7 +86,7 @@ public:
 	/*void draw(Card hand[]);*/
 	std::vector<Card*> generateDeck(std::vector <Card*> playing_deck, int max_deck_size);
 
-	void Draw(std::vector <Card*> player_deck, std::vector <Card*> deck);
+    std::vector<Card*> Draw(std::vector <Card*> player_deck, std::vector <Card*> deck);
 
 private:
 

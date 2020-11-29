@@ -16,13 +16,13 @@ int main() {
 	for (auto & i : playing_deck) {
 		cout << i->type << "-";
 	}
-	cout << "___________________________________________" << endl;
+	cout << endl <<  "___________________________________________" << endl;
 
 	std::vector<Card*> player1_hand;
+	cout << "Player1 hand size: " << player1_hand.size();
+	player1_hand = deck.Draw(playing_deck, player1_hand);
 
-/*	cout << "Player1 hand size: " << player1_hand.size();*/
-	deck.Draw(playing_deck, player1_hand);
-
+    cout << "Player1 hand size: " << player1_hand.size();
 
 }
 
