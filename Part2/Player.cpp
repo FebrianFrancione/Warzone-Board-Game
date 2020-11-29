@@ -14,6 +14,15 @@ using namespace std;
 //
 //};
 
+//copy
+Player::Player(const Player& p)
+{
+	name = p.name;
+	armySize = p.armySize;
+	/*player1_hand = p.player1_hand;*/
+
+}
+
 //constructor
 Player::Player(std::string n, int id, int army) {
 	//Player::Player(std::string n, int id, int army, list<string> t, int h) {
@@ -24,7 +33,6 @@ Player::Player(std::string n, int id, int army) {
 
 	armySize = army;
 	vector<string> playerTerritories;
-	std::vector<Card*> player_hand{ new Bomb(), new Airlift() };
 	//territories = t;
 	//hand = h;
 };
