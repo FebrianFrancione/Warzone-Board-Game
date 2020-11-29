@@ -5,7 +5,7 @@
 #include "Player.h"
 
 Card::Card() {
-	type = "no-type card";
+	type = "Default Card";
 }
 
 Card::Card(std::string t) {
@@ -20,7 +20,7 @@ Card::Card(const Card& obj) {
 }
 
 Card::~Card(void) {
-	cout << "Freeing Card Memory";
+	cout << "Freeing Card Memory" << endl;
 }
 
 //string Card::printCard() {
@@ -34,44 +34,69 @@ std::ostream& operator<<(ostream& os, const Card& data)
 }
 
 Bomb::Bomb() {
-	type = "Bomb";
+	type = "Bomb Card";
 }
 
-Bomb::Bomb(std::string t) {
-	type = t;
+//Bomb::Bomb(std::string t) {
+//	type = t;
+//}
+
+
+
+Reinforcement::Reinforcement() {
+	type = "Reinforcement Card";
 }
 
-
-//
-//Reinforcement::Reinforcement() {
-//	type = "Reinforcement";
-//}
-//Blockade::Blockade() {
-//	type = "Blockade";
-//}
-//
-//Airlift::Airlift() {
-//	type = "Airlift";
-//}
-//
-//Diplomacy::Diplomacy() {
-//	type = "Diplomacy";
+//Reinforcement::Reinforcement(std::string t) {
+//	type = t;
 //}
 
 
-//Deck::Deck() {
-//	//generating deck
-//
-//	do {
-//
-//		game_deck.push_back(Card());
-//		game_deck.push_back(Bomb());
-//		game_deck.push_back(Reinforcement());
-//		game_deck.push_back(Blockade());
-//		game_deck.push_back(Diplomacy());
-//		game_deck.push_back(Airlift());
-//	} while (game_deck.size() < 52);
-//
+Blockade::Blockade() {
+	type = "Blockade Card";
+}
+
+//Blockade::Blockade(std::string t) {
+//	type = t;
 //}
+
+
+Airlift::Airlift() {
+	type = "Airlift Card";
+}
+
+//Airlift::Airlift(std::string t) {
+//	type = t;
+//}
+
+Diplomacy::Diplomacy() {
+	type = "Diplomacy Card";
+}
+
+//Diplomacy::Diplomacy(std::string t) {
+//	type = t;
+//}
+
+//std::vector<Card>& Deck::GetVect()
+//{
+//	return Cards_in_Deck;
+//}
+
+//std::vector<Card> Cards_in_Deck = generateDeck();
+
+
+void Deck::generateDeck() {
+	//generating deck
+
+	do {
+
+		game_deck.push_back(new Card());
+		game_deck.push_back(new Bomb());
+		game_deck.push_back(new Reinforcement());
+		game_deck.push_back(new Blockade());
+		game_deck.push_back(new Diplomacy());
+		game_deck.push_back(new Airlift());
+	} while (game_deck.size() < 52);
+}
 
 

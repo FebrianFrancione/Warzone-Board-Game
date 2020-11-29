@@ -18,7 +18,6 @@ public:
 	Card(const Card& obj);//copy
 	~Card();//destructor
 	/*void play(Deck deck, Player player1, Player player2);*/ // creates an order and adds to list of orders
-
 	friend std::ostream& operator<< (std::ostream& out, const Card& data);
 };
 
@@ -27,38 +26,44 @@ public:
 class Bomb : public Card {
 public:
 	Bomb();
-	Bomb(std::string t);
+	//Bomb(std::string t);
+};
+
+class Reinforcement : public Card {
+public:
+	Reinforcement();
+	//Reinforcement(std::string t);
+private:
+
+
 };
 
 
+class Blockade : public Card {
+public:
+	Blockade();
+	//Blockade(std::string t);
+private:
 
-//class Reinforcement : public Card {
-//public:
-//	Reinforcement();
-//private:
-//
-//
-//};
-//class Blockade : public Card {
-//public:
-//	Blockade();
-//private:
-//
-//
-//};
-//class Airlift : public Card {
-//public:
-//	Airlift();
-//private:
-//
-//
-//};
-//class Diplomacy : public Card {
-//public:
-//	Diplomacy();
-//private:
-//
-//};
+
+};
+
+class Airlift : public Card {
+public:
+	Airlift();
+	//Airlift(std::string t);
+private:
+
+
+};
+
+class Diplomacy : public Card {
+public:
+	Diplomacy();
+	//Diplomacy(std::string t);
+private:
+
+};
 
 //class Hand {
 //public:
@@ -66,18 +71,21 @@ public:
 //	int max_cards_in_hand;
 //};
 
-//class Deck {
-//public:
-//	//aiming ot h
-//	vector<Card> game_deck;
-//	Deck();
-//	Deck(Deck& otherDeck);
-//	void draw(Card hand[]);
-//
-//	void generateDeck();
-//	/* draw(Player player);*/
-//	vector<Card> Cards_in_Deck;
-//private:
-//	/*int deck_size;*/
-//
-//};
+class Deck {
+public:
+	//aiming ot h
+	std::vector<Card*> game_deck;
+	Deck();
+	Deck(Deck& otherDeck);
+	void draw(Card hand[]);
+
+	void generateDeck();
+
+	/* draw(Player player);*/
+	/*vector<Card> Cards_in_Deck;*/
+	/*std::vector<Card> Cards_in_Deck = Deck::generateDeck();*/
+	/*std::vector<Card>& GetVect();*/
+private:
+	/*int deck_size;*/
+
+};
