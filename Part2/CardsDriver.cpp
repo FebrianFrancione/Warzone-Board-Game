@@ -13,14 +13,14 @@ int main() {
 	playing_deck = deck.generateDeck(playing_deck, max_deck_size);
 	cout << playing_deck.size() << endl;
 
-	for (int i = 0; i < playing_deck.size(); i++) {
-		cout << playing_deck[i]->type << "-";
+	for (auto & i : playing_deck) {
+		cout << i->type << "-";
 	}
 	cout << "___________________________________________" << endl;
 
 	std::vector<Card*> player1_hand;
 
-	cout << "Player1 hand size: " << player1_hand.size();
+/*	cout << "Player1 hand size: " << player1_hand.size();*/
 	deck.Draw(playing_deck, player1_hand);
 
 

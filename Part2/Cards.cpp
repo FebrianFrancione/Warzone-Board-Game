@@ -123,10 +123,10 @@ void Deck::Draw(std::vector <Card*> deck, std::vector <Card*> player_deck) {
 		cout << *deck.at(k);
 	}
 
-	int n = deck.size();
+	/*int n = deck.size();*/
 	/*hand.push_back(playing_deck[n - 1]);*/
-	cout << player_deck.at(n);
-	deck.pop_back();
+	/*cout << player_deck.at(n);
+	deck.pop_back();*/
 }
 Deck::~Deck(void) {
 	cout << "Freeing Deck Memory" << endl;
