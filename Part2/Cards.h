@@ -70,9 +70,12 @@ private:
 };
 
 //class Hand {
+//
 //public:
-//	vector<Card> hand;
-//	int max_cards_in_hand;
+//	Hand();
+//	Hand(const Hand& otherHand);
+//private:
+//	vector<Card*> hand;
 //};
 
 class Deck {
@@ -84,7 +87,7 @@ public:
 	/*void draw(Card hand[]);*/
 	std::vector<Card*> generateDeck(std::vector <Card*> playing_deck, int max_deck_size);
 
-	void Draw(Card hand[], std::vector <Card*> playing_deck);
+	/*void Draw(std::vector<Card*> hand, std::vector <Card*> playing_deck);*/
 
 	/* draw(Player player);*/
 	/*vector<Card> Cards_in_Deck;*/

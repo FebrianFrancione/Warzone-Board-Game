@@ -1,2 +1,8 @@
-﻿  CardsDriver.cpp
-  345test.vcxproj -> C:\Users\febri\source\repos\COMP-345-Warzone\Part2\x64\Debug\345test.exe
+﻿  Cards.cpp
+C:\Users\febri\source\repos\COMP-345-Warzone\Part2\Player.h(42,14): error C2065: 'Card': undeclared identifier
+C:\Users\febri\source\repos\COMP-345-Warzone\Part2\Player.h(42,19): error C2059: syntax error: '>'
+  CardsDriver.cpp
+C:\Users\febri\source\repos\COMP-345-Warzone\Part2\Player.h(42,14): error C2065: 'Card': undeclared identifier
+C:\Users\febri\source\repos\COMP-345-Warzone\Part2\Player.h(42,19): error C2059: syntax error: '>'
+  Player.cpp
+  Generating Code...

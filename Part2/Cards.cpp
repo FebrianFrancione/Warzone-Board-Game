@@ -21,9 +21,6 @@ Card::~Card(void) {
 	cout << "Freeing Card Memory" << endl;
 }
 
-//string Card::printCard() {
-//	return "Here are the cards detail. Card type: " << type << endl;
-//}
 
 std::ostream& operator<<(ostream& os, const Card& data)
 {
@@ -35,53 +32,35 @@ Bomb::Bomb() {
 	type = "Bomb Card";
 }
 
-//Bomb::Bomb(std::string t) {
-//	type = t;
-//}
-
-
 
 Reinforcement::Reinforcement() {
 	type = "Reinforcement Card";
 }
 
-//Reinforcement::Reinforcement(std::string t) {
-//	type = t;
-//}
-
-
 Blockade::Blockade() {
 	type = "Blockade Card";
 }
-
-//Blockade::Blockade(std::string t) {
-//	type = t;
-//}
 
 
 Airlift::Airlift() {
 	type = "Airlift Card";
 }
 
-//Airlift::Airlift(std::string t) {
-//	type = t;
-//}
-
 Diplomacy::Diplomacy() {
 	type = "Diplomacy Card";
 }
 
-//Diplomacy::Diplomacy(std::string t) {
-//	type = t;
-//}
 
-//std::vector<Card>& Deck::GetVect()
+//Hand::Hand() {
+//	std::vector<Card> hand;
+//}
+//
+//Hand::Hand(const Hand& otherHand)
 //{
-//	return Cards_in_Deck;
+//	for (int i = 0; i <= 7; i++) {
+//		hand.push_back(otherHand.hand[i]);
+//	}
 //}
-
-//std::vector<Card> Cards_in_Deck = generateDeck();
-
 
 Deck::Deck() {
 
@@ -138,9 +117,27 @@ std::vector<Card*> Deck::generateDeck(std::vector <Card*> playing_deck, int max_
 	return playing_deck;
 }
 
-void Draw(Card hand[], std::vector <Card*> playing_deck) {
-	//shuffle the players and set playerTurn ID
-	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-	std::shuffle(std::begin(playing_deck), std::end(playing_deck), std::default_random_engine(seed));
-
-}
+//void Draw(std::vector <Card*> playing_deck) {
+//	//shuffle the cards
+//	for (int k = 0; k < playing_deck.size(); k++) {
+//		cout << playing_deck[k];
+//	}
+//
+//	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+//	std::shuffle(std::begin(playing_deck), std::end(playing_deck), std::default_random_engine(seed));
+//
+//	for (int k = 0; k < playing_deck.size(); k++) {
+//		cout << playing_deck[k];
+//	}
+//
+//	int n = playing_deck.size();
+//	/*hand.push_back(playing_deck[n - 1]);*/
+//	cout << hand[1];
+//	playing_deck.pop_back();
+//
+//
+//
+//	//int n = playing_deck.size();
+//	//hand.push_back(territories[n - 1]);
+//	//territories.pop_back();
+//}

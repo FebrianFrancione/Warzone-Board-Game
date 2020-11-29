@@ -1,8 +1,6 @@
 using namespace std;
 #include "Player.h"
-#include <iostream>
-#include <string>
-#include "Cards.h"
+
 
 
 
@@ -26,7 +24,7 @@ Player::Player(std::string n, int id, int army) {
 
 	armySize = army;
 	vector<string> playerTerritories;
-	/*vector<Hand> hand;*/
+	std::vector<Card*> player_hand{ new Bomb(), new Airlift() };
 	//territories = t;
 	//hand = h;
 };

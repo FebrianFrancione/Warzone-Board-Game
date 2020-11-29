@@ -5,7 +5,7 @@
 
 int main() {
 
-	Player Player1{ "Player1", 0, 0 };
+	Player player1{ "Player1", 0, 0 };
 	Deck deck;
 	std::vector <Card*> playing_deck;
 	int max_deck_size = 52;
@@ -16,9 +16,12 @@ int main() {
 		cout << playing_deck[i]->type << "-";
 	}
 	cout << endl;
+	player1.player_hand.push_back(new Bomb());
+	cout << player1.player_hand.size();
 
 
 }
+
 
 
 //Hand cards_in_hand;

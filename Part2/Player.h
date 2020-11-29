@@ -4,6 +4,8 @@
 #include <list>
 #include <string>
 #include <vector>
+#include "Cards.h"
+
 
 using namespace std;
 
@@ -16,7 +18,7 @@ public:
 	/*Player();*/
 	Player(std::string n, int id, int army);
 
-	Player(std::string n, int id, int army, list<string> t, int h);
+	//Player(std::string n, int id, int army, list<string> t, int h);
 
 	/*Player(list<string> t, int h);*/
 	~Player();
@@ -37,7 +39,7 @@ public:
 
 	vector<string>playerTerritories;
 	list<string> territories;
-	//vector<Hand> hand;
+	std::vector<Card*> player_hand;
 private:
 	int armySize;
 	std::string name;
