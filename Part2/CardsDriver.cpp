@@ -1,8 +1,11 @@
 #include "Cards.h"
+#include "Player.h"
+
 
 
 int main() {
 
+	Player Player1{ "Player1", 0, 0 };
 	Deck deck;
 	std::vector <Card*> playing_deck;
 	int max_deck_size = 52;

@@ -3,7 +3,11 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <chrono> 
+#include <random>
+#include <algorithm>
 #include "Player.h"
+
 
 
 
@@ -79,6 +83,8 @@ public:
 	Deck(Deck& otherDeck);
 	/*void draw(Card hand[]);*/
 	std::vector<Card*> generateDeck(std::vector <Card*> playing_deck, int max_deck_size);
+
+	void Draw(Card hand[], std::vector <Card*> playing_deck);
 
 	/* draw(Player player);*/
 	/*vector<Card> Cards_in_Deck;*/

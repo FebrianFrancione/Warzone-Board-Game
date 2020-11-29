@@ -1,8 +1,6 @@
 #include "Cards.h"
-#include <iostream>
-#include <string>
-#include <vector>
 #include "Player.h"
+
 
 Card::Card() {
 	type = "Default Card";
@@ -138,4 +136,11 @@ std::vector<Card*> Deck::generateDeck(std::vector <Card*> playing_deck, int max_
 
 
 	return playing_deck;
+}
+
+void Draw(Card hand[], std::vector <Card*> playing_deck) {
+	//shuffle the players and set playerTurn ID
+	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+	std::shuffle(std::begin(playing_deck), std::end(playing_deck), std::default_random_engine(seed));
+
 }
