@@ -1,3 +1,4 @@
+/*
 #include "Orders.h";
 using namespace std;
 
@@ -11,7 +12,8 @@ void f1() {
 	playerList.add(new Airlift());
 	playerList.add(new Negotiate());
 
-	/*cout << playerList;
+	*/
+/*cout << playerList;
 
 	playerList.move(0, 4);
 	cout << playerList;
@@ -23,7 +25,8 @@ void f1() {
 	cout << playerList;
 
 	playerList.deleteOrder(4);
-	cout << playerList;*/
+	cout << playerList;*//*
+
 	for (int i = 0; i < 100; i++) {
 		playerList.add(new Deploy());
 	}
@@ -33,4 +36,4 @@ int main() {
 
 	f1();
 
-}
+}*/

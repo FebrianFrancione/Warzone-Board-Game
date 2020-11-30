@@ -25,18 +25,18 @@ public:
 
 
 //inheritance class for cards
-class Bomb : public Card {
+class BombCard : public Card {
 public:
-	Bomb();
+    BombCard();
 	//Bomb(std::string t);
 	/*Play(Player player1, Player player2, Territory thisTerr, Territory otherTerr);*/
      virtual void Play();
 };
 
 
-class Reinforcement : public Card {
+class ReinforcementCard : public Card {
 public:
-	Reinforcement();
+    ReinforcementCard();
 	//Reinforcement(std::string t);
     /*Play(Player player1, Player player2, Territory thisTerr, Territory otherTerr);*/
     virtual void Play();
@@ -44,9 +44,9 @@ private:
 };
 
 
-class Blockade : public Card {
+class BlockadeCard : public Card {
 public:
-	Blockade();
+	BlockadeCard();
 	//Blockade(std::string t);
     /*Play(Player player1, Player player2, Territory thisTerr, Territory otherTerr);*/
   virtual void Play();
@@ -55,9 +55,9 @@ private:
 
 };
 
-class Airlift : public Card {
+class AirliftCard : public Card {
 public:
-	Airlift();
+    AirliftCard();
 	//Airlift(std::string t);
     /*Play(Player player1, Player player2, Territory thisTerr, Territory otherTerr);*/
     virtual void Play();
@@ -66,9 +66,9 @@ private:
 
 };
 
-class Diplomacy : public Card {
+class DiplomacyCard : public Card {
 public:
-	Diplomacy();
+    DiplomacyCard();
 	//Diplomacy(std::string t);
     /*Play(Player player1, Player player2, Territory thisTerr, Territory otherTerr);*/
     virtual void Play();

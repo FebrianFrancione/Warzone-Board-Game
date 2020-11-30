@@ -28,25 +28,25 @@ std::ostream& operator<<(ostream& os, const Card& data)
 	return os;
 }
 
-Bomb::Bomb() {
+BombCard::BombCard() {
 	type = "Bomb Card ";
 }
 
 
-Reinforcement::Reinforcement() {
+ReinforcementCard::ReinforcementCard() {
 	type = "Reinforcement Card ";
 }
 
-Blockade::Blockade() {
+BlockadeCard::BlockadeCard() {
 	type = "Blockade Card ";
 }
 
 
-Airlift::Airlift() {
+AirliftCard::AirliftCard() {
 	type = "Airlift Card ";
 }
 
-Diplomacy::Diplomacy() {
+DiplomacyCard::DiplomacyCard() {
 	type = "Diplomacy Card ";
 }
 
@@ -64,15 +64,15 @@ void Deck::generateDeck() {
 	std::vector<Card*> playing_deck;
 	while (playing_deck.size() <= max_deck_size) {
 
-		playing_deck.push_back(new Bomb());
+		playing_deck.push_back(new BombCard());
 
-		playing_deck.push_back(new Reinforcement());
+		playing_deck.push_back(new ReinforcementCard());
 
-		playing_deck.push_back(new Blockade());
+		playing_deck.push_back(new BlockadeCard());
 
-		playing_deck.push_back(new Diplomacy());
+		playing_deck.push_back(new DiplomacyCard());
 
-		playing_deck.push_back(new Airlift());
+		playing_deck.push_back(new AirliftCard());
 
 
 		/*	if (max_deck_size - playing_deck.size() < 5) {
@@ -149,7 +149,7 @@ void Card::Play(){
     cout << "Default play Card" << endl;
 }
 //Bomb::Play(Player player1, Player player2, Territory thisTerr, Territory otherTerr){
-void Bomb::Play(){
+void BombCard::Play(){
 /*otherTerr.setArmies(troopsRemain);
 
 if (otherTerr.getArmies() < 0) {
@@ -159,7 +159,7 @@ cout << "Bomb Card played. Enemy Territory's army has been halved. If armies = 0
 }
 
 //Bomb::Play(Player player1, Player player2, Territory thisTerr, Territory otherTerr){
-void Reinforcement::Play(){
+void ReinforcementCard::Play(){
 /*otherTerr.setArmies(troopsRemain);
 
 if (otherTerr.getArmies() < 0) {
@@ -169,7 +169,7 @@ otherTerr.setArmies(0);*/
 }
 
 //Bomb::Play(Player player1, Player player2, Territory thisTerr, Territory otherTerr){
-void Blockade::Play(){
+void BlockadeCard::Play(){
 /*otherTerr.setArmies(troopsRemain);
 
 if (otherTerr.getArmies() < 0) {
@@ -179,7 +179,7 @@ otherTerr.setArmies(0);*/
 }
 
 //Bomb::Play(Player player1, Player player2, Territory thisTerr, Territory otherTerr){
-void Airlift::Play(){
+void AirliftCard::Play(){
 /*otherTerr.setArmies(troopsRemain);
 
 if (otherTerr.getArmies() < 0) {
@@ -189,7 +189,7 @@ otherTerr.setArmies(0);*/
 }
 
 //Bomb::Play(Player player1, Player player2, Territory thisTerr, Territory otherTerr){
-void Diplomacy::Play(){
+void DiplomacyCard::Play(){
 /*otherTerr.setArmies(troopsRemain);
 
 if (otherTerr.getArmies() < 0) {
