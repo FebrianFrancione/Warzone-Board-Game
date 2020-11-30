@@ -18,7 +18,8 @@ public:
 
 	Card(const Card& obj);//copy
 	~Card();//destructor
-	/*void play(Deck deck, Player player1, Player player2);*/ // creates an order and adds to list of orders
+	void play(Player player1, Player player2); // creates an order and adds to list of orders
+
 	friend std::ostream& operator<< (std::ostream& out, const Card& data);
 };
 
@@ -66,7 +67,7 @@ private:
 
 };
 
-class Hand {
+/*class Hand {
 
 public:
 	Hand();
@@ -74,7 +75,8 @@ public:
 	~Hand();
 private:
 	vector<Card*> hand;
-};
+};*/
+
 
 class Deck {
 public:
@@ -88,9 +90,5 @@ public:
 	/*void draw(Card hand[]);*/
 	void generateDeck();
 
-    std::vector<Card*> Draw(std::vector <Card*> player_deck, std::vector <Card*> deck);
-
-private:
-
-
+    std::vector<Card*> Draw(std::vector <Card*> player_deck);
 };

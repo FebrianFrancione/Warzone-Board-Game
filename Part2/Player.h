@@ -42,6 +42,7 @@ public:
 	vector<string> playerTerritories;
 	list<string> territories;
 
+
 private:
 	int armySize;
 	std::string name;

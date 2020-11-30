@@ -51,9 +51,9 @@ Diplomacy::Diplomacy() {
 }
 
 
-Hand::~Hand(void) {
+/*Hand::~Hand(void) {
 	cout << "Freeing Hand Memory" << endl;
-}
+}*/
 
 Deck::Deck() {
 
@@ -109,7 +109,7 @@ void Deck::generateDeck() {
 	cout << "Deck generated" << endl;
 }
 
-std::vector<Card*> Deck::Draw(std::vector <Card*> deck, std::vector <Card*> player_deck) {
+std::vector<Card*> Deck::Draw(std::vector <Card*> player_deck) {
 
 	//this causes issues in the code
 	int n = deck.size();
@@ -120,13 +120,11 @@ std::vector<Card*> Deck::Draw(std::vector <Card*> deck, std::vector <Card*> play
     cout << "Player deck card: " << player_deck.at(0)->type << endl;
     deck.pop_back();
 
-
-
     for(int i = 50 ;i < deck.size(); i++){
         cout << deck[i]->type;
     }
-    cout << endl << "Deck size: " << deck.size();
-    return player_deck, deck;
+    cout << endl << "Deck size: " << deck.size() << endl;
+    return player_deck;
 }
 
 void Deck::shuffle(){

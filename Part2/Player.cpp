@@ -24,7 +24,7 @@ Player::Player(const Player& p)
 }
 
 //constructor
-Player::Player(std::string n, int id, int army) {
+Player::Player(std::string n, int id, int army){
 	//Player::Player(std::string n, int id, int army, list<string> t, int h) {
 
 
@@ -33,6 +33,7 @@ Player::Player(std::string n, int id, int army) {
 
 	armySize = army;
 	vector<string> playerTerritories;
+
 	//territories = t;
 	//hand = h;
 };
