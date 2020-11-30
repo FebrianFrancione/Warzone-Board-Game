@@ -1,8 +1,7 @@
 #include <string>
 using namespace std;
 
-#ifndef Maps
-#define Maps
+#pragma once
 
 //A vertex of the graph
 //Contains a list of all the territories connected to it
@@ -84,10 +83,11 @@ private:
 	int numEdges;
 };
 
-#endif // !Maps
+/*#endif*/ // !Maps
 
 //Subgraph of the graph
 //Similar to the Map graph but only holds a list of the territories pertaining to it
+
 class Continent {
 public:
 	Continent(int cId, string cName, int reinforcements);
