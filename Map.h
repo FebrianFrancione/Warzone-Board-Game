@@ -62,6 +62,27 @@ private:
 	int dest;
 };
 
+//Subgraph of the graph
+//Similar to the Map graph but only holds a list of the territories pertaining to it
+//MODIFIED: only contains the territories and reinforcement count
+//any other information can be found in the map itself
+class Continent {
+public:
+	Continent();
+	Continent(string _name, int _reinforcements);
+	Continent(const Continent& original);
+	~Continent();
+	//void addEdge(int n1, int n2);
+	void addTerritory(const Territory territory);
+	Continent& operator= (const Continent& original);
+	friend std::ostream& operator<< (std::ostream& out, const Continent& continent);
+private:
+	string name;
+	Territory* territories;
+	int numTerr;
+	int totalReinforcements;
+};
+
 //Graph
 //Implemented as a sort of modified edge list structure
 class Map {
@@ -73,6 +94,7 @@ public:
 	void addEdge(const Edge edge);
 	void addEdge(int n1, int n2);
 	void addTerritory(const Territory territory);
+	void addContinent(const Continent continent);
 	Territory getTerritory(int id);
 	Map& operator= (const Map& original);
 	friend std::ostream& operator<< (std::ostream& out, const Map& map);
@@ -82,26 +104,8 @@ private:
 	int numTerr;
 	Edge* edges;
 	int numEdges;
+	Continent* continents;
+	int numContinents;
 };
 
 #endif // !Maps
-
-//Subgraph of the graph
-//Similar to the Map graph but only holds a list of the territories pertaining to it
-class Continent {
-public:
-	Continent(int cId, string cName, int reinforcements);
-	Continent(const Continent& original);
-	~Continent();
-	//void addEdge(int n1, int n2);
-	void addTerritory(const Territory territory);
-	Continent& operator= (const Continent& original);
-	friend std::ostream& operator<< (std::ostream& out, const Continent& continent);
-private:
-	int id;
-	string name;
-	Territory* territories;
-	int numTerr;
-	int totalReinforcements;
-	//Edge* edges;
-};

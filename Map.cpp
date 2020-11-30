@@ -177,123 +177,15 @@ std::ostream& operator<<(std::ostream& out, const Edge& edge) {
 }
 
 //=====================
-//	Map
-//=====================
-Map::Map(string _name) {
-	name = _name;
-	numTerr = 0;
-	territories = new Territory[numTerr];
-	numEdges = 0;
-	edges = new Edge[numEdges];
-}
-
-Map::Map(const Map& original) {
-	name = original.name;
-	numTerr = original.numTerr;
-	territories = new Territory[numTerr];
-	for (int i = 0; i < numTerr; i++) {
-		territories[i] = original.territories[i];
-	}
-	numEdges = original.numEdges;
-	edges = new Edge[numEdges];
-	for (int i = 0; i < numEdges; i++) {
-		edges[i] = original.edges[i];
-	}
-}
-
-Map::~Map() {
-	delete[] territories;
-	delete[] edges;
-}
-
-bool Map::validate() {
-	return false;
-}
-
-void Map::addEdge(int n1, int n2) {
-	/*numEdges++;
-	Edge* newList = new Edge[numEdges];
-	for (int i = 0; i < numEdges - 1; i++) {
-		newList[i] = edges[i];
-	}
-	newList[numEdges - 1] = Edge(n1, n2);
-	delete[] edges;
-	edges = newList;*/
-	this->addEdge(Edge(n1, n2));
-}
-
-void Map::addEdge(const Edge edge) {
-	numEdges++;
-	Edge* newList = new Edge[numEdges];
-	for (int i = 0; i < numEdges - 1; i++) {
-		newList[i] = edges[i];
-		//do not add an edge if theyre the same edge
-		if (edges[i].isEqual(edge)) {
-			cout << "Duplicate edge not added: " << edge << endl;
-			numEdges--;
-			delete[] newList;
-			return;
-		}
-	}
-	newList[numEdges - 1] = edge;
-	delete[] edges;
-	edges = newList;
-}
-
-void Map::addTerritory(const Territory territory) {
-	numTerr++;
-	Territory* newList = new Territory[numTerr];
-	for (int i = 0; i < numTerr - 1; i++) {
-		newList[i] = territories[i];
-		if (territories[i].isEqual(territory)) {
-			cout << "Duplicate country not added: " << territory << endl;
-			numTerr--;
-			delete[] newList;
-			return;
-		}
-	}
-	newList[numTerr - 1] = territory;
-	delete[] territories;
-	territories = newList;
-}
-
-Territory Map::getTerritory(int id) {
-	if (id < numTerr && id > 0) {
-		return territories[id];
-	}
-	return Territory();
-}
-
-Map& Map::operator=(const Map& original) {
-	name = original.name;
-	numTerr = original.numTerr;
-	territories = new Territory[numTerr];
-	for (int i = 0; i < numTerr; i++) {
-		territories[i] = original.territories[i];
-	}
-	numEdges = original.numEdges;
-	edges = new Edge[numEdges];
-	for (int i = 0; i < numEdges; i++) {
-		edges[i] = original.edges[i];
-	}
-	return *this;
-}
-
-std::ostream& operator<< (std::ostream& out, const Map& map) {
-	out << "Map: " << map.name << endl;
-	out << "Number of territories: " << map.numTerr << endl;
-	for (int i = 0; i < map.numTerr; i++) {
-		out << map.territories[i] << endl;
-	}
-	return out;
-}
-
-
-//=====================
 //	Continent
 //=====================
-Continent::Continent(int _id, string _name, int _reinforcements) {
-	id = _id;
+Continent::Continent() {
+	totalReinforcements = 0;
+	numTerr = 0;
+	territories = new Territory[numTerr];
+}
+
+Continent::Continent(string _name, int _reinforcements) {
 	name = _name;
 	totalReinforcements = _reinforcements;
 	numTerr = 0;
@@ -301,7 +193,6 @@ Continent::Continent(int _id, string _name, int _reinforcements) {
 }
 
 Continent::Continent(const Continent& original) {
-	id = original.id;
 	name = original.name;
 	totalReinforcements = original.totalReinforcements;
 	numTerr = original.numTerr;
@@ -333,7 +224,6 @@ void Continent::addTerritory(const Territory territory) {
 }
 
 Continent& Continent::operator=(const Continent& original) {
-	id = original.id;
 	name = original.name;
 	totalReinforcements = original.totalReinforcements;
 	numTerr = original.numTerr;
@@ -346,4 +236,123 @@ Continent& Continent::operator=(const Continent& original) {
 
 std::ostream& operator<<(std::ostream& out, const Continent& continent) {
 	return (out << "Continent: " << continent.name << "has " << continent.numTerr << " territories. Gives " << continent.totalReinforcements << " total reinforcements.");
+}
+
+//=====================
+//	Map
+//=====================
+Map::Map(string _name) {
+	name = _name;
+	numTerr = 0;
+	territories = new Territory[numTerr];
+	numEdges = 0;
+	edges = new Edge[numEdges];
+}
+
+Map::Map(const Map& original) {
+	name = original.name;
+	numTerr = original.numTerr;
+	territories = new Territory[numTerr];
+	for (int i = 0; i < numTerr; i++) {
+		territories[i] = original.territories[i];
+	}
+	numEdges = original.numEdges;
+	edges = new Edge[numEdges];
+	for (int i = 0; i < numEdges; i++) {
+		edges[i] = original.edges[i];
+	}
+}
+
+Map::~Map() {
+	delete[] territories;
+	delete[] edges;
+}
+
+//Big function
+bool Map::validate() {
+	bool flag = true;
+	return flag;
+}
+
+void Map::addEdge(int n1, int n2) {
+	this->addEdge(Edge(n1, n2));
+}
+
+void Map::addEdge(const Edge edge) {
+	numEdges++;
+	Edge* newList = new Edge[numEdges];
+	for (int i = 0; i < numEdges - 1; i++) {
+		newList[i] = edges[i];
+		//VERIFIED IN VALIDATE INSTEAD
+		//do not add an edge if theyre the same edge
+		/*if (edges[i].isEqual(edge)) {
+			cout << "Duplicate edge not added: " << edge << endl;
+			numEdges--;
+			delete[] newList;
+			return;
+		}*/
+	}
+	newList[numEdges - 1] = edge;
+	delete[] edges;
+	edges = newList;
+}
+
+void Map::addTerritory(const Territory territory) {
+	numTerr++;
+	Territory* newList = new Territory[numTerr];
+	for (int i = 0; i < numTerr - 1; i++) {
+		newList[i] = territories[i];
+		//VERIFIED IN VALIDATE INSTEAD
+		/*if (territories[i].isEqual(territory)) {
+			cout << "Duplicate country not added: " << territory << endl;
+			numTerr--;
+			delete[] newList;
+			return;
+		}*/
+	}
+	newList[numTerr - 1] = territory;
+	delete[] territories;
+	territories = newList;
+}
+
+void Map::addContinent(const Continent continent) {
+	numContinents++;
+	Continent* newList = new Continent[numContinents];
+	for (int i = 0; i < numContinents - 1; i++) {
+		newList[i] = continents[i];
+	}
+	newList[numTerr - 1] = continent;
+	delete[] continents;
+	continents = newList;
+}
+
+Territory Map::getTerritory(int id) {
+	if (id < numTerr && id > 0) {
+		return territories[id];
+	}
+	return Territory();
+}
+
+Map& Map::operator=(const Map& original) {
+	name = original.name;
+	numTerr = original.numTerr;
+	territories = new Territory[numTerr];
+	for (int i = 0; i < numTerr; i++) {
+		territories[i] = original.territories[i];
+	}
+	numEdges = original.numEdges;
+	edges = new Edge[numEdges];
+	for (int i = 0; i < numEdges; i++) {
+		edges[i] = original.edges[i];
+	}
+	return *this;
+}
+
+std::ostream& operator<< (std::ostream& out, const Map& map) {
+	out << "Map: " << map.name << endl;
+	out << "Number of territories: " << map.numTerr << endl;
+	for (int i = 0; i < map.numTerr; i++) {
+		out << map.territories[i] << endl;
+	}
+	return out;
 }
