@@ -27,6 +27,18 @@ int main() {
 
     player1_hand = playing_deck.Draw(player1_hand);
     cout << player1_hand.size() << ": " << player1_hand[0]->type << " deck: " << playing_deck.deck.size() << endl;
+    player1_hand.push_back(new Bomb());
+    std::vector<Card*> player2_hand{new Bomb(), new Reinforcement(), new Blockade(), new Airlift(), new Diplomacy()};
+    player1_hand[0]->Play();
+
+    cout << "Player 2 printing pLay on cards: " << endl;
+    for (auto & i : player2_hand) {
+        i->Play();
+    }
+
+
+ /*   Bomb bomb;
+    bomb.Play();*/
  /*   for (auto & i : playing_deck.deck) {
         cout << i->type << "-";
     }*/

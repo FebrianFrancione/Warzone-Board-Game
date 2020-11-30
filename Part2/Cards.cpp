@@ -145,3 +145,55 @@ Deck::~Deck(void) {
 	cout << "Freeing Deck Memory" << endl;
 }
 
+void Card::Play(){
+    cout << "Default play Card" << endl;
+}
+//Bomb::Play(Player player1, Player player2, Territory thisTerr, Territory otherTerr){
+void Bomb::Play(){
+/*otherTerr.setArmies(troopsRemain);
+
+if (otherTerr.getArmies() < 0) {
+otherTerr.setArmies(0);*/
+cout << "Bomb Card played. Enemy Territory's army has been halved. If armies = 0, set territory armies to 0" << endl;
+   /* cout << "\n" << "otherTerr.getName()" << " now has " << "otherTerr.getArmies()" << " army units.\n";*/
+}
+
+//Bomb::Play(Player player1, Player player2, Territory thisTerr, Territory otherTerr){
+void Reinforcement::Play(){
+/*otherTerr.setArmies(troopsRemain);
+
+if (otherTerr.getArmies() < 0) {
+otherTerr.setArmies(0);*/
+    cout << "Reinforcement Card played. Add 5 armies to current terrritory." << endl;
+   /* cout << "\n" << "otherTerr.getName()" << " now has " << "otherTerr.getArmies()" << " army units.\n";*/
+}
+
+//Bomb::Play(Player player1, Player player2, Territory thisTerr, Territory otherTerr){
+void Blockade::Play(){
+/*otherTerr.setArmies(troopsRemain);
+
+if (otherTerr.getArmies() < 0) {
+otherTerr.setArmies(0);*/
+    cout << "Blockade Card played. Sets the territory owner to neutral and multiply army by 3" << endl;
+//    cout << "\n" << "otherTerr.getName()" << " now has " << "otherTerr.getArmies()" << " army units.\n";
+}
+
+//Bomb::Play(Player player1, Player player2, Territory thisTerr, Territory otherTerr){
+void Airlift::Play(){
+/*otherTerr.setArmies(troopsRemain);
+
+if (otherTerr.getArmies() < 0) {
+otherTerr.setArmies(0);*/
+    cout << "Airlift Card played. Transfers an amount of armies from current territory to target territory" << endl;
+//    cout << "\n" << "otherTerr.getName()" << " now has " << "otherTerr.getArmies()" << " army units.\n";
+}
+
+//Bomb::Play(Player player1, Player player2, Territory thisTerr, Territory otherTerr){
+void Diplomacy::Play(){
+/*otherTerr.setArmies(troopsRemain);
+
+if (otherTerr.getArmies() < 0) {
+otherTerr.setArmies(0);*/
+    cout << "Diplomacy Card played. Make chosen opposing player unable to attack current player." << endl;
+//    cout << "\n" << "otherTerr.getName()" << " now has " << "otherTerr.getArmies()" << " army units.\n";
+}

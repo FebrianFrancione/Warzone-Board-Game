@@ -7,7 +7,7 @@
 #include <random>
 #include <algorithm>
 #include "Player.h"
-
+/*#include "Territory.h"*/
 class Card {
 
 public:
@@ -18,8 +18,8 @@ public:
 
 	Card(const Card& obj);//copy
 	~Card();//destructor
-	void play(Player player1, Player player2); // creates an order and adds to list of orders
-
+	/*void play(Player player1, Player player2); */// creates an order and adds to list of orders
+    virtual void Play();
 	friend std::ostream& operator<< (std::ostream& out, const Card& data);
 };
 
@@ -29,15 +29,18 @@ class Bomb : public Card {
 public:
 	Bomb();
 	//Bomb(std::string t);
+	/*Play(Player player1, Player player2, Territory thisTerr, Territory otherTerr);*/
+     virtual void Play();
 };
+
 
 class Reinforcement : public Card {
 public:
 	Reinforcement();
 	//Reinforcement(std::string t);
+    /*Play(Player player1, Player player2, Territory thisTerr, Territory otherTerr);*/
+    virtual void Play();
 private:
-
-
 };
 
 
@@ -45,6 +48,8 @@ class Blockade : public Card {
 public:
 	Blockade();
 	//Blockade(std::string t);
+    /*Play(Player player1, Player player2, Territory thisTerr, Territory otherTerr);*/
+  virtual void Play();
 private:
 
 
@@ -54,6 +59,8 @@ class Airlift : public Card {
 public:
 	Airlift();
 	//Airlift(std::string t);
+    /*Play(Player player1, Player player2, Territory thisTerr, Territory otherTerr);*/
+    virtual void Play();
 private:
 
 
@@ -63,6 +70,8 @@ class Diplomacy : public Card {
 public:
 	Diplomacy();
 	//Diplomacy(std::string t);
+    /*Play(Player player1, Player player2, Territory thisTerr, Territory otherTerr);*/
+    virtual void Play();
 private:
 
 };
