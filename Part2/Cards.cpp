@@ -58,8 +58,10 @@ Hand::~Hand(void) {
 Deck::Deck() {
 
 }
-std::vector<Card*> Deck::generateDeck(std::vector <Card*> playing_deck, int max_deck_size) {
+void Deck::generateDeck() {
+    int max_deck_size = 52;
 	//generating deck
+	std::vector<Card*> playing_deck;
 	while (playing_deck.size() <= max_deck_size) {
 
 		playing_deck.push_back(new Bomb());
@@ -99,38 +101,49 @@ std::vector<Card*> Deck::generateDeck(std::vector <Card*> playing_deck, int max_
 				}
 			}*/
 
-
-
 	}
 	while (playing_deck.size() > max_deck_size) {
 		playing_deck.pop_back();
 	}
-
-
-	return playing_deck;
+	deck = playing_deck;
+	cout << "Deck generated" << endl;
 }
 
 std::vector<Card*> Deck::Draw(std::vector <Card*> deck, std::vector <Card*> player_deck) {
-	//shuffle the cards
-
-	cout << endl << "_______________________________________________" << endl;
-	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-	std::shuffle(std::begin(deck), deck.end(), std::default_random_engine(seed));
-
-	cout << "Deck has been shuffled! " << endl;
-
 
 	//this causes issues in the code
 	int n = deck.size();
+	cout << "n: " << n << endl;
     player_deck.push_back(deck[n-1]);
-    cout << player_deck.size();
-    return player_deck;
-	/*deck.pop_back();*/
-	/*int n = deck.size();*/
-	/*hand.push_back(playing_deck[n - 1]);*/
-	/*cout << player_deck.at(n);
-	deck.pop_back();*/
+
+    cout << "Player deck size: " << player_deck.size() << endl;
+    cout << "Player deck card: " << player_deck.at(0)->type << endl;
+    deck.pop_back();
+
+
+
+    for(int i = 50 ;i < deck.size(); i++){
+        cout << deck[i]->type;
+    }
+    cout << endl << "Deck size: " << deck.size();
+    return player_deck, deck;
 }
+
+void Deck::shuffle(){
+    //shuffle the card
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::shuffle(std::begin(deck), deck.end(), std::default_random_engine(seed));
+
+    cout <<endl<< "Deck has been shuffled! " << endl;
+
+    for(int i = 50 ;i < deck.size(); i++){
+        cout << deck[i]->type;
+    }
+
+    cout << endl << "_______________________________________________" << endl;
+}
+
 Deck::~Deck(void) {
 	cout << "Freeing Deck Memory" << endl;
 }
+

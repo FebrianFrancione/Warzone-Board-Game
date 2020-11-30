@@ -6,7 +6,6 @@
 #include <vector>
 #include "Cards.h"
 
-
 using namespace std;
 
 //Player Class
@@ -40,9 +39,8 @@ public:
 	void setPlayerArmySize(int army);
 	int getPlayerArmySize();
 
-	vector<string>playerTerritories;
+	vector<string> playerTerritories;
 	list<string> territories;
-
 
 private:
 	int armySize;

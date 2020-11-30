@@ -83,8 +83,10 @@ public:
 	Deck();
 	Deck(Deck& otherDeck);
 	~Deck();
+    std::vector<Card*> deck;
+    void shuffle();
 	/*void draw(Card hand[]);*/
-	std::vector<Card*> generateDeck(std::vector <Card*> playing_deck, int max_deck_size);
+	void generateDeck();
 
     std::vector<Card*> Draw(std::vector <Card*> player_deck, std::vector <Card*> deck);
 
