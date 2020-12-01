@@ -1,2 +1,0 @@
-C:\Users\febri\source\repos\COMP-345-Warzone\Part2\x64\Debug\345test.exe
-C:\Users\febri\source\repos\COMP-345-Warzone\Part2\x64\Debug\345test.pdb

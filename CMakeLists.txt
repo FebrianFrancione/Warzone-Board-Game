@@ -3,19 +3,19 @@ project(COMP_345_Warzone)
 
 set(CMAKE_CXX_STANDARD 14)
 
-include_directories(Part2)
+#[[include_directories(WarZone/Part2)]]
 
 add_executable(COMP_345_Warzone
-        Part2/Cards.cpp
-        Part2/Cards.h
-        Part2/CardsDriver.cpp
-        Part2/startupPhase.cpp
-        Part2/startupPhase.h
-        Map.cpp
-        Map.h
-        MapDriver.cpp
-        Orders.h
-        Orders.cpp
-        OrdersDriver.cpp
-        Part2/Player.cpp
-        Part2/Player.h)
+        WarZone/Cards.cpp
+        WarZone/Cards.h
+        WarZone/CardsDriver.cpp
+        WarZone/startupPhase.cpp
+        WarZone/startupPhase.h
+        WarZone/Map.cpp
+        WarZone/Map.h
+        WarZone/MapDriver.cpp
+        WarZone/Orders.h
+        WarZone/Orders.cpp
+        WarZone/OrdersDriver.cpp
+        WarZone/Player.cpp
+        WarZone/Player.h)

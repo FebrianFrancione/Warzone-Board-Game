@@ -1,8 +1,0 @@
-﻿  Cards.cpp
-C:\Users\febri\source\repos\COMP-345-Warzone\Part2\Cards.cpp(119,16): warning C4244: 'initializing': conversion from '_Rep' to 'unsigned int', possible loss of data
-          with
-          [
-              _Rep=std::chrono::system_clock::rep
-          ]
-C:\Users\febri\source\repos\COMP-345-Warzone\Part2\Cards.cpp(126,21): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-  345test.vcxproj -> C:\Users\febri\source\repos\COMP-345-Warzone\Part2\x64\Debug\345test.exe
