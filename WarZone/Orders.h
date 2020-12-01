@@ -1,7 +1,5 @@
+#pragma once
 #include <iostream>
-
-#ifndef Orders
-#define Orders
 
 //Order superclass
 class Order {
@@ -128,5 +126,3 @@ public:
 	Negotiate& operator= (const Negotiate& negotiate);
 	friend std::ostream& operator << (std::ostream& out, const Negotiate& deploy);
 };
-
-#endif // !Orders

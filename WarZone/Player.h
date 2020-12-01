@@ -28,7 +28,7 @@ public:
 
 	//copy
 	Player(const Player& p);
-Player(list<string> t, int h);
+	Player(list<string> t, int h);
 
 	~Player();
 
