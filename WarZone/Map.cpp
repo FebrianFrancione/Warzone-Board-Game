@@ -153,7 +153,7 @@ Edge::Edge(int o, int d) {
 		dest = o;
 	}*/
 	//Directional edges
-	origin = 0;
+	origin = o;
 	dest = d;
 }
 
@@ -275,6 +275,7 @@ Map::Map(string _name) {
 Map::Map(const Map& original) {
 	name = original.name;
 	numTerr = original.numTerr;
+	numContinents = original.numContinents;
 	territories = new Territory[numTerr];
 	for (int i = 0; i < numTerr; i++) {
 		territories[i] = original.territories[i];
@@ -284,7 +285,6 @@ Map::Map(const Map& original) {
 	for (int i = 0; i < numEdges; i++) {
 		edges[i] = original.edges[i];
 	}
-	numContinents = original.numContinents;
 	continents = new Continent[numContinents];
 	for (int i = 0; i < numContinents; i++) {
 		continents[i] = original.continents[i];
@@ -433,6 +433,7 @@ string Map::getName() {
 Map& Map::operator=(const Map& original) {
 	name = original.name;
 	numTerr = original.numTerr;
+	numContinents = original.numContinents;
 	territories = new Territory[numTerr];
 	for (int i = 0; i < numTerr; i++) {
 		territories[i] = original.territories[i];
@@ -441,6 +442,10 @@ Map& Map::operator=(const Map& original) {
 	edges = new Edge[numEdges];
 	for (int i = 0; i < numEdges; i++) {
 		edges[i] = original.edges[i];
+	}
+	continents = new Continent[numContinents];
+	for (int i = 0; i < numContinents; i++) {
+		continents[i] = original.continents[i];
 	}
 	return *this;
 }

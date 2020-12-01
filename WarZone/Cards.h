@@ -1,15 +1,15 @@
 #pragma once
-#include "Cards.h"
+
 #include <iostream>
 #include <string>
 #include <vector>
 #include <chrono> 
 #include <random>
 #include <algorithm>
-#include "Player.h"
-#include "Map.h"
 #include <list>
 
+#include "Player.h"
+#include "Map.h"
 
 /*#include "Territory.h"*/
 class Cards {

@@ -22,7 +22,8 @@ void MapLoader::loadMap() {
     ifstream mapFile(filename);
 
     if (!mapFile.is_open() || map == nullptr) {
-        return;
+        cout << "Could not load map from " << filename << ". File does not exist" << endl;
+        throw exception();
     }
 
     // Use a while loop together with the getline() function to read the file line by line

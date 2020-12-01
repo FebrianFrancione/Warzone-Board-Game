@@ -1,78 +1,68 @@
-using namespace std;
-/*#include "Player.h"*/
+#include "Player.h"
 #include "Cards.h"
+#include "Map.h"
 
+#include <iomanip>
 
+using namespace std;
 
-
-//default cunstructor
-//default cunstructor
-Player::Player() {
-};
-
-//copy
-Player::Player(const Player& p)
-{
-	name = p.name;
-	armySize = p.armySize;
-	/*player1_hand = p.player1_hand;*/
-
-}
+//default constructor
+//Player::Player() {
+//	armySize = -1;
+//	playerTurnId = -1;
+//	hand = -1;
+//};
 
 //constructor
-Player::Player(std::string n, int id, int army){
+Player::Player(std::string n, int id, int army, Map* needle) {
 	//Player::Player(std::string n, int id, int army, list<string> t, int h) {
-
-
+	armySize = army;
 	name = n;
 	playerTurnId = id;
-
-	armySize = army;
-	vector<string> playerTerritories;
-
+	gameMap = needle;
+	//vector<string> playerTerritories;
 	//territories = t;
 	//hand = h;
 };
 
-//contructor 
-//Player::Player(list<string> t, int h) {
-//
-//	
-//};
+//copy constructor
+Player::Player(const Player& p) {
+	armySize = p.armySize;
+	name = p.name;
+	playerTurnId = p.playerTurnId;
+	/*player1_hand = p.player1_hand;*/
+}
 
 Player::~Player() {}
 
 //Iterates over a list of territories owned by the player and displays them
 void Player::toDefend() {
-
-	cout << "The territories you can defend are:";
-	cout << endl;
-	for (list<string>::iterator it = territories.begin(); it != territories.end(); ++it) {
-
-		std::cout << ' ' << *it;
-		cout << endl;
-
-	};
-	cout << endl;
+	cout << "Your territories to defend: " << endl;
+	for (int i = 0; i < territories.size(); i++) {
+		cout << setw(40) << territories[i]->getName() << endl; 
+	}
+	cout << "--------" << endl;
 }
 
-// Displays a list of surrounding territories the player can attack, arbitrary for now
+// Displays a list of surrounding territories the player can attack
 void Player::toAttack() {
-
-	list<string> a;
-	a.push_back("Russia");
-	a.push_back("China");
-	a.push_back("Japan");
-
-	cout << "The territories you can attack are:";
-	cout << endl;
-	for (list<string>::iterator it = a.begin(); it != a.end(); ++it) {
-
-		std::cout << ' ' << *it;
-		cout << endl;
-
-	};
-	cout << endl;
+	cout << "The territories you can attack are: " << endl;
+	for (int i = 0; i < territories.size(); i++) {
+		for (int j = 0; j < territories[i]->getNumberAdj(); j++) {
+			if (gameMap->getTerritory(territories[i]->getAdjacent(j))->getOwner() != name) {
+				cout << 
+					right << setw(40) << gameMap->getTerritory(territories[i]->getAdjacent(j))->getName() << 
+					" (" << setw(2) << territories[i]->getAdjacent(j) << ")" <<
+					setw(20) << " belonging to " <<
+					left << setw(20) << gameMap->getTerritory(territories[i]->getAdjacent(j))->getOwner() <<
+					" from " <<
+					right << setw(40) << territories[i]->getName() <<
+					" (" << setw(2) << territories[i]->getId() << ")" <<
+					endl;
+			}
+		}
+	}
+	cout << "--------" << endl;
 }
 
 //Adds an order to the order list and displays all current orders

@@ -1,11 +1,7 @@
 #pragma once
 
-#include "Cards.h";
-#include "GameEngine.h"
-#include "Map.h"
-#include "MapLoader.h"
-#include "Orders.h"
 #include "Player.h"
+
 #include <iostream>
 #include <list>
 #include <vector>
@@ -18,6 +14,7 @@ private:
 	vector<Player*> players;
 	Map* gameMap;
 	string mapName;
+	string winner;
 public:
 	//assignment operator constructor
 	GameEngine();
@@ -26,7 +23,11 @@ public:
 
 	bool initializeGameValues(); //returns true if game intialized successfully
 	void startupPhase();
-	void assignOrder();
-	void assignCardDeck();
-	void GamestartupPhase();
+	//void assignOrder();
+	//void assignCardDeck();
+	//void GamestartupPhase();
+	void mainGameLoop();
+	void reinforcementPhase();
+	void issueOrdersPhase();
+	void executeOrdersPhase();
 };

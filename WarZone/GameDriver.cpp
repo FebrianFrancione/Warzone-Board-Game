@@ -12,4 +12,10 @@ int main() {
 		exit(1000);
 	}
 	game.startupPhase();
+	cout << endl;
+	cout << "=========================================" << endl;
+	cout << "The game has been initialized. Game Start" << endl;
+	cout << "=========================================" << endl;
+	cout << endl;
+	game.mainGameLoop();
 }

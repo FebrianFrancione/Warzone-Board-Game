@@ -1,10 +1,7 @@
 #pragma once
 
-#include "Player.h"
 #include <string>
 using namespace std;
-
-
 
 //A vertex of the graph
 //Contains a list of all the territories connected to it
