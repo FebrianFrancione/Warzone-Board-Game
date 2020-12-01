@@ -1,28 +1,28 @@
 #include "Cards.h"
 #include "Player.h"
+using namespace std;
 
-
-Card::Card() {
+Cards::Cards() {
 	type = "Default Card";
 }
 
-Card::Card(std::string t) {
+Cards::Cards(std::string t) {
 	type = t;
 }
 
 //copy constructor
-Card::Card(const Card& obj) {
+Cards::Cards(const Cards& obj) {
 	// body of constructor
 	cout << "copy constructor allocating ptr" << endl;
 	type = obj.type; // copy the value using deep copy
 }
 
-Card::~Card(void) {
+Cards::~Cards(void) {
 	cout << "Freeing Card Memory" << endl;
 }
 
 
-std::ostream& operator<<(ostream& os, const Card& data)
+std::ostream& operator<<(ostream& os, const Cards& data)
 {
 	os << data.type;
 	return os;
@@ -61,7 +61,7 @@ Deck::Deck() {
 void Deck::generateDeck() {
     int max_deck_size = 52;
 	//generating deck
-	std::vector<Card*> playing_deck;
+	std::vector<Cards*> playing_deck;
 	while (playing_deck.size() <= max_deck_size) {
 
 		playing_deck.push_back(new BombCard());
@@ -109,7 +109,7 @@ void Deck::generateDeck() {
 	cout << "Deck generated" << endl;
 }
 
-std::vector<Card*> Deck::Draw(std::vector <Card*> player_deck) {
+std::vector<Cards*> Deck::Draw(std::vector <Cards*> player_deck) {
 
 	//this causes issues in the code
 	int n = deck.size();
@@ -145,7 +145,7 @@ Deck::~Deck(void) {
 	cout << "Freeing Deck Memory" << endl;
 }
 
-void Card::Play(){
+void Cards::Play(){
     cout << "Default play Card" << endl;
 }
 //Bomb::Play(Player player1, Player player2, Territory thisTerr, Territory otherTerr){

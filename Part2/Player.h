@@ -8,13 +8,16 @@
 
 using namespace std;
 
+class Cards;
+
 //Player Class
 class Player
 {
 public:
+    Player();
 
-	//Constructors
-	/*Player();*/
+
+//Constructors
 
 	Player(std::string n, int id, int army);
 
@@ -22,7 +25,8 @@ public:
 
 	//copy
 	Player(const Player& p);
-	/*Player(list<string> t, int h);*/
+Player(list<string> t, int h);
+
 	~Player();
 
 	//methods to attack, defend, and issue orders
@@ -39,10 +43,10 @@ public:
 	void setPlayerArmySize(int army);
 	int getPlayerArmySize();
 
-	vector<string> playerTerritories;
+vector<string> playerTerritories;
+
 	list<string> territories;
-
-
+    std::vector<Cards*> player_hand;
 private:
 	int armySize;
 	std::string name;
