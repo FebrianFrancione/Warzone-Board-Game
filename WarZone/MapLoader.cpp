@@ -21,7 +21,7 @@ void MapLoader::loadMap() {
     string line;
     ifstream mapFile(filename);
 
-    if (!mapFile.is_open()) {
+    if (!mapFile.is_open() || map == nullptr) {
         return;
     }
 

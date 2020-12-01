@@ -268,6 +268,8 @@ Map::Map(string _name) {
 	territories = new Territory[numTerr];
 	numEdges = 0;
 	edges = new Edge[numEdges];
+	numContinents = 0;
+	continents = new Continent[numContinents];
 }
 
 Map::Map(const Map& original) {
@@ -281,6 +283,11 @@ Map::Map(const Map& original) {
 	edges = new Edge[numEdges];
 	for (int i = 0; i < numEdges; i++) {
 		edges[i] = original.edges[i];
+	}
+	numContinents = original.numContinents;
+	continents = new Continent[numContinents];
+	for (int i = 0; i < numContinents; i++) {
+		continents[i] = original.continents[i];
 	}
 }
 
