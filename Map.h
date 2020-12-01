@@ -28,6 +28,11 @@ public:
 	bool isAdjacent(int id);
 	//checker
 	bool isEqual(Territory territory);
+	//Get number of adjacent territories
+	int getNumberAdj();
+	int getAdjacent(int index);
+	//get continent
+	int getContinentId();
 	Territory& operator= (const Territory& original);
 	friend std::ostream& operator<< (std::ostream& out, const Territory& territory);
 private:
@@ -61,6 +66,30 @@ private:
 	int dest;
 };
 
+//Subgraph of the graph
+//Similar to the Map graph but only holds a list of the territories pertaining to it
+//MODIFIED: only contains the territories and reinforcement count
+//any other information can be found in the map itself
+class Continent {
+public:
+	Continent();
+	Continent(int _id, string _name, int _reinforcements);
+	Continent(const Continent& original);
+	~Continent();
+	//void addEdge(int n1, int n2);
+	void addTerritory(int territoryId);
+	int getTerritoryId(int index);
+	int getNumTerritories();
+	Continent& operator= (const Continent& original);
+	friend std::ostream& operator<< (std::ostream& out, const Continent& continent);
+private:
+	int id;
+	string name;
+	int* territoryIds;
+	int numTerr;
+	int totalReinforcements;
+};
+
 //Graph
 //Implemented as a sort of modified edge list structure
 class Map {
@@ -68,11 +97,23 @@ public:
 	Map(string name);
 	Map(const Map& original);
 	~Map();
+	//Validates by game rules
 	bool validate();
+	//Add objects to the map
 	void addEdge(const Edge edge);
 	void addEdge(int n1, int n2);
 	void addTerritory(const Territory territory);
-	Territory getTerritory(int id);
+	void addContinent(const Continent continent);
+	//Get objects as pointers from the map
+	Territory* getTerritory(int id);
+	Edge* getEdge(int id);
+	Continent* getContinent(int id);
+	//Get values
+	int getNumTerritories();
+	int getNumEdges();
+	int getNumContinents();
+	string getName();
+	//Operator overloads
 	Map& operator= (const Map& original);
 	friend std::ostream& operator<< (std::ostream& out, const Map& map);
 private:
@@ -81,9 +122,12 @@ private:
 	int numTerr;
 	Edge* edges;
 	int numEdges;
+	Continent* continents;
+	int numContinents;
 };
 
-/*#endif*/ // !Maps
+
+#endif // !Maps
 
 //Subgraph of the graph
 //Similar to the Map graph but only holds a list of the territories pertaining to it
@@ -105,3 +149,4 @@ private:
 	int totalReinforcements;
 	//Edge* edges;
 };
+

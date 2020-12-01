@@ -1,5 +1,6 @@
 /*
 #include "Map.h"
+#include "MapLoader.h"
 #include <iostream>
 
 void f1() {
@@ -43,6 +44,17 @@ void f1() {
 
 int main() {
 
-	f1();
+	MapLoader loader = MapLoader("canada_missingBorder.map");
+	loader.loadMap();
+	loader.printMap();
+
+	Map gameMap = loader.getMapCopy();
+
+	if (gameMap.validate()) {
+		cout << gameMap.getName() << " is valid";
+	}
+	else {
+		cout << gameMap.getName() << " is invalid";
+	}
 
 }*/
