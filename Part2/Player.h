@@ -1,4 +1,3 @@
-/*
 #pragma once
 
 #include <iostream>
@@ -9,13 +8,13 @@
 
 using namespace std;
 
+class Cards;
+
 //Player Class
 class Player
 {
 public:
     Player();
-*/
-/* extern settings_t ESPdata;*//*
 
 
 //Constructors
@@ -26,8 +25,7 @@ public:
 
 	//copy
 	Player(const Player& p);
-	*/
-/*Player(list<string> t, int h);*//*
+Player(list<string> t, int h);
 
 	~Player();
 
@@ -45,14 +43,10 @@ public:
 	void setPlayerArmySize(int army);
 	int getPlayerArmySize();
 
-	*/
-/*vector<string> playerTerritories;*//*
+vector<string> playerTerritories;
 
 	list<string> territories;
-    typedef Cards;
-	vector<Cards*> player_hand;
-	Cards* cards = new Cards;
-
+    std::vector<Cards*> player_hand;
 private:
 	int armySize;
 	std::string name;
@@ -61,4 +55,3 @@ private:
 	int hand;
 	list<string> orders;
 };
-*/

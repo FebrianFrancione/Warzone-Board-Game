@@ -106,11 +106,14 @@ public:
 
 
 
+/*
 class Player
 {
 public:
     Player();
-/* extern settings_t ESPdata;*/
+*/
+/* extern settings_t ESPdata;*//*
+
 
 //Constructors
 
@@ -120,7 +123,9 @@ public:
 
     //copy
     Player(const Player& p);
-    /*Player(list<string> t, int h);*/
+    */
+/*Player(list<string> t, int h);*//*
+
     ~Player();
 
     //methods to attack, defend, and issue orders
@@ -137,7 +142,9 @@ public:
     void setPlayerArmySize(int army);
     int getPlayerArmySize();
 
-    /*vector<string> playerTerritories;*/
+    */
+/*vector<string> playerTerritories;*//*
+
     std::list<std::string> territories;
     std::vector<Cards*> player_hand;
     Cards* cards = new Cards;
@@ -150,3 +157,4 @@ private:
     int hand;
     std::list<std::string> orders;
 };
+*/

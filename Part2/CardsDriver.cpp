@@ -6,11 +6,16 @@ using namespace std;
 int main() {
 
 	Player player1{ "Player1", 0, 0 };
-	player1.player_hand;
-	std::vector<Cards*> player1_hand;
-	player1.player_hand.push_back(new BombCard());
-	cout << player1.player_hand.size();
+/*    player1.player_hand;
 
+	player1.player_hand.push_back(new BombCard());
+	cout << player1.player_hand.size();*/
+player1.player_hand.push_back(new BombCard());
+cout << " Hand: " << player1.player_hand.at(0)->type;
+
+
+
+    std::vector<Cards*> player1_hand;
 	Deck playing_deck;
 	std::vector <Cards*> hand;
 
