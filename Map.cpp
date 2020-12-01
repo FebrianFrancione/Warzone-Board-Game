@@ -100,6 +100,18 @@ bool Territory::isEqual(Territory territory) {
 	return (territory.getId() == id || territory.getName() == name);
 }
 
+int Territory::getNumberAdj() {
+	return numAdj;
+}
+
+int Territory::getAdjacent(int index) {
+	return adjTerr[index];
+}
+
+int Territory::getContinentId() {
+	return continentID;
+}
+
 Territory& Territory::operator=(const Territory& original) {
 	id = original.id;
 	name = original.name;
@@ -130,19 +142,19 @@ Edge::Edge() {
 }
 
 Edge::Edge(int o, int d) {
-	/*if (o < 0 || d < 0 || o == d) {
-		cout << "Invalid edge " << origin << " and " << dest << endl;
-		throw std::exception();
-	}*/
+	//Undirected edges
 	//In order to avoid duplicate edges, the origin value id is always set as the smaller of the 2
-	if (o < d) {
+	/*if (o < d) {
 		origin = o;
 		dest = d;
 	}
 	else {
 		origin = d;
 		dest = o;
-	}
+	}*/
+	//Directional edges
+	origin = 0;
+	dest = d;
 }
 
 Edge::Edge(const Edge& edge) {
@@ -180,62 +192,71 @@ std::ostream& operator<<(std::ostream& out, const Edge& edge) {
 //	Continent
 //=====================
 Continent::Continent() {
+	id = -1;
 	totalReinforcements = 0;
 	numTerr = 0;
-	territories = new Territory[numTerr];
+	territoryIds = new int[numTerr];
 }
 
-Continent::Continent(string _name, int _reinforcements) {
+Continent::Continent(int _id, string _name, int _reinforcements) {
+	id = _id;
 	name = _name;
 	totalReinforcements = _reinforcements;
 	numTerr = 0;
-	territories = new Territory[numTerr];
+	territoryIds = new int[numTerr];
 }
 
 Continent::Continent(const Continent& original) {
+	id = original.id;
 	name = original.name;
 	totalReinforcements = original.totalReinforcements;
 	numTerr = original.numTerr;
-	territories = new Territory[numTerr];
+	territoryIds = new int[numTerr];
 	for (int i = 0; i < numTerr; i++) {
-		territories[i] = original.territories[i];
+		territoryIds[i] = original.territoryIds[i];
 	}
 }
 
 Continent::~Continent() {
-	delete[] territories;
+	delete[] territoryIds;
 }
 
-void Continent::addTerritory(const Territory territory) {
+void Continent::addTerritory(int id) {
 	numTerr++;
-	Territory* newList = new Territory[numTerr];
+	int* newList = new int[numTerr];
 	for (int i = 0; i < numTerr - 1; i++) {
-		newList[i] = territories[i];
-		if (territories[i].isEqual(territory)) {
-			cout << "Duplicate country found. Not added: " << territory << endl;
-			numTerr--;
-			delete[] newList;
-			return;
-		}
+		newList[i] = territoryIds[i];
 	}
-	newList[numTerr - 1] = territory;
-	delete territories;
-	territories = newList;
+	newList[numTerr - 1] = id;
+	delete territoryIds;
+	territoryIds = newList;
+}
+
+int Continent::getTerritoryId(int index) {
+	if (index < numTerr && index >= 0) {
+		return territoryIds[index];
+	}
+	throw exception();
+}
+
+int Continent::getNumTerritories() {
+	return numTerr;
 }
 
 Continent& Continent::operator=(const Continent& original) {
+	id = original.id;
 	name = original.name;
 	totalReinforcements = original.totalReinforcements;
 	numTerr = original.numTerr;
-	territories = new Territory[numTerr];
+	territoryIds = new int[numTerr];
 	for (int i = 0; i < numTerr; i++) {
-		territories[i] = original.territories[i];
+		territoryIds[i] = original.territoryIds[i];
 	}
 	return *this;
 }
 
 std::ostream& operator<<(std::ostream& out, const Continent& continent) {
-	return (out << "Continent: " << continent.name << "has " << continent.numTerr << " territories. Gives " << continent.totalReinforcements << " total reinforcements.");
+	return (out << "Continent: " << continent.name << " has " << continent.numTerr << " territories. Gives " << continent.totalReinforcements << " total reinforcements.");
 }
 
 //=====================
@@ -270,8 +291,47 @@ Map::~Map() {
 
 //Big function
 bool Map::validate() {
-	bool flag = true;
-	return flag;
+	//Check if there was anything ever initialized or if it's a default map
+	if (numTerr < 1) {
+		return false;
+	}
+	//Part of the validation is done in the respective add() functions for countries and edges
+	for (int i = 0; i < numTerr; i++) {
+		//Check if all territories have at least one adjacent territory, and therefore, everything is connected
+		if (territories[i].getNumberAdj() < 1) {
+			return false;
+		}
+		//Check that for every territory, one of it's neighbours is in the same continent, because if it isn't, gg
+		//isolated territory that either isn't connected to its continent, or single territory exists for whole continent
+		bool hasNeighbour = false;
+		for (int j = 0; j < territories[i].getNumberAdj(); j++) {
+			//for each neighbour check if they share the same continent id. if there is one, we gucci
+			if (territories[territories[i].getAdjacent(j)].getContinentId() == territories[i].getContinentId()) {
+				hasNeighbour = true;
+			}
+		}
+		if (!hasNeighbour) {
+			return false;
+		}
+		//Verify that there isn't the same territory already
+		for (int j = i + 1; j < numTerr; j++) {
+			if (territories[i].isEqual(territories[j])) {
+				return false;
+			}
+		}
+	}
+	//For each continent, make sure that the id's in its list arent found in another continent
+	for (int i = 0; i < numContinents; i++) {
+		//For each territory in the continent
+		for (int j = 0; j < continents[i].getNumTerritories(); j++) {
+			//get the territory id, pass it to the array of territories, get the continent id associated, match against i
+			//in this case, i is equivalent to the continent id because we used the index of the array as the id
+			if (territories[continents[i].getTerritoryId(j)].getContinentId() != i) {
+				return false;
+			}
+		}
+	}
+	return true;
 }
 
 void Map::addEdge(int n1, int n2) {
@@ -283,14 +343,13 @@ void Map::addEdge(const Edge edge) {
 	Edge* newList = new Edge[numEdges];
 	for (int i = 0; i < numEdges - 1; i++) {
 		newList[i] = edges[i];
-		//VERIFIED IN VALIDATE INSTEAD
 		//do not add an edge if theyre the same edge
-		/*if (edges[i].isEqual(edge)) {
-			cout << "Duplicate edge not added: " << edge << endl;
+		if (edges[i].isEqual(edge)) {
+			//cout << "Duplicate edge not added: " << edge << endl;
 			numEdges--;
 			delete[] newList;
 			return;
-		}*/
+		}
 	}
 	newList[numEdges - 1] = edge;
 	delete[] edges;
@@ -302,13 +361,14 @@ void Map::addTerritory(const Territory territory) {
 	Territory* newList = new Territory[numTerr];
 	for (int i = 0; i < numTerr - 1; i++) {
 		newList[i] = territories[i];
-		//VERIFIED IN VALIDATE INSTEAD
-		/*if (territories[i].isEqual(territory)) {
-			cout << "Duplicate country not added: " << territory << endl;
-			numTerr--;
-			delete[] newList;
-			return;
-		}*/
+		//do not add a country if theyre the same id or name
+		//if (territories[i].isEqual(territory)) {
+		//	//cout << "Duplicate country not added: " << territory << endl;
+		//	numTerr--;
+		//	delete[] newList;
+		//	return;
+		//}
+		///////////////////////////Commented out in favour of the validate() check instead
 	}
 	newList[numTerr - 1] = territory;
 	delete[] territories;
@@ -321,16 +381,46 @@ void Map::addContinent(const Continent continent) {
 	for (int i = 0; i < numContinents - 1; i++) {
 		newList[i] = continents[i];
 	}
-	newList[numTerr - 1] = continent;
+	newList[numContinents - 1] = continent;
 	delete[] continents;
 	continents = newList;
 }
 
-Territory Map::getTerritory(int id) {
-	if (id < numTerr && id > 0) {
-		return territories[id];
+Territory* Map::getTerritory(int id) {
+	if (id < numTerr && id >= 0) {
+		return &territories[id];
 	}
-	return Territory();
+	throw exception();
+}
+
+Edge* Map::getEdge(int id) {
+	if (id < numEdges && id >= 0) {
+		return &edges[id];
+	}
+	throw exception();
+}
+
+Continent* Map::getContinent(int id) {
+	if (id < numContinents && id >= 0) {
+		return &continents[id];
+	}
+	throw exception();
+}
+
+int Map::getNumTerritories() {
+	return numTerr;
+}
+
+int Map::getNumEdges() {
+	return numEdges;
+}
+
+int Map::getNumContinents() {
+	return numContinents;
+}
+
+string Map::getName() {
+	return name;
 }
 
 Map& Map::operator=(const Map& original) {
