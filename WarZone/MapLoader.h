@@ -1,6 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include "Map.h"
+#include <filesystem>
 using namespace std;
 
 #ifndef MapLoaderH

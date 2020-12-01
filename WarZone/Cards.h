@@ -8,6 +8,7 @@
 #include <algorithm>
 #include "Player.h"
 #include "Map.h"
+#include "MapLoader.h"
 #include <list>
 
 

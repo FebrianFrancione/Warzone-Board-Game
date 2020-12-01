@@ -2,6 +2,8 @@
 #include "MapLoader.h"
 #include <iostream>
 #include <sstream>
+#include <fstream>
+#include <filesystem>
 
 MapLoader::MapLoader() {
     map = nullptr;
@@ -21,7 +23,9 @@ void MapLoader::loadMap() {
     string line;
     ifstream mapFile(filename);
 
+    cout << "Filename: " << filename << endl;
     if (!mapFile.is_open()) {
+        cout << "Not open";
         return;
     }
 
