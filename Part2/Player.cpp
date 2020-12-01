@@ -1,5 +1,5 @@
 using namespace std;
-#include "Player.h"
+/*#include "Player.h"*/
 #include "Cards.h"
 
 
@@ -7,12 +7,8 @@ using namespace std;
 
 //default cunstructor
 //default cunstructor
-//Player::Player() {
-//
-//	int hand{ 0 };
-//	string name{ "Player" };
-//
-//};
+Player::Player() {
+};
 
 //copy
 Player::Player(const Player& p)

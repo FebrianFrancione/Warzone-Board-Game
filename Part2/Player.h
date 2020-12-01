@@ -1,3 +1,4 @@
+/*
 #pragma once
 
 #include <iostream>
@@ -12,9 +13,12 @@ using namespace std;
 class Player
 {
 public:
+    Player();
+*/
+/* extern settings_t ESPdata;*//*
 
-	//Constructors
-	/*Player();*/
+
+//Constructors
 
 	Player(std::string n, int id, int army);
 
@@ -22,7 +26,9 @@ public:
 
 	//copy
 	Player(const Player& p);
-	/*Player(list<string> t, int h);*/
+	*/
+/*Player(list<string> t, int h);*//*
+
 	~Player();
 
 	//methods to attack, defend, and issue orders
@@ -39,9 +45,13 @@ public:
 	void setPlayerArmySize(int army);
 	int getPlayerArmySize();
 
-	vector<string> playerTerritories;
-	list<string> territories;
+	*/
+/*vector<string> playerTerritories;*//*
 
+	list<string> territories;
+    typedef Cards;
+	vector<Cards*> player_hand;
+	Cards* cards = new Cards;
 
 private:
 	int armySize;
@@ -51,3 +61,4 @@ private:
 	int hand;
 	list<string> orders;
 };
+*/

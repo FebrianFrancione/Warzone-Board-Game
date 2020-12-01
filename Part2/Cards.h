@@ -7,25 +7,27 @@
 #include <random>
 #include <algorithm>
 #include "Player.h"
+#include <list>
+
 /*#include "Territory.h"*/
-class Card {
+class Cards {
 
 public:
 	std::string type;
 	//Card methods need to be here
-	Card();
-	Card(std::string t);//simple constructor
+	Cards();
+	Cards(std::string t);//simple constructor
 
-	Card(const Card& obj);//copy
-	~Card();//destructor
+	Cards(const Cards& obj);//copy
+	~Cards();//destructor
 	/*void play(Player player1, Player player2); */// creates an order and adds to list of orders
     virtual void Play();
-	friend std::ostream& operator<< (std::ostream& out, const Card& data);
+	friend std::ostream& operator<< (std::ostream& out, const Cards& data);
 };
 
 
 //inheritance class for cards
-class BombCard : public Card {
+class BombCard : public Cards {
 public:
     BombCard();
 	//Bomb(std::string t);
@@ -34,7 +36,7 @@ public:
 };
 
 
-class ReinforcementCard : public Card {
+class ReinforcementCard : public Cards {
 public:
     ReinforcementCard();
 	//Reinforcement(std::string t);
@@ -44,7 +46,7 @@ private:
 };
 
 
-class BlockadeCard : public Card {
+class BlockadeCard : public Cards {
 public:
 	BlockadeCard();
 	//Blockade(std::string t);
@@ -55,7 +57,7 @@ private:
 
 };
 
-class AirliftCard : public Card {
+class AirliftCard : public Cards {
 public:
     AirliftCard();
 	//Airlift(std::string t);
@@ -66,7 +68,7 @@ private:
 
 };
 
-class DiplomacyCard : public Card {
+class DiplomacyCard : public Cards {
 public:
     DiplomacyCard();
 	//Diplomacy(std::string t);
@@ -94,10 +96,57 @@ public:
 	Deck();
 	Deck(Deck& otherDeck);
 	~Deck();
-    std::vector<Card*> deck;
+    std::vector<Cards*> deck;
     void shuffle();
 	/*void draw(Card hand[]);*/
 	void generateDeck();
 
-    std::vector<Card*> Draw(std::vector <Card*> player_deck);
+    std::vector<Cards*> Draw(std::vector <Cards*> player_deck);
+};
+
+
+
+class Player
+{
+public:
+    Player();
+/* extern settings_t ESPdata;*/
+
+//Constructors
+
+    Player(std::string n, int id, int army);
+
+    //Player(std::string n, int id, int army, list<string> t, int h);
+
+    //copy
+    Player(const Player& p);
+    /*Player(list<string> t, int h);*/
+    ~Player();
+
+    //methods to attack, defend, and issue orders
+    void toAttack();
+    void toDefend();
+    void issueOrder();
+
+    void setName(std::string n);
+    std::string getName();
+
+    void setPlayerTurnId(int id);
+    int getPlayerTurnId();
+
+    void setPlayerArmySize(int army);
+    int getPlayerArmySize();
+
+    /*vector<string> playerTerritories;*/
+    std::list<std::string> territories;
+    std::vector<Cards*> player_hand;
+    Cards* cards = new Cards;
+
+private:
+    int armySize;
+    std::string name;
+    int playerTurnId;
+
+    int hand;
+    std::list<std::string> orders;
 };
