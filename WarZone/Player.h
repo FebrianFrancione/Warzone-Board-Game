@@ -29,6 +29,8 @@ public:
 	//Destructor
 	~Player();
 	//methods to attack, defend, and issue orders
+    void setPlayerStrategy(PlayerStrategy* playerstrat);
+
 	void toAttack();
 	void toDefend();
 	void toDeploy();
@@ -54,6 +56,8 @@ public:
 	vector<Territory*> territories;
   //Cards
   std::vector<Cards*> player_hand;
+
+
   
 private:
 	int armySize;

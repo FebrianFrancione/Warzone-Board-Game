@@ -105,26 +105,31 @@ void Player::toDeploy() {
 }
 
 //Iterates over a list of territories owned by the player and displays them
+/*
 void Player::toDefend() {
-	cout << "Your territories: " << endl;
+    this->playerstrat->toDefend(this->name, this->territories, this->gameMap, this->orders);
+*/
+/*	cout << "Your territories: " << endl;
 	for (int i = 0; i < territories.size(); i++) {
-		cout << 
-			right << setw(36) << territories[i]->getName() << 
+		cout <<
+			right << setw(36) << territories[i]->getName() <<
 			" (ID:" << setw(2) << territories[i]->getId() << ")" <<
 			" (Troops:" << setw(3) << territories[i]->getVirtualArmy() << ")" <<
 			endl;
 	}
-	cout << "--------" << endl;
+	cout << "--------" << endl;*//*
+
+}
+*/
+
 
 // Displays a list of surrounding territories the player can attack
 void Player::toAttack() {
-
     this->playerstrat->toAttack(this->name, this->territories, this->gameMap, this->orders);
+}
 
-
-	cout << "The territories you can attack are: " << endl;
+	/*cout << "The territories you can attack are: " << endl;*/
 	//own territories loop
-	this->playerstrat->toAttack();
 /*  cout << "The territories you can attack are: " << endl;
 	for (int i = 0; i < territories.size(); i++) {
 		//adjacent territories of i loop
@@ -146,8 +151,6 @@ void Player::toAttack() {
 	}
 	cout << "--------" << endl;*/
 
-}
-
 void Player::toDefend() {
     this->playerstrat->toDefend(this->name, this->territories, this->gameMap, this->orders);
     cout << " Inside player class Player name: " << this;
@@ -160,12 +163,8 @@ void Player::issueOrder() {
 }
 
 
-
-
-
-
-  this->playerstrat->issueOrder();
-  //EVERYTHING AFTER THIS NEEDS TO BE MOVED INTO THE PLAYER STRATEGY INSTEAD FOR HUMANS
+// where to put this?
+ /* //EVERYTHING AFTER THIS NEEDS TO BE MOVED INTO THE PLAYER STRATEGY INSTEAD FOR HUMANS
 	string input;
 	cout << endl << "============" << endl;
 	cout << name << "'s turn to issue orders." << endl;
@@ -205,18 +204,18 @@ void Player::issueOrder() {
 				//select origin
 				cout << "Select territory to attack from >> ";
 				getline(cin, input);
-				/*while (!validTerritoryAttack(input, players[i])) {
+				*//*while (!validTerritoryAttack(input, players[i])) {
 					cout << "!!Enter a valid territory ID to attack from >> ";
 					getline(cin, input);
-				}*/
+				}*//*
 				origin = gameMap->getTerritory(stoi(input));
 				//select target
 				cout << "Select territory to target for attack >> ";
 				getline(cin, input);
-				/*while (!validTerritoryAttackTarget(input, origin, players[i])) {
+				*//*while (!validTerritoryAttackTarget(input, origin, players[i])) {
 					cout << "!!Enter a valid territory ID to target for attack >> ";
 					getline(cin, input);
-				}*/
+				}*//*
 				destination = gameMap->getTerritory(stoi(input));
 				cout << "Number of troops to attack with >> ";
 			}
@@ -226,18 +225,18 @@ void Player::issueOrder() {
 				//Select origin of transfer
 				cout << "Select territory to transfer from >> ";
 				getline(cin, input);
-				/*while (!validTerritoryDefend(input, players[i])) {
+				*//*while (!validTerritoryDefend(input, players[i])) {
 					cout << "!!Enter a valid territory ID to transfer from >> ";
 					getline(cin, input);
-				}*/
+				}*//*
 				origin = gameMap->getTerritory(stoi(input));
 				//Select target of transfer
 				cout << "Select territory to transfer to>>";
 				getline(cin, input);
-				/*while (!validTerritoryTransferTarget(input, origin, players[i])) {
+				*//*while (!validTerritoryTransferTarget(input, origin, players[i])) {
 					cout << "!!Enter a valid territory ID to transfer too >> ";
 					getline(cin, input);
-				}*/
+				}*//*
 				destination = gameMap->getTerritory(stoi(input));
 				cout << "Number of troops to transfer >> ";
 			}
@@ -248,10 +247,10 @@ void Player::issueOrder() {
 			//This reaches only if the player attacked or transfered successfully
 			//Get number of troops to transfer
 			getline(cin, input);
-			/*while (!validAdvanceAmount(input, origin)) {
+			*//*while (!validAdvanceAmount(input, origin)) {
 				cout << "Enter a valid number of troops >> ";
 				getline(cin, input);
-			}*/
+			}*//*
 			qty = stoi(input);
 			//Create the advance order
 			//players[i]->issueOrder(Order::Advance, new Advance(origin, destination, qty, players[i]->getName(), destination->getOwner()));
@@ -274,7 +273,7 @@ void Player::issueOrder() {
 		default:
 			break;
 		}
-	}
+	}*/
 
 	//string type;
 	//switch (orderType) {
@@ -313,7 +312,6 @@ void Player::issueOrder() {
 	//	cout << i + 1 << ": " << *(orders->get(i)) << endl;
 	//}
 	//cout << endl;
-}
 
 void Player::executeOrder(int i) {
 	if (i < orders->getSize() && i >= 0) {

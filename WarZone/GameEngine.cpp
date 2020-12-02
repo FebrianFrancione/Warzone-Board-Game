@@ -3,6 +3,7 @@
 #include "Map.h"
 #include "MapLoader.h"
 
+
 #include <iostream>
 //#include <filesystem> //ENABLE IF PROJECT IS SET FOR C++17, IF NOT CANNOT READ FILES FROM DIRECTORY
 #include <filesystem>
@@ -305,15 +306,12 @@ void GameEngine::mainGameLoop() {
 	issueOrdersPhase();
 	executeOrdersPhase();
 	for (int i = 0; i < num_players; i++) {
-		cout << "It is " << players[i]->getName() << "'s turn" << endl;
-		cout << players[i]->getName() << "'s Defense: " << endl;
+        cout << "It is " << players[i]->getName() << "'s turn" << endl;
+        cout << players[i]->getName() << "'s Defense: " << endl;
         players[i]->toDefend();
-
-
-
         cout << players[i]->getName() << "'s Attack: " << endl;
         players[i]->toAttack();
-
+    }
 	bool victory = false;
 	while (!victory) {
 		reinforcementPhase();
