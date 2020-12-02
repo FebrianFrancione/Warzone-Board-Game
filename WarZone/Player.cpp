@@ -51,10 +51,13 @@ Player::Player(const Player& p) {
 
 Player::~Player() {}
 
+
 //player Strategies
 void Player::setPlayerStrategy(PlayerStrategy* strat){
     this->playerstrat = strat;
 }
+
+//Iterates over a list of territories owned by the player and displays them
 
 void Player::printPlayerTerritories() {
 	cout << name << "'s territories: " << endl;
@@ -67,6 +70,7 @@ void Player::printPlayerTerritories() {
 	}
 	cout << "--------" << endl;
 }
+
 
 void Player::toDeploy() {
 	string input;
@@ -115,6 +119,9 @@ void Player::toDefend() {
 // Displays a list of surrounding territories the player can attack
 void Player::toAttack() {
 
+    this->playerstrat->toAttack(this->name, this->territories, this->gameMap, this->orders);
+
+
 	cout << "The territories you can attack are: " << endl;
 	//own territories loop
 	this->playerstrat->toAttack();
@@ -138,19 +145,25 @@ void Player::toAttack() {
 		}
 	}
 	cout << "--------" << endl;*/
+
 }
 
 void Player::toDefend() {
-    this->playerstrat->toDefend();
-    /*cout << "Your territories to defend: " << endl;
-    for (int i = 0; i < territories.size(); i++) {
-        cout << setw(40) << territories[i]->getName() << endl;
-    }
-    cout << "--------" << endl;*/
+    this->playerstrat->toDefend(this->name, this->territories, this->gameMap, this->orders);
+    cout << " Inside player class Player name: " << this;
 }
 
 //Adds an order to the order list and displays all current orders
 void Player::issueOrder() {
+
+    this->playerstrat->issueOrder(this->name, this->territories, this->gameMap, this->orders);
+}
+
+
+
+
+
+
   this->playerstrat->issueOrder();
   //EVERYTHING AFTER THIS NEEDS TO BE MOVED INTO THE PLAYER STRATEGY INSTEAD FOR HUMANS
 	string input;

@@ -152,12 +152,12 @@ void GameEngine::startupPhase() {
         case 3: players[i]->setPlayerStrategy(&benevolentStrat);break;
         case 4: players[i]->setPlayerStrategy(&neutralStrat);break;
         }
-        cout << "Strat set!" << endl;
+        //these will be removed
+ /*       cout << "Strat set!" << endl;
         players[i]->toAttack();
-        players[i]->toDefend();
         players[i]->issueOrder();
 
-        cout << "Continue" << endl;
+        cout << "Continue" << endl;*/
 	}
 
 
@@ -300,6 +300,20 @@ void GameEngine::executeOrdersPhase() {
 //	MAIN GAME LOOP
 //================================
 void GameEngine::mainGameLoop() {
+
+	reinforcementPhase();
+	issueOrdersPhase();
+	executeOrdersPhase();
+	for (int i = 0; i < num_players; i++) {
+		cout << "It is " << players[i]->getName() << "'s turn" << endl;
+		cout << players[i]->getName() << "'s Defense: " << endl;
+        players[i]->toDefend();
+
+
+
+        cout << players[i]->getName() << "'s Attack: " << endl;
+        players[i]->toAttack();
+
 	bool victory = false;
 	while (!victory) {
 		reinforcementPhase();
@@ -351,6 +365,7 @@ bool GameEngine::validTerritoryDefend(string selection, Player* player) {
 	if (gameMap->getTerritory(territoryId)->getOwner() != player->getName()) {
 		cout << "!!This territory does not belong to you." << endl;
 		return false;
+
 	}
 	else {
 		return true;
