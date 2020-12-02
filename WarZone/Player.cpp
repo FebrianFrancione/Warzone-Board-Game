@@ -14,7 +14,7 @@ using namespace std;
 //};
 
 //temp
-Player::Player(std::string n, int id, int army) {
+/*Player::Player(std::string n, int id, int army) {
     //Player::Player(std::string n, int id, int army, list<string> t, int h) {
     armySize = army;
     name = n;
@@ -22,7 +22,7 @@ Player::Player(std::string n, int id, int army) {
     //vector<string> playerTerritories;
     //territories = t;
     //hand = h;
-};
+};*/
 
 //constructor
 Player::Player(std::string n, int id, int army, Map* needle) {
@@ -60,12 +60,12 @@ void Player::setPlayerStrategy(PlayerStrategy* strat){
 void Player::toAttack() {
 
 	this->playerstrat->toAttack();
-//    cout << "The territories you can attack are: " << endl;
-	/*for (int i = 0; i < territories.size(); i++) {
+  cout << "The territories you can attack are: " << endl;
+	for (int i = 0; i < territories.size(); i++) {
 		for (int j = 0; j < territories[i]->getNumberAdj(); j++) {
 			if (gameMap->getTerritory(territories[i]->getAdjacent(j))->getOwner() != name) {
-				cout << 
-					right << setw(40) << gameMap->getTerritory(territories[i]->getAdjacent(j))->getName() << 
+				cout <<
+					right << setw(40) << gameMap->getTerritory(territories[i]->getAdjacent(j))->getName() <<
 					" (" << setw(2) << territories[i]->getAdjacent(j) << ")" <<
 					setw(20) << " belonging to " <<
 					left << setw(20) << gameMap->getTerritory(territories[i]->getAdjacent(j))->getOwner() <<
@@ -76,7 +76,7 @@ void Player::toAttack() {
 			}
 		}
 	}
-	cout << "--------" << endl;*/
+	cout << "--------" << endl;
 }
 
 void Player::toDefend() {

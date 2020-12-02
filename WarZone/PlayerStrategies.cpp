@@ -1,7 +1,16 @@
-/*#include "PlayerStrategies.h"*/
+/*#include "PlayerStrategies.h"*//*
+
 #include <string>
 #include <iostream>
+#include "Map.h"
+#include "Player.h"
+#include <iomanip>
+
 using namespace std;
+
+*/
+/*class Player;*//*
+
 
 class PlayerStrategy {
 public:
@@ -14,6 +23,25 @@ class HumanPlayerStrategy: public PlayerStrategy{
 public:
     virtual void toAttack(){
         cout << "HumanPlayerStrategy toAttack player strat" << endl;
+          */
+/*cout << "The territories you can attack are: " << endl;
+        for (int i = 0; i < territories.size(); i++) {
+            for (int j = 0; j < territories[i]->getNumberAdj(); j++) {
+                if (gameMap->getTerritory(territories[i]->getAdjacent(j))->getOwner() != name) {
+                    cout <<
+                        right << setw(40) << gameMap->getTerritory(territories[i]->getAdjacent(j))->getName() <<
+                        " (" << setw(2) << territories[i]->getAdjacent(j) << ")" <<
+                        setw(20) << " belonging to " <<
+                        left << setw(20) << gameMap->getTerritory(territories[i]->getAdjacent(j))->getOwner() <<
+                        " from " <<
+                        right << setw(40) << territories[i]->getName() <<
+                        " (" << setw(2) << territories[i]->getId() << ")" <<
+                        endl;
+                }
+            }
+        }
+        cout << "--------" << endl;*//*
+
     }
 
     virtual void toDefend(){
@@ -67,6 +95,7 @@ public:
 
 
 
+*/
 /*
 
 class Players {
@@ -81,8 +110,10 @@ public:
 private:
     PlayerStrategy * playerstrat;
 };
+*//*
+
+
+
+
+
 */
-
-
-
-

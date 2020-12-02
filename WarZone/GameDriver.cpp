@@ -1,5 +1,4 @@
-/*
-#include "Cards.h";
+#include "Cards.h"
 #include "GameEngine.h"
 #include "Map.h"
 #include "MapLoader.h"
@@ -19,4 +18,4 @@ int main() {
 	cout << "=========================================" << endl;
 	cout << endl;
 	game.mainGameLoop();
-}*/
+}

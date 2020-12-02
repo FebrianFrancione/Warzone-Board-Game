@@ -1,4 +1,3 @@
-/*
 #include "GameEngine.h"
 #include "Player.h"
 #include "Map.h"
@@ -6,6 +5,7 @@
 
 #include <iostream>
 //#include <filesystem> //ENABLE IF PROJECT IS SET FOR C++17, IF NOT CANNOT READ FILES FROM DIRECTORY
+#include <filesystem>
 using namespace std;
 
 //================================
@@ -35,11 +35,9 @@ bool GameEngine::initializeGameValues() {
 	cout << "Type in name of map to play on: (you may have to check manually in the directory)" << endl;
 	string path = "Maps/";
 	//ENABLE ONLY IF C++17 IS AVAILABLE
-	*/
-/*
-	for (const auto& entry : filesystem::directory_iterator(path))
-		std::cout << entry.path() << std::endl;
-	*//*
+/*	for (const auto& entry : filesystem::directory_iterator(path))
+		std::cout << entry.path() << std::endl;*/
+
 
 	cout << "Default available: \"canada.map\"" << endl << ">> ";
 	getline(cin, input);
@@ -117,10 +115,36 @@ void GameEngine::startupPhase() {
 			cout << "Empty name, try again" << endl << ">>";
 			getline(cin, input);
 		}
+
+
 		//gameMap is a pointer, and we're giving each player direct access to the map object because I didn't
 		//implement the graph data structure properly and now it's kinda too late to rewrite that whole thing
-		//so we're doing some *epic* cheating
+		//so we're doing some ------****epic****------ cheating.
 		players.push_back(new Player(input, i, initialArmies, gameMap));
+
+        //sanity check
+        //strategy before or after
+        AggressivePlayerStrategy aggroStrat;
+        HumanPlayerStrategy humanStrat;
+        BenevolentPlayerStrategy benevolentStrat;
+        NeutralPlayerStrategy neutralStrat;
+        int strat_id {0};
+
+        cout << "Enter player " << i + 1 << "'s Starting Strategy."<<endl<<"1.Human 2.Aggro 3.Benevolent 4.Neutral(AFK)" << endl;
+        cin >> strat_id;
+        cout << strat_id;
+        switch (strat_id) {
+        case 1: players[i]->setPlayerStrategy(&humanStrat);break;
+        case 2: players[i]->setPlayerStrategy(&aggroStrat);break;
+        case 3: players[i]->setPlayerStrategy(&benevolentStrat);break;
+        case 4: players[i]->setPlayerStrategy(&neutralStrat);break;
+        }
+        cout << "Strat set!" << endl;
+        cout << "Testing Strat set!" << endl;
+        players[i]->toAttack();
+        players[i]->toDefend();
+        players[i]->issueOrder();
+
 	}
 	//Shuffle the vector to randomize play order
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
@@ -166,12 +190,11 @@ void GameEngine::startupPhase() {
 	for (int i = 0; i < gameMap->getNumTerritories() - distributeQty; i++) {
 		cout << gameMap->getTerritory(shuffleTerritories[i + distributeQty])->getName() << endl;
 	}
-	*/
-/*cout << "--------" << endl;
+cout << "--------" << endl;
 	cout << "All territories in order: " << endl;
 	for (int i = 0; i < gameMap->getNumTerritories(); i++) {
 		cout << gameMap->getTerritory(i)->getName() << " owned by " << gameMap->getTerritory(i)->getOwner() << endl;
-	}*//*
+	}
 
 
 }
@@ -201,4 +224,3 @@ void GameEngine::mainGameLoop() {
 		players[i]->toAttack();
 	}
 }
-*/

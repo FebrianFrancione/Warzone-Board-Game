@@ -7,11 +7,10 @@
 
 #include "Cards.h"
 #include "Map.h"
-#include "PlayerStrategies.cpp"
+#include "PlayerStrategies.h"
 
 using namespace std;
 
-class PlayerStrategy;
 class Cards;
 
 class Territory;
@@ -23,7 +22,7 @@ public:
     Player();
 
 //Constructors
-    Player(std::string n, int id, int army);
+
     Player(std::string n, int id, int army, Map* needle);
 
     //Player(std::string n, int id, int army, list<string> t, int h);
@@ -62,15 +61,18 @@ public:
     //Cards
     std::vector<Cards*> player_hand;
 
+    //I call this one the needle threader: the pointer points directly to the map
+
 private:
 
     int armySize;
-    std::string name;
+
     int playerTurnId;
 
     int hand;
     list<string> orders;
 
+    std::string name;
     //I call this one the needle threader: the pointer points directly to the map
     Map* gameMap;
     //strategy

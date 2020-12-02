@@ -1,7 +1,7 @@
+/*
+#include "Player.h"*/
 
-#include "Player.h"
-
-int main(){
+/*int main(){
     Player player1("name", 0, 0);
     AggressivePlayerStrategy aggroStrat;
     HumanPlayerStrategy humanStrat;
@@ -26,11 +26,11 @@ int main(){
     player1.setPlayerStrategy(&neutralStrat);
     player1.toAttack();
     player1.toDefend();
-    player1.issueOrder();
+    player1.issueOrder();*/
 
     /*Players player1;
     player1.toAttack();*/
 /*    AggressivePlayerStrategy *aggro = new AggressivePlayerStrategy;
 
     player1.toAttack();*/
-}
+//}
