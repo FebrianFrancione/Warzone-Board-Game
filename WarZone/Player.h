@@ -30,7 +30,9 @@ public:
 	//methods to attack, defend, and issue orders
 	void toAttack();
 	void toDefend();
-	void issueOrder(int orderType, Order* order);
+	void toDeploy();
+	void printPlayerTerritories();
+	void issueOrder();
 	void executeOrder(int i);
 	Order* getFirstOrder();
 	int numberOfOrders();
@@ -60,4 +62,9 @@ private:
 	OrdersList* orders;
 	//I call this one the needle threader: the pointer points directly to the map
 	Map* gameMap;
+
+	//validation functions on user input
+	bool validTerritoryDeploy(string input);
+	bool validReinforceAmount(string input);
+	bool validOrder(string input);
 };
