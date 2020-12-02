@@ -151,12 +151,12 @@ void GameEngine::startupPhase() {
         case 3: players[i]->setPlayerStrategy(&benevolentStrat);break;
         case 4: players[i]->setPlayerStrategy(&neutralStrat);break;
         }
-        cout << "Strat set!" << endl;
+        //these will be removed
+ /*       cout << "Strat set!" << endl;
         players[i]->toAttack();
-        players[i]->toDefend();
         players[i]->issueOrder();
 
-        cout << "Continue" << endl;
+        cout << "Continue" << endl;*/
 	}
 
 
@@ -236,8 +236,11 @@ void GameEngine::mainGameLoop() {
 	for (int i = 0; i < num_players; i++) {
 		cout << "It is " << players[i]->getName() << "'s turn" << endl;
 		cout << players[i]->getName() << "'s Defense: " << endl;
-	    players[i]->toDefend();
+        players[i]->toDefend();
+
+
+
         cout << players[i]->getName() << "'s Attack: " << endl;
-		players[i]->toAttack();
+        players[i]->toAttack();
 	}
 }
