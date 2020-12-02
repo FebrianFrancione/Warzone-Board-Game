@@ -58,9 +58,8 @@ void Player::setPlayerStrategy(PlayerStrategy* strat){
 
 // Displays a list of surrounding territories the player can attack
 void Player::toAttack() {
-
 	this->playerstrat->toAttack();
-  cout << "The territories you can attack are: " << endl;
+/*  cout << "The territories you can attack are: " << endl;
 	for (int i = 0; i < territories.size(); i++) {
 		for (int j = 0; j < territories[i]->getNumberAdj(); j++) {
 			if (gameMap->getTerritory(territories[i]->getAdjacent(j))->getOwner() != name) {
@@ -76,7 +75,7 @@ void Player::toAttack() {
 			}
 		}
 	}
-	cout << "--------" << endl;
+	cout << "--------" << endl;*/
 }
 
 void Player::toDefend() {

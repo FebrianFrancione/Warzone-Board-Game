@@ -13,15 +13,20 @@ class Player;
 
 class PlayerStrategy {
 public:
-    virtual string toAttack() = 0;
+/*    virtual string toAttack() = 0;
+    virtual string toDefend() = 0;
+    virtual string issueOrder() = 0;*/
+
+    virtual void toAttack() = 0;
     virtual void toDefend() = 0;
     virtual void issueOrder() = 0;
 };
 
 class HumanPlayerStrategy: public PlayerStrategy{
 public:
-    virtual string toAttack(){
-        cout << "HumanPlayerStrategy toAttack player strat" << endl;
+    virtual void toAttack(){
+        cout << "**HumanPlayerStrategy** toAttack" << endl;
+
 /*
 cout << "The territories you can attack are: " << endl;
       for (int i = 0; i < territories.size(); i++) {
@@ -45,51 +50,58 @@ cout << "The territories you can attack are: " << endl;
     }
 
     virtual void toDefend(){
-        cout << "HumanPlayerStrategy toDefend player strat"<< endl;
+        cout << "**HumanPlayerStrategy** toDefend"<< endl;
     }
     virtual void issueOrder(){
-        cout << "HumanPlayerStrategy issueOrder player strat"<< endl;
+        cout << "**HumanPlayerStrategy** IssueOrder"<< endl;
     }
 
 };
 
 class AggressivePlayerStrategy: public PlayerStrategy{
 public:
-    virtual string toAttack(){
-        cout << "AggressivePlayerStrategy toAttack player strat"<< endl;
+
+    virtual void toAttack(){
+        cout << "**AggressivePlayerStrategy** toAttack"<< endl;
     }
+
     virtual void toDefend(){
-        cout << "AggressivePlayerStrategy toDefend player strat"<< endl;
+        cout << "**AggressivePlayerStrategy** toDefend"<< endl;
     }
+
     virtual void issueOrder(){
-        cout << "AggressivePlayerStrategy issueOrder player strat"<< endl;
+        cout << "**AggressivePlayerStrategy** IssueOrder"<< endl;
     }
 };
 
 class BenevolentPlayerStrategy: public PlayerStrategy{
 public:
-    virtual string toAttack(){
-        cout << "BenevolentPlayerStrategy toAttack player strat"<< endl;
+    virtual void toAttack(){
+        cout << "**BenevolentPlayerStrategy** toAttack"<< endl;
     }
+
     virtual void toDefend(){
-        cout << "BenevolentPlayerStrategy toDefend player strat"<< endl;
+        cout << "**BenevolentPlayerStrategy** toDefend"<< endl;
     }
+
     virtual void issueOrder(){
-        cout << "BenevolentPlayerStrategy issueOrder player strat"<< endl;
+        cout << "**BenevolentPlayerStrategy** IssueOrder"<< endl;
     }
 };
 
 class NeutralPlayerStrategy: public PlayerStrategy{
 public:
 
-    virtual string toAttack(){
-        cout << "NeutralPlayerStrategy toAttack player strat"<< endl;
+    virtual void toAttack(){
+        cout << "**NeutralPlayerStrategy** toAttack"<< endl;
     }
+
     virtual void toDefend(){
-        cout << "NeutralPlayerStrategy toDefend player strat"<< endl;
+        cout << "**NeutralPlayerStrategy** toDefend"<< endl;
     }
+
     virtual void issueOrder(){
-        cout << "NeutralPlayerStrategy issueOrder player strat"<< endl;
+        cout << "**NeutralPlayerStrategy** IssueOrder"<< endl;
     }
 };
 

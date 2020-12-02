@@ -14,7 +14,7 @@ using namespace std;
 class Cards;
 
 class Territory;
-
+class PlayerStrategy;
 //Player Class
 class Player
 {

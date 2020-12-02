@@ -8,6 +8,11 @@
 #include <filesystem>
 using namespace std;
 
+AggressivePlayerStrategy aggroStrat;
+HumanPlayerStrategy humanStrat;
+BenevolentPlayerStrategy benevolentStrat;
+NeutralPlayerStrategy neutralStrat;
+
 //================================
 //	GameEngine
 //================================
@@ -39,14 +44,17 @@ bool GameEngine::initializeGameValues() {
 		std::cout << entry.path() << std::endl;*/
 
 
-	cout << "Default available: \"canada.map\"" << endl << ">> ";
-	getline(cin, input);
+/*	cout << "Default available: \"canada.map\"" << endl << ">> ";
+	getline(cin, input);*/
+	//temp
+	input = "canada.map";
 	mapName = path + input;
 	//GET PLAYERS
-	cout << "Enter number of players (2-5)" << endl << ">> ";
+/*	cout << "Enter number of players (2-5)" << endl << ">> ";
 	getline(cin, input);
 	try {
-		num_players = stoi(input);
+		*//*num_players = stoi(input);*//*
+
 		if (num_players > 5 || num_players < 2) {
 			throw exception();
 		}
@@ -54,7 +62,13 @@ bool GameEngine::initializeGameValues() {
 	catch (const std::exception& e) {
 		cout << "Invalid player number. Game closing" << endl;
 		return false;
-	}
+	}*/
+
+
+    //temp
+    num_players = 2;
+
+
 	//statistic observer on/off
 	cout << "Statistic Observer (type \"on\" to turn on)" << endl << ">> ";
 	getline(cin, input);
@@ -122,12 +136,10 @@ void GameEngine::startupPhase() {
 		//so we're doing some ------****epic****------ cheating.
 		players.push_back(new Player(input, i, initialArmies, gameMap));
 
+
         //sanity check
         //strategy before or after
-        AggressivePlayerStrategy aggroStrat;
-        HumanPlayerStrategy humanStrat;
-        BenevolentPlayerStrategy benevolentStrat;
-        NeutralPlayerStrategy neutralStrat;
+
         int strat_id {0};
 
         cout << "Enter player " << i + 1 << "'s Starting Strategy."<<endl<<"1.Human 2.Aggro 3.Benevolent 4.Neutral(AFK)" << endl;
@@ -140,12 +152,15 @@ void GameEngine::startupPhase() {
         case 4: players[i]->setPlayerStrategy(&neutralStrat);break;
         }
         cout << "Strat set!" << endl;
-        cout << "Testing Strat set!" << endl;
         players[i]->toAttack();
         players[i]->toDefend();
         players[i]->issueOrder();
 
+        cout << "Continue" << endl;
 	}
+
+
+
 	//Shuffle the vector to randomize play order
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 	std::shuffle(std::begin(players), std::end(players), std::default_random_engine(seed));
@@ -220,7 +235,9 @@ void GameEngine::mainGameLoop() {
 	executeOrdersPhase();
 	for (int i = 0; i < num_players; i++) {
 		cout << "It is " << players[i]->getName() << "'s turn" << endl;
-		players[i]->toDefend();
+		cout << players[i]->getName() << "'s Defense: " << endl;
+	    players[i]->toDefend();
+        cout << players[i]->getName() << "'s Attack: " << endl;
 		players[i]->toAttack();
 	}
 }
