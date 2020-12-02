@@ -7,10 +7,11 @@
 
 #include "Cards.h"
 #include "Map.h"
-#include "PlayerStrategies.h"
+#include "PlayerStrategies.cpp"
 
 using namespace std;
 
+class PlayerStrategy;
 class Cards;
 
 class Territory;
@@ -22,7 +23,7 @@ public:
     Player();
 
 //Constructors
-
+    Player(std::string n, int id, int army);
     Player(std::string n, int id, int army, Map* needle);
 
     //Player(std::string n, int id, int army, list<string> t, int h);

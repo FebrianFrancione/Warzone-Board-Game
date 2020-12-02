@@ -1,68 +1,71 @@
-#include "PlayerStrategies.h"
+/*#include "PlayerStrategies.h"*/
 #include <string>
 #include <iostream>
 using namespace std;
 
+class PlayerStrategy {
+public:
+    virtual void toAttack() = 0;
+    virtual void toDefend() = 0;
+    virtual void issueOrder() = 0;
+};
+
+class HumanPlayerStrategy: public PlayerStrategy{
+public:
+    virtual void toAttack(){
+        cout << "HumanPlayerStrategy toAttack player strat" << endl;
+    }
+
+    virtual void toDefend(){
+        cout << "HumanPlayerStrategy toDefend player strat"<< endl;
+    }
+    virtual void issueOrder(){
+        cout << "HumanPlayerStrategy issueOrder player strat"<< endl;
+    }
+
+};
+
+class AggressivePlayerStrategy: public PlayerStrategy{
+public:
+    virtual void toAttack(){
+        cout << "AggressivePlayerStrategy toAttack player strat"<< endl;
+    }
+    virtual void toDefend(){
+        cout << "AggressivePlayerStrategy toDefend player strat"<< endl;
+    }
+    virtual void issueOrder(){
+        cout << "AggressivePlayerStrategy issueOrder player strat"<< endl;
+    }
+};
+
+class BenevolentPlayerStrategy: public PlayerStrategy{
+public:
+    virtual void toAttack(){
+        cout << "BenevolentPlayerStrategy toAttack player strat"<< endl;
+    }
+    virtual void toDefend(){
+        cout << "BenevolentPlayerStrategy toDefend player strat"<< endl;
+    }
+    virtual void issueOrder(){
+        cout << "BenevolentPlayerStrategy issueOrder player strat"<< endl;
+    }
+};
+
+class NeutralPlayerStrategy: public PlayerStrategy{
+public:
+
+    virtual void toAttack(){
+        cout << "NeutralPlayerStrategy toAttack player strat"<< endl;
+    }
+    virtual void toDefend(){
+        cout << "NeutralPlayerStrategy toDefend player strat"<< endl;
+    }
+    virtual void issueOrder(){
+        cout << "NeutralPlayerStrategy issueOrder player strat"<< endl;
+    }
+};
 
 
-
-
-void PlayerStrategy::toAttack() {};
-void PlayerStrategy::toDefend() {};
-void PlayerStrategy::issueOrder() {};
-
-
-class PlayerStrategy;
-class HumanPlayerStrategy;
-class AggressivePlayerStrategy;
-class BenevolentPlayerStrategy;
-class NeutralPlayerStrategy;
-
-void HumanPlayerStrategy::HumanPlayerStrategy::toAttack(){
-    cout << "HumanPlayerStrategy toAttack player strat";
-}
-void HumanPlayerStrategy::HumanPlayerStrategy::toDefend(){
-    cout << "HumanPlayerStrategy toDefend player strat";
-}
-void HumanPlayerStrategy::HumanPlayerStrategy::issueOrder(){
-    cout << "HumanPlayerStrategy issueOrder player strat";
-}
-
-
-
-void AggressivePlayerStrategy::toAttack(){
-    cout << "AggressivePlayerStrategy toAttack player strat";
-}
-void AggressivePlayerStrategy::toDefend(){
-    cout << "AggressivePlayerStrategy toDefend player strat";
-}
-void AggressivePlayerStrategy::issueOrder(){
-    cout << "AggressivePlayerStrategy issueOrder player strat";
-}
-
-
-
-void BenevolentPlayerStrategy::toAttack(){
-    cout << "BenevolentPlayerStrategy toAttack player strat";
-}
-void BenevolentPlayerStrategy::toDefend(){
-    cout << "BenevolentPlayerStrategy toDefend player strat";
-}
-void BenevolentPlayerStrategy::issueOrder(){
-    cout << "BenevolentPlayerStrategy issueOrder player strat";
-}
-
-
-
-void NeutralPlayerStrategy::toAttack(){
-    cout << "NeutralPlayerStrategy toAttack player strat";
-}
-void NeutralPlayerStrategy::toDefend(){
-    cout << "NeutralPlayerStrategy toDefend player strat";
-}
-void NeutralPlayerStrategy::issueOrder(){
-    cout << "NeutralPlayerStrategy issueOrder player strat";
-}
 
 /*
 

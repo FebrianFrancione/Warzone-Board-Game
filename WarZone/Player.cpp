@@ -13,6 +13,17 @@ using namespace std;
 //	hand = -1;
 //};
 
+//temp
+Player::Player(std::string n, int id, int army) {
+    //Player::Player(std::string n, int id, int army, list<string> t, int h) {
+    armySize = army;
+    name = n;
+    playerTurnId = id;
+    //vector<string> playerTerritories;
+    //territories = t;
+    //hand = h;
+};
+
 //constructor
 Player::Player(std::string n, int id, int army, Map* needle) {
 	//Player::Player(std::string n, int id, int army, list<string> t, int h) {

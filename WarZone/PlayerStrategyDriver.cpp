@@ -1,8 +1,8 @@
-#include "PlayerStrategies.h"
+
 #include "Player.h"
 
 int main(){
-    Player player1;
+    Player player1("name", 0, 0);
     AggressivePlayerStrategy aggroStrat;
     HumanPlayerStrategy humanStrat;
     BenevolentPlayerStrategy benevolentStrat;
