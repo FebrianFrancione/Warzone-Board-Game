@@ -26,8 +26,12 @@ public:
 	//void assignOrder();
 	//void assignCardDeck();
 	//void GamestartupPhase();
-	void mainGameLoop();
 	void reinforcementPhase();
 	void issueOrdersPhase();
 	void executeOrdersPhase();
+	void mainGameLoop();
+	//Name check function
+	bool validName(string name);
+	bool validTerritoryDefend(string selection, Player* player);
+	bool validReinforceAmount(string amount, Player* player);
 };

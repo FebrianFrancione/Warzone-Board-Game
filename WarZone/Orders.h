@@ -1,4 +1,7 @@
 #pragma once
+
+#include "Map.h";
+
 #include <iostream>
 
 //Order superclass
@@ -32,13 +35,11 @@ public:
 	//Destructor
 	~OrdersList();
 	//Methods
+	void add(Order* order);
 	void move(int from, int to);
-	//Renamed to deleteOrder since overloading delete would be unncessarily long
-	//and error prone since the actual delete method is something else entirely
 	void deleteOrder(int pos);
 	Order* get(int pos);
-	//added to add an order to the list
-	void add(Order* order);
+	int getSize();
 	//Operator overloads
 	OrdersList& operator = (const OrdersList& ordersList);
 	friend std::ostream& operator << (std::ostream& out, const OrdersList& ordersList);
@@ -58,6 +59,7 @@ private:
 class Deploy : public Order {
 public:
 	Deploy();
+	Deploy(Territory* _territory, int qty);
 	Deploy(const Deploy& original);
 	~Deploy();
 	void execute();
@@ -65,6 +67,9 @@ public:
 	Order* clone();
 	Deploy& operator= (const Deploy& deploy);
 	friend std::ostream& operator << (std::ostream& out, const Deploy& deploy);
+private:
+	Territory* territory;
+	int qty;
 };
 
 class Advance : public Order {

@@ -70,6 +70,14 @@ int Territory::getArmyCount() {
 	return armyCount;
 }
 
+void Territory::addTroops(int qty) {
+	armyCount += qty;
+}
+
+void Territory::removeTroops(int qty) {
+	armyCount -= qty;
+}
+
 void Territory::addAdjacent(int id) {
 	numAdj++;
 	int* newList = new int[numAdj];
@@ -241,6 +249,10 @@ int Continent::getTerritoryId(int index) {
 
 int Continent::getNumTerritories() {
 	return numTerr;
+}
+
+int Continent::getReinforcementBonus() {
+	return totalReinforcements;
 }
 
 Continent& Continent::operator=(const Continent& original) {

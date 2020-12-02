@@ -24,6 +24,8 @@ public:
 	//army count getter/setter
 	void setArmyCount(int count);
 	int getArmyCount();
+	void addTroops(int qty);
+	void removeTroops(int qty);
 	//setting adjacent territories
 	void addAdjacent(int id);
 	bool isAdjacent(int id);
@@ -82,6 +84,7 @@ public:
 	void addTerritory(int territoryId);
 	int getTerritoryId(int index);
 	int getNumTerritories();
+	int getReinforcementBonus();
 	Continent& operator= (const Continent& original);
 	friend std::ostream& operator<< (std::ostream& out, const Continent& continent);
 private:

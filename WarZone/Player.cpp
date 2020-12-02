@@ -7,11 +7,12 @@
 using namespace std;
 
 //default constructor
-//Player::Player() {
-//	armySize = -1;
-//	playerTurnId = -1;
-//	hand = -1;
-//};
+Player::Player() {
+	armySize = -1;
+	playerTurnId = -1;
+	hand = -1;
+	orders = new OrdersList();
+};
 
 //constructor
 Player::Player(std::string n, int id, int army, Map* needle) {
@@ -20,6 +21,7 @@ Player::Player(std::string n, int id, int army, Map* needle) {
 	name = n;
 	playerTurnId = id;
 	gameMap = needle;
+	orders = new OrdersList();
 	//vector<string> playerTerritories;
 	//territories = t;
 	//hand = h;
@@ -30,6 +32,7 @@ Player::Player(const Player& p) {
 	armySize = p.armySize;
 	name = p.name;
 	playerTurnId = p.playerTurnId;
+	orders = p.orders;
 	/*player1_hand = p.player1_hand;*/
 }
 
@@ -37,9 +40,9 @@ Player::~Player() {}
 
 //Iterates over a list of territories owned by the player and displays them
 void Player::toDefend() {
-	cout << "Your territories to defend: " << endl;
+	cout << "Your territories: " << endl;
 	for (int i = 0; i < territories.size(); i++) {
-		cout << setw(40) << territories[i]->getName() << endl; 
+		cout << setw(40) << territories[i]->getName() << "(" << territories[i]->getId() << ")" << endl; 
 	}
 	cout << "--------" << endl;
 }
@@ -66,24 +69,44 @@ void Player::toAttack() {
 }
 
 //Adds an order to the order list and displays all current orders
-void Player::issueOrder() {
+void Player::issueOrder(int orderType, Order* order) {
 
-	int j = 1;
-
-	orders.push_back(" Order " + to_string(j));
-	cout << " Order " + to_string(j) << " was added to the list of orders";
-	cout << endl;
-
-	j++;
-
-	cout << "List of all orders:";
-	cout << endl;
-	for (list<string>::iterator it = orders.begin(); it != orders.end(); ++it) {
-
-		std::cout << ' ' << *it;
-		cout << endl;
-
-	};
+	string type;
+	switch (orderType) {
+	case Order::Deploy:
+		//orders->add(new Deploy());
+		type = "Deploy";
+		break;
+	case Order::Advance:
+		//orders->add(new Advance());
+		type = "Advance";
+		break;
+	case Order::Bomb:
+		//orders->add(new Bomb());
+		type = "Bomb";
+		break;
+	case Order::Blockade:
+		//orders->add(new Blockade());
+		type = "Blockade";
+		break;
+	case Order::Airlift:
+		//orders->add(new Airlift());
+		type = "Airlift";
+		break;
+	case Order::Negotiate:
+		//orders->add(new Negotiate());
+		type = "Negotiate";
+		break;
+	default:
+		cout << "Invalid Order type" << endl;
+		break;
+	}
+	orders->add(order);
+	cout << type << " order added to " << name << "'s list" << endl;
+	cout << "List of all orders:" << endl;
+	for (int i = 0; i < orders->getSize(); i++) {
+		cout << i + 1 << ": " << *(orders->get(i)) << endl;
+	}
 	cout << endl;
 }
 
@@ -107,5 +130,13 @@ void Player::setPlayerArmySize(int army) {
 }
 int Player::getPlayerArmySize() {
 	return armySize;
+}
+
+void Player::addReinforcements(int r) {
+	armySize += r;
+}
+
+void Player::subtractReinforcements(int r) {
+	armySize -= r;
 }
 

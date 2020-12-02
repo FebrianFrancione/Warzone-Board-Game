@@ -1,4 +1,5 @@
 #include "Orders.h"
+#include "Map.h"
 #include <iostream>
 using namespace std;
 
@@ -35,7 +36,22 @@ Order& Order::operator=(const Order& order) {
 //"to string" (stream operator overload for output)
 //Returns order type ID (which for superclass is none)
 ostream& operator<<(ostream& out, const Order& order) {
-	return (out << "Order of type " << order.type << " execution state: " << order.executed);
+	switch (order.type) {
+	case Order::Deploy: out << "Deploy"; break;
+	case Order::Advance: out << "Advance"; break;
+	case Order::Bomb: out << "Bomb"; break;
+	case Order::Blockade: out << "Blockade"; break;
+	case Order::Airlift: out << "Airlift"; break;
+	case Order::Negotiate: out << "Negotiate"; break;
+	}
+	out << " order. Execution state: ";
+	if (order.executed) {
+		out << "Executed";
+	}
+	else {
+		out << "Not executed";
+	}
+	return out;
 }
 
 //================
@@ -66,6 +82,18 @@ OrdersList::~OrdersList() {
 	}
 	delete [] theList;
 };
+
+//Add a new order to a list
+void OrdersList::add(Order* newOrder) {
+	size++;
+	Order** newList = new Order * [size];
+	for (int i = 0; i < size - 1; i++) {
+		newList[i] = theList[i];
+	}
+	newList[size - 1] = newOrder->clone();
+	delete theList;
+	theList = newList;
+}
 
 //Move order from start position to end position
 void OrdersList::move(int start, int end) {
@@ -107,21 +135,13 @@ void OrdersList::deleteOrder(int pos) {
 	theList = newList;
 }
 
-//Add a new order to a list
-void OrdersList::add(Order* newOrder) {
-	size++;
-	Order** newList = new Order*[size];
-	for (int i = 0; i < size - 1; i++) {
-		newList[i] = theList[i];
-	}
-	newList[size - 1] = newOrder->clone();
-	delete theList;
-	theList = newList;
-}
-
 //Get a specific order from the list
 Order* OrdersList::get(int pos) {
 	return theList[pos];
+}
+
+int OrdersList::getSize() {
+	return size;
 }
 
 //Assignment operator
@@ -155,23 +175,43 @@ ostream& operator<<(ostream& out, const OrdersList& ordersList) {
 Deploy::Deploy() {
 	executed = false;
 	type = OrderType::Deploy;
+	territory = nullptr;
+	qty = 0;
+}
+
+Deploy::Deploy(Territory* _territory, int _qty) {
+	executed = false;
+	type = OrderType::Deploy;
+	territory = _territory;
+	qty = _qty;
 }
 
 Deploy::Deploy(const Deploy& original) {
 	executed = original.executed;
 	type = original.type;
+	territory = original.territory;
+	qty = original.qty;
 }
 
 //Destructor
-Deploy::~Deploy() {};
+Deploy::~Deploy() {
+	delete territory;
+};
 
 void Deploy::execute() {
-	if (this->validate()) {
-		cout << "Executing deploy order.\n";
+	if (validate()) {
+		cout << "Adding " << qty << " troops to " << territory->getName() << endl;
+		territory->addTroops(qty);
 		executed = true;
 	}
 }
 bool Deploy::validate() {
+	//Only check to do is whether the territory belongs to anyone
+	//Can't access any other information. This order can only be added to a players list if it belongs to a player
+	//A deploy order has the highest priority, and therefore cannot fail otherwise
+	if (territory->getOwner().empty()) {
+		return false;
+	}
 	return !executed;
 }
 
@@ -179,6 +219,8 @@ Order* Deploy::clone() {
 	Deploy* newDeployOrder = new Deploy();
 	newDeployOrder->type = this->type;
 	newDeployOrder->executed = this->executed;
+	newDeployOrder->territory = this->territory;
+	newDeployOrder->qty = this->qty;
 	return (Order*)newDeployOrder;
 }
 

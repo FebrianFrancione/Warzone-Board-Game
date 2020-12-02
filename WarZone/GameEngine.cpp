@@ -88,7 +88,10 @@ bool GameEngine::initializeGameValues() {
 	}
 	else {
 		loader.printMap();
+		return true;
 	}
+	//If this threw, it just really confirms how dogshit I(calvin) am heh
+	throw exception();
 }
 
 //================================
@@ -108,8 +111,8 @@ void GameEngine::startupPhase() {
 	for (int i = 0; i < num_players; i++) {
 		cout << "Enter player " << i + 1 << "'s name >> ";
 		getline(cin, input);
-		while (input.empty()) {
-			cout << "Empty name, try again" << endl << ">>";
+		while (!validName(input)) {
+			cout << "Invalid name, try again" << endl << ">>";
 			getline(cin, input);
 		}
 		//gameMap is a pointer, and we're giving each player direct access to the map object because I didn't
@@ -139,13 +142,15 @@ void GameEngine::startupPhase() {
 	int distributeQty = gameMap->getNumTerritories() - (gameMap->getNumTerritories() % num_players);
 	for (int i = 0; i < distributeQty; i++) {
 		//Update the player's list of territories
-		//players[i % num_players]->territoriesId.push_back(shuffleTerritories[i]);
 		players[i % num_players]->territories.push_back(gameMap->getTerritory(shuffleTerritories[i]));
 		//Update the territories' owner in the map itself
 		gameMap->getTerritory(shuffleTerritories[i])->setOwner(players[i % num_players]->getName());
-		//Put a message out for the player //TEST
-		//cout << players[i % num_players]->getName() << " receives " << gameMap->getTerritory(shuffleTerritories[i])->getName() << endl;
+		//Assign a minimum of 1 troop
+		gameMap->getTerritory(shuffleTerritories[i])->setArmyCount(1);
+		players[i % num_players]->subtractReinforcements(1);
+		
 	}
+	//OUTPUT TO SCREEN
 	cout << "====================" << endl;
 	cout << "Territory distribution summary" << endl;
 	for (int i = 0; i < num_players; i++) {
@@ -161,18 +166,71 @@ void GameEngine::startupPhase() {
 	for (int i = 0; i < gameMap->getNumTerritories() - distributeQty; i++) {
 		cout << gameMap->getTerritory(shuffleTerritories[i + distributeQty])->getName() << endl;
 	}
-	/*cout << "--------" << endl;
-	cout << "All territories in order: " << endl;
-	for (int i = 0; i < gameMap->getNumTerritories(); i++) {
-		cout << gameMap->getTerritory(i)->getName() << " owned by " << gameMap->getTerritory(i)->getOwner() << endl;
-	}*/
-
 }
 
 //================================
 //	MAIN GAME LOOP FUNCTIONS
 //================================
 void GameEngine::reinforcementPhase() {
+	//Check for continent bonus for any player
+	for (int i = 0; i < gameMap->getNumContinents(); i++) {
+		//get the owner of the first territory of the continent
+		bool bonus = true;
+		string first = gameMap->getTerritory(gameMap->getContinent(i)->getTerritoryId(0))->getOwner();
+		string last;
+		//iterate through the list of countries in the continent
+		for (int j = 0; j < gameMap->getContinent(i)->getNumTerritories(); j++) {
+			last = gameMap->getTerritory(gameMap->getContinent(i)->getTerritoryId(j))->getOwner();
+			//we found a different player present in the continent
+			if (last != first) {
+				bonus = false;
+			}
+		}
+		if (bonus) {
+			for (int j = 0; j < players.size(); j++) {
+				if (players[j]->getName() == first) {
+					players[j]->addReinforcements(gameMap->getContinent(i)->getReinforcementBonus());
+				}
+			}
+		}
+	}
+	//Each player must assign all of their remaining troops
+	cout << "Reinforcement Phase:" << endl;
+	int reinforcements;
+	string input;
+	for (int playerIndex = 0; playerIndex < num_players; playerIndex++) {
+		cout << "Player " << players[playerIndex]->getName() << "'s turn to reinforce. ";
+		//Reinforcements by number of territories with a minimum of 3
+		reinforcements = players[playerIndex]->territories.size() / 3;
+		if (reinforcements < 3) {
+			reinforcements = 3;
+		}
+		//Add existing amount
+		players[playerIndex]->addReinforcements(reinforcements);
+		//Loop to deploy all troops
+		int selectId;
+		while (players[playerIndex]->getPlayerArmySize() > 0) {
+			cout << players[playerIndex]->getPlayerArmySize() << " troops left to deploy." << endl;
+			players[playerIndex]->toDefend();
+			cout << "Enter a territory ID to deploy to >> ";
+			getline(cin, input);
+			while (!validTerritoryDefend(input, players[playerIndex])) {
+				cout << "Enter a valid territory ID >> ";
+				getline(cin, input);
+			}
+			selectId = stoi(input);
+			cout << "Number of troops to deploy >> ";
+			getline(cin, input);
+			while (!validReinforceAmount(input, players[playerIndex])) {
+				cout << "Enter a valid number of troops to deploy >> ";
+				getline(cin, input);
+			}
+			reinforcements = stoi(input);
+			cout << "Adding " << reinforcements << " troops to " << gameMap->getTerritory(selectId)->getName() << endl;
+			players[playerIndex]->issueOrder(Order::Deploy, new Deploy(gameMap->getTerritory(selectId), reinforcements));
+			players[playerIndex]->subtractReinforcements(reinforcements);
+		}
+	}
 }
 
 void GameEngine::issueOrdersPhase() {
@@ -188,9 +246,59 @@ void GameEngine::mainGameLoop() {
 	reinforcementPhase();
 	issueOrdersPhase();
 	executeOrdersPhase();
-	for (int i = 0; i < num_players; i++) {
+	/*for (int i = 0; i < num_players; i++) {
 		cout << "It is " << players[i]->getName() << "'s turn" << endl;
 		players[i]->toDefend();
 		players[i]->toAttack();
+	}
+	players[0]->issueOrder(Order::Deploy);
+	players[0]->issueOrder(Order::Deploy);*/
+}
+
+bool GameEngine::validName(string name) {
+	if (name.empty()) {
+		return false;
+	}
+	for (int i = 0; i < players.size(); i++) {
+		if (players[i]->getName() == name) {
+			return false;
+		}
+	}
+	return true;
+}
+
+bool GameEngine::validTerritoryDefend(string selection, Player* player) {
+	int territoryId;
+	try {
+		territoryId = stoi(selection);
+	}
+	catch (const std::exception&) {
+		cout << "Not a territory ID" << endl;
+		return false;
+	}
+	if (gameMap->getTerritory(territoryId)->getOwner() != player->getName() || territoryId > gameMap->getNumTerritories() || territoryId < 0) {
+		cout << "This territory does not belong to you. If it does, please make a complaint to the game devs. But idk how much they can help you." << endl;
+		return false;
+	}
+	else {
+		return true;
+	}
+}
+
+bool GameEngine::validReinforceAmount(string amount, Player* player) {
+	int qty;
+	try {
+		qty = stoi(amount);
+	}
+	catch (const std::exception&) {
+		cout << "Not a valid number" << endl;
+		return false;
+	}
+	if (qty > player->getPlayerArmySize() || qty < 1) {
+		cout << "Can't reinforce by " << qty << " troops." << endl;
+		return false;
+	}
+	else {
+		return true;
 	}
 }
