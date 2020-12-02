@@ -1,12 +1,11 @@
+#pragma once
+
 #include <iostream>
 #include <fstream>
 #include <string>
 #include "Map.h"
 #include <filesystem>
 using namespace std;
-
-#ifndef MapLoaderH
-#define MapLoaderH
 
 class MapLoader {
 public:
@@ -25,6 +24,3 @@ private:
 	string COUNTRIES_HEADER = "[countries]";
 	string BORDERS_HEADER = "[borders]";
 };
-
-#endif // !MapLoader
-

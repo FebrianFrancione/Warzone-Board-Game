@@ -4,6 +4,7 @@
 #include <list>
 #include <string>
 #include <vector>
+
 #include "Cards.h"
 #include "Map.h"
 
@@ -19,16 +20,15 @@ class Player
 public:
     Player();
 
-
 //Constructors
 
-	Player(std::string n, int id, int army);
+	Player(std::string n, int id, int army, Map* needle);
 
 	//Player(std::string n, int id, int army, list<string> t, int h);
 
 	//copy
 	Player(const Player& p);
-Player(list<string> t, int h);
+	//Player(list<string> t, int h);
 
 	~Player();
 
@@ -46,10 +46,13 @@ Player(list<string> t, int h);
 	void setPlayerArmySize(int army);
 	int getPlayerArmySize();
 
-    vector<string> playerTerritories;
+    //vector<string> playerTerritories;
 
+	//list<string> territories;
 
-	list<string> territories;
+	//vector<int> territoriesId;
+
+	vector<Territory*> territories;
 
 	//Cards
     std::vector<Cards*> player_hand;
@@ -60,4 +63,7 @@ private:
 
 	int hand;
 	list<string> orders;
+
+	//I call this one the needle threader: the pointer points directly to the map
+	Map* gameMap;
 };
