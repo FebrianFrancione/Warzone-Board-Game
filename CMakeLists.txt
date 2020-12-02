@@ -26,4 +26,4 @@ add_executable(COMP_345_Warzone
         WarZone/GameEngine.cpp
         WarZone/GameDriver.cpp
         WarZone/PlayerStrategies.cpp
-        WarZone/PlayerStrategies.h)
+        WarZone/PlayerStrategies.h WarZone/PlayerStrategyDriver.cpp)

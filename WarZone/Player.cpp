@@ -35,19 +35,22 @@ Player::Player(const Player& p) {
 
 Player::~Player() {}
 
-//Iterates over a list of territories owned by the player and displays them
-void Player::toDefend() {
-	cout << "Your territories to defend: " << endl;
-	for (int i = 0; i < territories.size(); i++) {
-		cout << setw(40) << territories[i]->getName() << endl; 
-	}
-	cout << "--------" << endl;
+
+
+//player Strategies
+void Player::setPlayerStrategy(PlayerStrategy* strat){
+    this->playerstrat = strat;
 }
+
+//Iterates over a list of territories owned by the player and displays them
+
 
 // Displays a list of surrounding territories the player can attack
 void Player::toAttack() {
-	cout << "The territories you can attack are: " << endl;
-	for (int i = 0; i < territories.size(); i++) {
+
+	this->playerstrat->toAttack();
+//    cout << "The territories you can attack are: " << endl;
+	/*for (int i = 0; i < territories.size(); i++) {
 		for (int j = 0; j < territories[i]->getNumberAdj(); j++) {
 			if (gameMap->getTerritory(territories[i]->getAdjacent(j))->getOwner() != name) {
 				cout << 
@@ -62,13 +65,22 @@ void Player::toAttack() {
 			}
 		}
 	}
-	cout << "--------" << endl;
+	cout << "--------" << endl;*/
+}
+
+void Player::toDefend() {
+    this->playerstrat->toDefend();
+    /*cout << "Your territories to defend: " << endl;
+    for (int i = 0; i < territories.size(); i++) {
+        cout << setw(40) << territories[i]->getName() << endl;
+    }
+    cout << "--------" << endl;*/
 }
 
 //Adds an order to the order list and displays all current orders
 void Player::issueOrder() {
-
-	int j = 1;
+    this->playerstrat->issueOrder();
+/*	int j = 1;
 
 	orders.push_back(" Order " + to_string(j));
 	cout << " Order " + to_string(j) << " was added to the list of orders";
@@ -84,7 +96,7 @@ void Player::issueOrder() {
 		cout << endl;
 
 	};
-	cout << endl;
+	cout << endl;*/
 }
 
 

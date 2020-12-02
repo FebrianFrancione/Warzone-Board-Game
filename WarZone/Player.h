@@ -34,6 +34,9 @@ public:
     ~Player();
 
     //methods to attack, defend, and issue orders
+    //strat
+    void setPlayerStrategy(PlayerStrategy* strat);
+
     void toAttack();
     void toDefend();
     void issueOrder();
@@ -69,5 +72,7 @@ private:
 
     //I call this one the needle threader: the pointer points directly to the map
     Map* gameMap;
+    //strategy
+    PlayerStrategy * playerstrat;
 
 };
