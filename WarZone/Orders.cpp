@@ -1,5 +1,7 @@
 #include "Orders.h"
+#include "Map.h"
 #include <iostream>
+#include <iomanip>
 using namespace std;
 
 //================
@@ -22,6 +24,10 @@ Order::Order(const Order& original) {
 //Default
 Order::~Order() {}
 
+int Order::getType() {
+	return type;
+}
+
 //Assignment operator
 Order& Order::operator=(const Order& order) {
 	if (&order == this) {
@@ -35,7 +41,22 @@ Order& Order::operator=(const Order& order) {
 //"to string" (stream operator overload for output)
 //Returns order type ID (which for superclass is none)
 ostream& operator<<(ostream& out, const Order& order) {
-	return (out << "Order of type " << order.type << " execution state: " << order.executed);
+	switch (order.type) {
+	case Order::Deploy: out << "Deploy"; break;
+	case Order::Advance: out << "Advance"; break;
+	case Order::Bomb: out << "Bomb"; break;
+	case Order::Blockade: out << "Blockade"; break;
+	case Order::Airlift: out << "Airlift"; break;
+	case Order::Negotiate: out << "Negotiate"; break;
+	}
+	out << " order. Execution state: ";
+	if (order.executed) {
+		out << "Executed";
+	}
+	else {
+		out << "Not executed";
+	}
+	return out;
 }
 
 //================
@@ -67,10 +88,22 @@ OrdersList::~OrdersList() {
 	delete [] theList;
 };
 
+//Add a new order to a list
+void OrdersList::add(Order* newOrder) {
+	size++;
+	Order** newList = new Order * [size];
+	for (int i = 0; i < size - 1; i++) {
+		newList[i] = theList[i];
+	}
+	newList[size - 1] = newOrder;
+	delete theList;
+	theList = newList;
+}
+
 //Move order from start position to end position
 void OrdersList::move(int start, int end) {
 	if (start == end || start < 0 || start > size || end < 0 || end > size) {
-		cout << "Cannot move order from pos " << start << " to pos " << end << endl;
+		//cout << "Cannot move order from pos " << start << " to pos " << end << endl;
 		return;
 	}
 	//Moving it down the list, we need to shift everything after
@@ -103,25 +136,17 @@ void OrdersList::deleteOrder(int pos) {
 		newList[i] = theList[i];// ->clone();
 	}
 	//Delete old list and point to new list
-	delete theList;
-	theList = newList;
-}
-
-//Add a new order to a list
-void OrdersList::add(Order* newOrder) {
-	size++;
-	Order** newList = new Order*[size];
-	for (int i = 0; i < size - 1; i++) {
-		newList[i] = theList[i];
-	}
-	newList[size - 1] = newOrder->clone();
-	delete theList;
+	delete[] theList;
 	theList = newList;
 }
 
 //Get a specific order from the list
 Order* OrdersList::get(int pos) {
 	return theList[pos];
+}
+
+int OrdersList::getSize() {
+	return size;
 }
 
 //Assignment operator
@@ -155,23 +180,46 @@ ostream& operator<<(ostream& out, const OrdersList& ordersList) {
 Deploy::Deploy() {
 	executed = false;
 	type = OrderType::Deploy;
+	territory = new Territory();
+	qty = 0;
+}
+
+Deploy::Deploy(Territory* _territory, int _qty) {
+	executed = false;
+	type = OrderType::Deploy;
+	territory = _territory;
+	//territory = _territory;
+	qty = _qty;
 }
 
 Deploy::Deploy(const Deploy& original) {
 	executed = original.executed;
 	type = original.type;
+	territory = original.territory;
+	qty = original.qty;
 }
 
 //Destructor
-Deploy::~Deploy() {};
+Deploy::~Deploy() {//delete this->territory;
+};
 
 void Deploy::execute() {
-	if (this->validate()) {
-		cout << "Executing deploy order.\n";
-		executed = true;
+	if (validate()) {
+		cout << "Adding " << qty << " troops to " << territory->getName() << endl;
+		territory->addTroops(qty);
 	}
+	else {
+		cout << "Could not deploy " << qty << " troops to " << territory->getName() << endl;
+	}
+	executed = true;
 }
 bool Deploy::validate() {
+	//Only check to do is whether the territory belongs to anyone
+	//Can't access any other information. This order can only be added to a players list if it belongs to a player
+	//A deploy order has the highest priority, and therefore cannot fail otherwise
+	if (territory->getOwner().empty()) {
+		return false;
+	}
 	return !executed;
 }
 
@@ -179,6 +227,8 @@ Order* Deploy::clone() {
 	Deploy* newDeployOrder = new Deploy();
 	newDeployOrder->type = this->type;
 	newDeployOrder->executed = this->executed;
+	newDeployOrder->territory = new Territory(*this->territory);
+	newDeployOrder->qty = this->qty;
 	return (Order*)newDeployOrder;
 }
 
@@ -202,22 +252,75 @@ ostream& operator<<(ostream& out, const Deploy& deploy) {
 Advance::Advance() {
 	executed = false;
 	type = OrderType::Advance;
+	origin = new Territory();
+	destination = new Territory();
+	qty = 0;
+}
+
+Advance::Advance(Territory* _origin, Territory* _destination, int _qty, string _playerO, string _playerD) {
+	executed = false;
+	type = OrderType::Advance;
+	origin = _origin;
+	destination = _destination;
+	qty = _qty;
+	playerO = _playerO;
+	playerD = _playerD;
 }
 
 Advance::Advance(const Advance& original) {
 	executed = original.executed;
 	type = original.type;
+	origin = original.origin;
+	destination = original.destination;
+	qty = original.qty;
+	playerO = original.playerO;
+	playerD = original.playerD;
 }
 
-Advance::~Advance() {};
+Advance::~Advance() {
+	delete origin;
+	delete destination;
+};
 
 void Advance::execute() {
 	if (this->validate()) {
-		cout << "Executing advance/attack/transfer order.\n";
-		executed = true;
+		//cout << "Executing advance order.\n";
+		int result = 0;
+		if (playerO != playerD) {
+			cout << right << setw(36) << playerO << " attacking " << left << setw(36) << playerD << endl;
+			cout << right << setw(36) << origin->getName() << " attacking " << left << setw(36) << destination->getName();
+			cout << right << setw(36) << origin->getArmyCount() << " vs. " << left << setw(36) << destination->getArmyCount();
+			while (origin->getArmyCount() > 1 && destination->getArmyCount() > 0) {
+				result = rand() % 10;
+				if (result < 6) {
+					destination->removeTroops(1);
+				}
+				result = rand() % 10;
+				if (result < 7) {
+					origin->removeTroops(1);
+				}
+			}
+		}
 	}
+	else {
+		cout << "Advance order cancelled.";
+	}
+	executed = true;
 }
 bool Advance::validate() {
+	//Player lost control of their territory
+	if (origin->getOwner() != playerO) {
+		return false;
+	}
+	//Target switched ownership
+	if (destination->getOwner() != playerD) {
+		return false;
+	}
+	//Player lost the original troop count
+	if (origin->getArmyCount() < 2) {
+		return false;
+	}
+	//Return false if order already executed
 	return !executed;
 }
 
@@ -225,6 +328,10 @@ Order* Advance::clone() {
 	Advance* newAdvanceOrder = new Advance();
 	newAdvanceOrder->type = this->type;
 	newAdvanceOrder->executed = this->executed;
+	newAdvanceOrder->origin = new Territory(*this->origin);
+	newAdvanceOrder->destination = new Territory(*this->destination);
+	newAdvanceOrder->qty = this->qty;
+	newAdvanceOrder->playerO = this->playerD;
 	return (Order*)newAdvanceOrder;
 }
 

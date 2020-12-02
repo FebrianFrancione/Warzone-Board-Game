@@ -1,4 +1,6 @@
 #pragma once
+
+#include "Map.h"
 #include <iostream>
 
 //Order superclass
@@ -14,6 +16,7 @@ public:
 	virtual void execute() = 0;
 	virtual bool validate() = 0;
 	virtual Order* clone() = 0;
+	int getType();
 	//Operator overloads
 	Order& operator = (const Order& order);
 	friend std::ostream& operator << (std::ostream& out, const Order& order);
@@ -26,19 +29,18 @@ protected:
 //Class for Order Lists (lists by player)
 class OrdersList {
 public:
+	enum OrderListCommands{RemoveOrder = 8, ChangeOrder = 9};
 	//Constructors
 	OrdersList();
 	OrdersList(const OrdersList& originalList);
 	//Destructor
 	~OrdersList();
 	//Methods
+	void add(Order* order);
 	void move(int from, int to);
-	//Renamed to deleteOrder since overloading delete would be unncessarily long
-	//and error prone since the actual delete method is something else entirely
 	void deleteOrder(int pos);
 	Order* get(int pos);
-	//added to add an order to the list
-	void add(Order* order);
+	int getSize();
 	//Operator overloads
 	OrdersList& operator = (const OrdersList& ordersList);
 	friend std::ostream& operator << (std::ostream& out, const OrdersList& ordersList);
@@ -58,6 +60,7 @@ private:
 class Deploy : public Order {
 public:
 	Deploy();
+	Deploy(Territory* _territory, int qty);
 	Deploy(const Deploy& original);
 	~Deploy();
 	void execute();
@@ -65,11 +68,15 @@ public:
 	Order* clone();
 	Deploy& operator= (const Deploy& deploy);
 	friend std::ostream& operator << (std::ostream& out, const Deploy& deploy);
+private:
+	Territory* territory;
+	int qty;
 };
 
 class Advance : public Order {
 public:
 	Advance();
+	Advance(Territory* _origin, Territory* _destination, int _qty, string _playerO, string _playerD);
 	Advance(const Advance& original);
 	~Advance();
 	void execute();
@@ -77,6 +84,12 @@ public:
 	Order* clone();
 	Advance& operator= (const Advance& advance);
 	friend std::ostream& operator << (std::ostream& out, const Advance& deploy);
+private:
+	Territory* origin;
+	Territory* destination;
+	int qty;
+	string playerO;
+	string playerD;
 };
 
 class Bomb : public Order {

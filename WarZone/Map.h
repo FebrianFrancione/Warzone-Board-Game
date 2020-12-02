@@ -24,6 +24,10 @@ public:
 	//army count getter/setter
 	void setArmyCount(int count);
 	int getArmyCount();
+	void addTroops(int qty);
+	void removeTroops(int qty);
+	void setVirtualArmy(int qty);
+	int getVirtualArmy();
 	//setting adjacent territories
 	void addAdjacent(int id);
 	bool isAdjacent(int id);
@@ -42,6 +46,7 @@ private:
 	int* adjTerr;	//array of the ids of adjacent territories
 	int numAdj;
 	int armyCount;
+	int virtualArmyCount;	//because until you deploy the actual fucking troops, you need to pretend theyre there, execept theyre not
 	int continentID;
 	//TODO
 	//Placeholder for player class
@@ -82,6 +87,7 @@ public:
 	void addTerritory(int territoryId);
 	int getTerritoryId(int index);
 	int getNumTerritories();
+	int getReinforcementBonus();
 	Continent& operator= (const Continent& original);
 	friend std::ostream& operator<< (std::ostream& out, const Continent& continent);
 private:
