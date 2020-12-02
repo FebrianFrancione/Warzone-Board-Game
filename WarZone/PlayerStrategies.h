@@ -52,6 +52,12 @@ public:
         for (int i = 0; i < territories.size(); i++) {
             cout << setw(40) << territories[i]->getName() << endl;
         }
+
+        cout << "***********************" << endl;
+        cout << "Enter the territory you want to Defend:" << endl;
+        for (int i = 0; i < territories.size(); i++) {
+            cout << territories[i]->getName() << endl;
+        }
         cout << "--------" << endl;
 
     }
