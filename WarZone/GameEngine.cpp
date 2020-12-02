@@ -5,7 +5,13 @@
 
 #include <iostream>
 //#include <filesystem> //ENABLE IF PROJECT IS SET FOR C++17, IF NOT CANNOT READ FILES FROM DIRECTORY
+#include <filesystem>
 using namespace std;
+
+AggressivePlayerStrategy aggroStrat;
+HumanPlayerStrategy humanStrat;
+BenevolentPlayerStrategy benevolentStrat;
+NeutralPlayerStrategy neutralStrat;
 
 //================================
 //	GameEngine
@@ -34,18 +40,21 @@ bool GameEngine::initializeGameValues() {
 	cout << "Type in name of map to play on: (you may have to check manually in the directory)" << endl;
 	string path = "Maps/";
 	//ENABLE ONLY IF C++17 IS AVAILABLE
-	/*
-	for (const auto& entry : filesystem::directory_iterator(path))
-		std::cout << entry.path() << std::endl;
-	*/
-	cout << "Default available: \"canada.map\"" << endl << ">> ";
-	getline(cin, input);
+/*	for (const auto& entry : filesystem::directory_iterator(path))
+		std::cout << entry.path() << std::endl;*/
+
+
+/*	cout << "Default available: \"canada.map\"" << endl << ">> ";
+	getline(cin, input);*/
+	//temp
+	input = "canada.map";
 	mapName = path + input;
 	//GET PLAYERS
-	cout << "Enter number of players (2-5)" << endl << ">> ";
+/*	cout << "Enter number of players (2-5)" << endl << ">> ";
 	getline(cin, input);
 	try {
-		num_players = stoi(input);
+		*//*num_players = stoi(input);*//*
+
 		if (num_players > 5 || num_players < 2) {
 			throw exception();
 		}
@@ -53,7 +62,13 @@ bool GameEngine::initializeGameValues() {
 	catch (const std::exception&) {
 		cout << "Invalid player number. Game closing" << endl;
 		return false;
-	}
+	}*/
+
+
+    //temp
+    num_players = 2;
+
+
 	//statistic observer on/off
 	cout << "Statistic Observer (type \"on\" to turn on)" << endl << ">> ";
 	getline(cin, input);
@@ -115,11 +130,38 @@ void GameEngine::startupPhase() {
 			cout << "Invalid name, try again" << endl << ">>";
 			getline(cin, input);
 		}
+
+
 		//gameMap is a pointer, and we're giving each player direct access to the map object because I didn't
 		//implement the graph data structure properly and now it's kinda too late to rewrite that whole thing
-		//so we're doing some *epic* cheating
+		//so we're doing some ------****epic****------ cheating.
 		players.push_back(new Player(input, i, initialArmies, gameMap));
+
+
+        //sanity check
+        //strategy before or after
+
+        int strat_id {0};
+
+        cout << "Enter player " << i + 1 << "'s Starting Strategy."<<endl<<"1.Human 2.Aggro 3.Benevolent 4.Neutral(AFK)" << endl;
+        cin >> strat_id;
+        cout << strat_id;
+        switch (strat_id) {
+        case 1: players[i]->setPlayerStrategy(&humanStrat);break;
+        case 2: players[i]->setPlayerStrategy(&aggroStrat);break;
+        case 3: players[i]->setPlayerStrategy(&benevolentStrat);break;
+        case 4: players[i]->setPlayerStrategy(&neutralStrat);break;
+        }
+        cout << "Strat set!" << endl;
+        players[i]->toAttack();
+        players[i]->toDefend();
+        players[i]->issueOrder();
+
+        cout << "Continue" << endl;
 	}
+
+
+
 	//Shuffle the vector to randomize play order
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 	std::shuffle(std::begin(players), std::end(players), std::default_random_engine(seed));

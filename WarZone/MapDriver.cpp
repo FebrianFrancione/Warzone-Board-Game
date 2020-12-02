@@ -3,6 +3,7 @@
 #include "MapLoader.h"
 #include <iostream>
 
+
 void f1() {
 
 	Territory Canada = Territory(0, "Canada", 0);
@@ -44,7 +45,7 @@ void f1() {
 
 int main() {
 
-	MapLoader loader = MapLoader("canada_missingBorder.map");
+	MapLoader loader = MapLoader("Maps/canada.map");
 	loader.loadMap();
 	loader.printMap();
 
@@ -57,4 +58,5 @@ int main() {
 		cout << gameMap.getName() << " is invalid";
 	}
 
-}*/
+}
+*/

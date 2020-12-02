@@ -8,18 +8,19 @@
 #include "Cards.h"
 #include "Map.h"
 #include "Orders.h"
+#include "PlayerStrategies.h"
 
 using namespace std;
 
 class Cards;
 class Territory;
-
+class PlayerStrategy;
 //Player Class
 class Player
 {
 public:
 	//Constructors
-    Player();
+  Player();
 	Player(std::string n, int id, int army, Map* needle);
 	//Player(std::string n, int id, int army, list<string> t, int h);
 	//copy constructor
@@ -51,9 +52,9 @@ public:
 	//list<string> territories;
 	//vector<int> territoriesId;
 	vector<Territory*> territories;
-
-	//Cards
-    std::vector<Cards*> player_hand;
+  //Cards
+  std::vector<Cards*> player_hand;
+  
 private:
 	int armySize;
 	std::string name;
@@ -67,4 +68,5 @@ private:
 	bool validTerritoryDeploy(string input);
 	bool validReinforceAmount(string input);
 	bool validOrder(string input);
+  PlayerStrategy * playerstrat;
 };

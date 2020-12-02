@@ -16,6 +16,17 @@ Player::Player() {
 	orders = new OrdersList();
 };
 
+//temp
+/*Player::Player(std::string n, int id, int army) {
+    //Player::Player(std::string n, int id, int army, list<string> t, int h) {
+    armySize = army;
+    name = n;
+    playerTurnId = id;
+    //vector<string> playerTerritories;
+    //territories = t;
+    //hand = h;
+};*/
+
 //constructor
 Player::Player(std::string n, int id, int army, Map* needle) {
 	//Player::Player(std::string n, int id, int army, list<string> t, int h) {
@@ -39,6 +50,11 @@ Player::Player(const Player& p) {
 }
 
 Player::~Player() {}
+
+//player Strategies
+void Player::setPlayerStrategy(PlayerStrategy* strat){
+    this->playerstrat = strat;
+}
 
 void Player::printPlayerTerritories() {
 	cout << name << "'s territories: " << endl;
@@ -95,12 +111,14 @@ void Player::toDefend() {
 			endl;
 	}
 	cout << "--------" << endl;
-}
 
 // Displays a list of surrounding territories the player can attack
 void Player::toAttack() {
+
 	cout << "The territories you can attack are: " << endl;
 	//own territories loop
+	this->playerstrat->toAttack();
+/*  cout << "The territories you can attack are: " << endl;
 	for (int i = 0; i < territories.size(); i++) {
 		//adjacent territories of i loop
 		for (int j = 0; j < territories[i]->getNumberAdj(); j++) {
@@ -119,11 +137,22 @@ void Player::toAttack() {
 			}
 		}
 	}
-	cout << "--------" << endl;
+	cout << "--------" << endl;*/
+}
+
+void Player::toDefend() {
+    this->playerstrat->toDefend();
+    /*cout << "Your territories to defend: " << endl;
+    for (int i = 0; i < territories.size(); i++) {
+        cout << setw(40) << territories[i]->getName() << endl;
+    }
+    cout << "--------" << endl;*/
 }
 
 //Adds an order to the order list and displays all current orders
 void Player::issueOrder() {
+  this->playerstrat->issueOrder();
+  //EVERYTHING AFTER THIS NEEDS TO BE MOVED INTO THE PLAYER STRATEGY INSTEAD FOR HUMANS
 	string input;
 	cout << endl << "============" << endl;
 	cout << name << "'s turn to issue orders." << endl;
@@ -287,10 +316,10 @@ Order* Player::getFirstOrder() {
 	return nullptr;
 }
 
+
 int Player::numberOfOrders() {
 	return orders->getSize();
 }
-
 
 void Player::setName(string n) {
 	name = n;

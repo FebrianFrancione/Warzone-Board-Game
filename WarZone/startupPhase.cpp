@@ -1,3 +1,4 @@
+/*
 #include "startupPhase.h"
 #include <iostream>
 #include <stdio.h>
@@ -5,9 +6,13 @@
 #include <time.h>
 #include<vector>
 #include <iostream>     // std::cout
-/*#include <algorithm> */   // std::shuffle
+*/
+/*#include <algorithm> *//*
+   // std::shuffle
 #include <array>        // std::array
-/*#include <random>*/       // std::default_random_engine
+*/
+/*#include <random>*//*
+       // std::default_random_engine
 #include <chrono>       // std::chrono::system_clock
 #include <random>
 #include <algorithm>
@@ -81,9 +86,11 @@ int main() {
 	Player Player5{ "Player5", 0, 0 };
 
 
-	/*for (int i = 0; i < Player1.playerTerritories.size(); i++) {
+	*/
+/*for (int i = 0; i < Player1.playerTerritories.size(); i++) {
 		cout << Player1.playerTerritories[i];
-	}*/
+	}*//*
+
 	//placeholder for now, setting a list of territories that will bve used to distrbute, must be taken from map class aferwards
 
 	vector<string> territories;
@@ -162,7 +169,9 @@ int main() {
 		cin >> start;
 		if (start._Equal("y")) {
 			cout << "Game Started!" << endl;
-			/*		cout << "Printing army size" << endl;*/
+			*/
+/*		cout << "Printing army size" << endl;*//*
+
 					//for (int i = 0; i < player_vec.size(); i++) {
 					//	cout << "Player: " << player_vec[i].getName() << ", Army size: " << player_vec[i].getPlayerArmySize() << endl;
 					//}
@@ -170,9 +179,13 @@ int main() {
 
 
 					//shuffle the players and set playerTurn ID
-					/*unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();*/
-				/*	srand(time(0));
-					random_shuffle(player_vec.begin(), player_vec.end());*/
+					*/
+/*unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();*//*
+
+				*/
+/*	srand(time(0));
+					random_shuffle(player_vec.begin(), player_vec.end());*//*
+
 			unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 			std::shuffle(std::begin(player_vec), std::end(player_vec), std::default_random_engine(seed));
 
@@ -185,7 +198,9 @@ int main() {
 				i++;
 				//can set player turn id
 				cout << "Player: " << player.getName() << " Player turn id: " << player.getPlayerTurnId() << " Army size: " << player.getPlayerArmySize() << endl;
-				/*	cout << " Player turn Id: " << player.getPlayerTurnId() << endl;*/
+				*/
+/*	cout << " Player turn Id: " << player.getPlayerTurnId() << endl;*//*
+
 				cout << endl;
 			}
 
@@ -259,11 +274,13 @@ int main() {
 
 //Player1.setName("Frank");
 //Player2.setName("Bill");
+*/
 /*for (int i = 0; i < player_vec.size(); i++) {
 	cout << player_vec[i].getName() << endl;
-}*/
+}*//*
+
 //Player1.hand = 3;
 //Player players[]{ frank,bill };
 //std::ostream << players[1] << endl;
 //Player* enemy{ nullptr };
-//enemy = new Player;
+//enemy = new Player;*/
