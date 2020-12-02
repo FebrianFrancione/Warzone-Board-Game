@@ -1,3 +1,4 @@
+/*
 #include "Map.h"
 #include "MapLoader.h"
 #include <iostream>
@@ -58,3 +59,4 @@ int main() {
 	}
 
 }
+*/

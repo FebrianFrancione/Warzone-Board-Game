@@ -1,3 +1,4 @@
+/*
 #include "GameEngine.h"
 #include "Player.h"
 #include "Map.h"
@@ -34,10 +35,12 @@ bool GameEngine::initializeGameValues() {
 	cout << "Type in name of map to play on: (you may have to check manually in the directory)" << endl;
 	string path = "Maps/";
 	//ENABLE ONLY IF C++17 IS AVAILABLE
-	/*
+	*/
+/*
 	for (const auto& entry : filesystem::directory_iterator(path))
 		std::cout << entry.path() << std::endl;
-	*/
+	*//*
+
 	cout << "Default available: \"canada.map\"" << endl << ">> ";
 	getline(cin, input);
 	mapName = path + input;
@@ -88,7 +91,9 @@ bool GameEngine::initializeGameValues() {
 	}
 	else {
 		loader.printMap();
+		return true;
 	}
+
 }
 
 //================================
@@ -161,11 +166,13 @@ void GameEngine::startupPhase() {
 	for (int i = 0; i < gameMap->getNumTerritories() - distributeQty; i++) {
 		cout << gameMap->getTerritory(shuffleTerritories[i + distributeQty])->getName() << endl;
 	}
-	/*cout << "--------" << endl;
+	*/
+/*cout << "--------" << endl;
 	cout << "All territories in order: " << endl;
 	for (int i = 0; i < gameMap->getNumTerritories(); i++) {
 		cout << gameMap->getTerritory(i)->getName() << " owned by " << gameMap->getTerritory(i)->getOwner() << endl;
-	}*/
+	}*//*
+
 
 }
 
@@ -194,3 +201,4 @@ void GameEngine::mainGameLoop() {
 		players[i]->toAttack();
 	}
 }
+*/

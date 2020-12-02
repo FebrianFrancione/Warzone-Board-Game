@@ -21,4 +21,9 @@ add_executable(COMP_345_Warzone
         WarZone/Orders.cpp
         WarZone/OrdersDriver.cpp
         WarZone/Player.cpp
-        WarZone/Player.h)
+        WarZone/Player.h
+        WarZone/GameEngine.h
+        WarZone/GameEngine.cpp
+        WarZone/GameDriver.cpp
+        WarZone/PlayerStrategies.cpp
+        WarZone/PlayerStrategies.h)
