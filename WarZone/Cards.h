@@ -6,10 +6,12 @@
 #include <chrono> 
 #include <random>
 #include <algorithm>
-#include <list>
-
 #include "Player.h"
 #include "Map.h"
+#include "MapLoader.h"
+
+#include <list>
+
 
 /*#include "Territory.h"*/
 class Cards {
