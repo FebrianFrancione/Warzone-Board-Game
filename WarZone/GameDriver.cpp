@@ -1,4 +1,5 @@
-#include "Cards.h";
+
+#include "Cards.h"
 #include "GameEngine.h"
 #include "Map.h"
 #include "MapLoader.h"

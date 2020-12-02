@@ -11,6 +11,7 @@ Territory::Territory() {
 	adjTerr = new int[numAdj];
 	armyCount = 0;
 	continentID = -1;
+	virtualArmyCount = 0;
 }
 
 Territory::Territory(int _id, string _name, int _continentId) {
@@ -23,6 +24,7 @@ Territory::Territory(int _id, string _name, int _continentId) {
 	numAdj = 0;
 	adjTerr = new int[numAdj];
 	armyCount = 0;
+	virtualArmyCount = 0;
 	continentID = _continentId;
 }
 
@@ -30,6 +32,7 @@ Territory::Territory(const Territory& original) {
 	id = original.id;
 	name = original.name;
 	armyCount = original.armyCount;
+	virtualArmyCount = original.virtualArmyCount;
 	continentID = original.continentID;
 	numAdj = original.numAdj;
 	adjTerr = new int[numAdj];
@@ -76,6 +79,14 @@ void Territory::addTroops(int qty) {
 
 void Territory::removeTroops(int qty) {
 	armyCount -= qty;
+}
+
+void Territory::setVirtualArmy(int qty) {
+	virtualArmyCount = qty;
+}
+
+int Territory::getVirtualArmy() {
+	return virtualArmyCount;
 }
 
 void Territory::addAdjacent(int id) {

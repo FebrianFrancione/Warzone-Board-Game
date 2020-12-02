@@ -26,6 +26,8 @@ public:
 	int getArmyCount();
 	void addTroops(int qty);
 	void removeTroops(int qty);
+	void setVirtualArmy(int qty);
+	int getVirtualArmy();
 	//setting adjacent territories
 	void addAdjacent(int id);
 	bool isAdjacent(int id);
@@ -44,6 +46,7 @@ private:
 	int* adjTerr;	//array of the ids of adjacent territories
 	int numAdj;
 	int armyCount;
+	int virtualArmyCount;	//because until you deploy the actual fucking troops, you need to pretend theyre there, execept theyre not
 	int continentID;
 	//TODO
 	//Placeholder for player class

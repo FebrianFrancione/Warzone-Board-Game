@@ -10,6 +10,7 @@ using namespace std;
 Player::Player() {
 	armySize = -1;
 	playerTurnId = -1;
+	gameMap = new Map("");
 	hand = -1;
 	orders = new OrdersList();
 };
@@ -42,7 +43,11 @@ Player::~Player() {}
 void Player::toDefend() {
 	cout << "Your territories: " << endl;
 	for (int i = 0; i < territories.size(); i++) {
-		cout << setw(40) << territories[i]->getName() << "(" << territories[i]->getId() << ")" << endl; 
+		cout << 
+			right << setw(36) << territories[i]->getName() << 
+			" (ID:" << setw(2) << territories[i]->getId() << ")" <<
+			" (Troops:" << setw(3) << territories[i]->getVirtualArmy() << ")" <<
+			endl;
 	}
 	cout << "--------" << endl;
 }
@@ -50,17 +55,21 @@ void Player::toDefend() {
 // Displays a list of surrounding territories the player can attack
 void Player::toAttack() {
 	cout << "The territories you can attack are: " << endl;
+	//own territories loop
 	for (int i = 0; i < territories.size(); i++) {
+		//adjacent territories of i loop
 		for (int j = 0; j < territories[i]->getNumberAdj(); j++) {
 			if (gameMap->getTerritory(territories[i]->getAdjacent(j))->getOwner() != name) {
 				cout << 
-					right << setw(40) << gameMap->getTerritory(territories[i]->getAdjacent(j))->getName() << 
-					" (" << setw(2) << territories[i]->getAdjacent(j) << ")" <<
+					right << setw(36) << gameMap->getTerritory(territories[i]->getAdjacent(j))->getName() << 
+					" (ID:" << setw(2) << territories[i]->getAdjacent(j) << ")" <<
+					" (Troops:" << setw(3) << gameMap->getTerritory(territories[i]->getAdjacent(j))->getVirtualArmy() << ")" <<
 					setw(20) << " belonging to " <<
 					left << setw(20) << gameMap->getTerritory(territories[i]->getAdjacent(j))->getOwner() <<
 					" from " <<
-					right << setw(40) << territories[i]->getName() <<
-					" (" << setw(2) << territories[i]->getId() << ")" <<
+					right << setw(36) << territories[i]->getName() <<
+					" (ID:" << setw(2) << territories[i]->getId() << ")" <<
+					" (Troops:" << setw(3) << territories[i]->getVirtualArmy() << ")" <<
 					endl;
 			}
 		}
@@ -108,6 +117,24 @@ void Player::issueOrder(int orderType, Order* order) {
 		cout << i + 1 << ": " << *(orders->get(i)) << endl;
 	}
 	cout << endl;
+}
+
+void Player::executeOrder(int i) {
+	if (i < orders->getSize() && i >= 0) {
+		orders->get(i)->execute();
+		orders->deleteOrder(i);
+	}
+}
+
+Order* Player::getFirstOrder() {
+	if (orders->getSize() > 0) {
+		return orders->get(0);
+	}
+	return nullptr;
+}
+
+int Player::numberOfOrders() {
+	return orders->getSize();
 }
 
 

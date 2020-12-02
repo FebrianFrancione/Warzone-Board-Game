@@ -50,7 +50,7 @@ bool GameEngine::initializeGameValues() {
 			throw exception();
 		}
 	}
-	catch (const std::exception& e) {
+	catch (const std::exception&) {
 		cout << "Invalid player number. Game closing" << endl;
 		return false;
 	}
@@ -147,6 +147,7 @@ void GameEngine::startupPhase() {
 		gameMap->getTerritory(shuffleTerritories[i])->setOwner(players[i % num_players]->getName());
 		//Assign a minimum of 1 troop
 		gameMap->getTerritory(shuffleTerritories[i])->setArmyCount(1);
+		gameMap->getTerritory(shuffleTerritories[i])->setVirtualArmy(1);
 		players[i % num_players]->subtractReinforcements(1);
 		
 	}
@@ -163,13 +164,22 @@ void GameEngine::startupPhase() {
 		cout << "--------" << endl;
 	}
 	cout << "Neutral territories: " << endl;
+	int justToGetRidOfThisWarning;
 	for (int i = 0; i < gameMap->getNumTerritories() - distributeQty; i++) {
-		cout << gameMap->getTerritory(shuffleTerritories[i + distributeQty])->getName() << endl;
+		justToGetRidOfThisWarning = i + distributeQty;
+		cout << gameMap->getTerritory(shuffleTerritories[justToGetRidOfThisWarning])->getName() << endl;
 	}
 }
 
+//===============================================
+//	--------------------------------------
+//	The 3 functions for the main game loop
+//	--------------------------------------
+//===============================================
+
+
 //================================
-//	MAIN GAME LOOP FUNCTIONS
+//	Reinforcement Phase
 //================================
 void GameEngine::reinforcementPhase() {
 	//Check for continent bonus for any player
@@ -195,10 +205,12 @@ void GameEngine::reinforcementPhase() {
 		}
 	}
 	//Each player must assign all of their remaining troops
+	cout << endl << "++++++++++++++++++++" << endl;
 	cout << "Reinforcement Phase:" << endl;
 	int reinforcements;
 	string input;
 	for (int playerIndex = 0; playerIndex < num_players; playerIndex++) {
+		cout << endl << "============" << endl;
 		cout << "Player " << players[playerIndex]->getName() << "'s turn to reinforce. ";
 		//Reinforcements by number of territories with a minimum of 3
 		reinforcements = players[playerIndex]->territories.size() / 3;
@@ -210,8 +222,11 @@ void GameEngine::reinforcementPhase() {
 		//Loop to deploy all troops
 		int selectId;
 		while (players[playerIndex]->getPlayerArmySize() > 0) {
+			//while there are troops left to deploy
 			cout << players[playerIndex]->getPlayerArmySize() << " troops left to deploy." << endl;
+			//List all owned territories
 			players[playerIndex]->toDefend();
+			//Get id of territory to deploy to
 			cout << "Enter a territory ID to deploy to >> ";
 			getline(cin, input);
 			while (!validTerritoryDefend(input, players[playerIndex])) {
@@ -219,6 +234,7 @@ void GameEngine::reinforcementPhase() {
 				getline(cin, input);
 			}
 			selectId = stoi(input);
+			//Get amount of troops to deploy
 			cout << "Number of troops to deploy >> ";
 			getline(cin, input);
 			while (!validReinforceAmount(input, players[playerIndex])) {
@@ -227,38 +243,173 @@ void GameEngine::reinforcementPhase() {
 			}
 			reinforcements = stoi(input);
 			cout << "Adding " << reinforcements << " troops to " << gameMap->getTerritory(selectId)->getName() << endl;
+			//Create deploy order
 			players[playerIndex]->issueOrder(Order::Deploy, new Deploy(gameMap->getTerritory(selectId), reinforcements));
+			//Subtract from player's reinforcement pool
 			players[playerIndex]->subtractReinforcements(reinforcements);
+			//update the virtual troop count for the territory
+			gameMap->getTerritory(selectId)->setVirtualArmy(gameMap->getTerritory(selectId)->getVirtualArmy() + reinforcements);
 		}
 	}
 }
 
+//================================
+//	Issue Orders Phase
+//================================
 void GameEngine::issueOrdersPhase() {
+	string input;
+	cout << endl << "++++++++++++++++++++" << endl;
+	cout << "Order issuing phase" << endl;
+	//Each player gets to issue their orders
+	for (int i = 0; i < num_players; i++) {
+		cout << endl << "============" << endl;
+		cout << players[i]->getName() << "'s turn to issue orders." << endl;
+		//So long as the player isn't done and select option 0
+		int option = 1;
+		while (option != 0) {
+			//ouput menu
+			cout << "Orders: " << endl;
+			cout << Order::Advance << " - Advance" << endl;
+			cout << Order::Bomb << " - Airlift" << endl;
+			cout << Order::Blockade << " - Bomb" << endl;
+			cout << Order::Airlift << " - Blockade" << endl;
+			cout << Order::Negotiate << " - Negotiate" << endl;
+			cout << OrdersList::RemoveOrder << " - Remove Order" << endl;
+			cout << OrdersList::ChangeOrder << " - Change Order" << endl;
+			cout << "0 - Finish" << endl;
+			cout << " >> ";
+			//get user choice and validate it
+			getline(cin, input);
+			while (!validOrder(input, players[i])) {
+				cout << " >> ";
+				getline(cin, input);
+			}
+			option = stoi(input);
+			Territory* origin = new Territory();
+			Territory* destination = new Territory();
+			int qty = 0;
+			//Depending on the choice, act accordingly
+			switch (option) {
+			case Order::Advance:
+				//decide whether the player wishes to attack or transfer troops in advance command
+				cout << "Attack or Transfer (A to attack, T to transfer, anything else to cancel) >> ";
+				getline(cin, input);
+				//attack
+				if (input == "a" || input == "A") {
+					players[i]->toAttack();
+					//select origin
+					cout << "Select territory to attack from >> ";
+					getline(cin, input);
+					while (!validTerritoryAttack(input, players[i])) {
+						cout << "!!Enter a valid territory ID to attack from >> ";
+						getline(cin, input);
+					}
+					origin = gameMap->getTerritory(stoi(input));
+					//select target
+					cout << "Select territory to target for attack >> ";
+					getline(cin, input);
+					while (!validTerritoryAttackTarget(input, origin, players[i])) {
+						cout << "!!Enter a valid territory ID to target for attack >> ";
+						getline(cin, input);
+					}
+					destination = gameMap->getTerritory(stoi(input));
+					cout << "Number of troops to attack with >> ";
+				}
+				//transfer
+				else if (input == "t" || input == "T") {
+					players[i]->toDefend();
+					//Select origin of transfer
+					cout << "Select territory to transfer from >> ";
+					getline(cin, input);
+					while (!validTerritoryDefend(input, players[i])) {
+						cout << "!!Enter a valid territory ID to transfer from >> ";
+						getline(cin, input);
+					}
+					origin = gameMap->getTerritory(stoi(input));
+					//Select target of transfer
+					cout << "Select territory to transfer to>>";
+					getline(cin, input);
+					while (!validTerritoryTransferTarget(input, origin, players[i])) {
+						cout << "!!Enter a valid territory ID to transfer too >> ";
+						getline(cin, input);
+					}
+					destination = gameMap->getTerritory(stoi(input));
+					cout << "Number of troops to transfer >> ";
+				}
+				//If the player didnt select attack or transfer, break out
+				else {
+					break;
+				}
+				//This reaches only if the player attacked or transfered successfully
+				//Get number of troops to transfer
+				getline(cin, input);
+				while (!validAdvanceAmount(input, origin)) {
+					cout << "Enter a valid number of troops >> ";
+					getline(cin, input);
+				}
+				qty = stoi(input);
+				//Create the advance order
+				players[i]->issueOrder(Order::Advance, new Advance(origin, destination, qty, players[i]->getName(), destination->getOwner()));
+				//Update virtual army count
+				origin->setVirtualArmy(origin->getVirtualArmy() - qty);
+				break;
+			case Order::Bomb:
+				break;
+			case Order::Blockade:
+				break;
+			case Order::Airlift:
+				break;
+			case Order::Negotiate:
+				break;
+			case OrdersList::RemoveOrder:
+				break;
+			case OrdersList::ChangeOrder:
+				break;
+			default:
+				break;
+			}
+		}
+	}
 }
 
+//================================
+//	Execute Orders Phase
+//================================
 void GameEngine::executeOrdersPhase() {
+	for (int i = 0; i < num_players; i++) {
+		while (players[i]->numberOfOrders() > 0 && players[i]->getFirstOrder()->getType() == Order::Deploy) {
+			players[i]->executeOrder(0);
+		}
+	}
+	/*for (int i = 0; i < num_players; i++) {
+		players[i]->toAttack();
+		players[i]->toDefend();
+	}*/
 }
 
 //================================
 //	MAIN GAME LOOP
 //================================
 void GameEngine::mainGameLoop() {
-	reinforcementPhase();
-	issueOrdersPhase();
-	executeOrdersPhase();
-	/*for (int i = 0; i < num_players; i++) {
-		cout << "It is " << players[i]->getName() << "'s turn" << endl;
-		players[i]->toDefend();
-		players[i]->toAttack();
+	bool victory = false;
+	while (!victory) {
+		reinforcementPhase();
+		issueOrdersPhase();
+		executeOrdersPhase();
+		victory = true;
 	}
-	players[0]->issueOrder(Order::Deploy);
-	players[0]->issueOrder(Order::Deploy);*/
 }
 
+//================================
+//	Validation functions
+//================================
+
 bool GameEngine::validName(string name) {
+	//cant be empty
 	if (name.empty()) {
 		return false;
 	}
+	//check if exists in list already
 	for (int i = 0; i < players.size(); i++) {
 		if (players[i]->getName() == name) {
 			return false;
@@ -268,16 +419,28 @@ bool GameEngine::validName(string name) {
 }
 
 bool GameEngine::validTerritoryDefend(string selection, Player* player) {
-	int territoryId;
+	int territoryId = 0;
+	//attempt to parse user input into int
 	try {
 		territoryId = stoi(selection);
 	}
 	catch (const std::exception&) {
-		cout << "Not a territory ID" << endl;
+		cout << "!!Not a territory ID" << endl;
 		return false;
 	}
-	if (gameMap->getTerritory(territoryId)->getOwner() != player->getName() || territoryId > gameMap->getNumTerritories() || territoryId < 0) {
-		cout << "This territory does not belong to you. If it does, please make a complaint to the game devs. But idk how much they can help you." << endl;
+	//within territory id ranges
+	if (territoryId > gameMap->getNumTerritories() || territoryId < 0) {
+		cout << "!!Invalid territory ID." << endl;
+		return false;
+	}
+	//check that there are enough troops to move
+	if (gameMap->getTerritory(territoryId)->getVirtualArmy() < 1) {
+		cout << "Not enough troops to transfer";
+		return false;
+	}
+	//check if belongs to the player
+	if (gameMap->getTerritory(territoryId)->getOwner() != player->getName()) {
+		cout << "!!This territory does not belong to you." << endl;
 		return false;
 	}
 	else {
@@ -285,20 +448,169 @@ bool GameEngine::validTerritoryDefend(string selection, Player* player) {
 	}
 }
 
+bool GameEngine::validTerritoryTransferTarget(string selection, Territory* origin, Player* player) {
+	int territoryId = 0;
+	//attempt to parse user input into int
+	try {
+		territoryId = stoi(selection);
+	}
+	catch (const std::exception&) {
+		cout << "!!Not a territory ID" << endl;
+		return false;
+	}
+	//within territory ids range
+	if (territoryId > gameMap->getNumTerritories() || territoryId < 0) {
+		cout << "!!Invalid territory ID." << endl;
+		return false;
+	}
+	//for each neighbour of the origin, check if one of them is a target
+	for (int i = 0; i < origin->getNumberAdj(); i++) {
+		if (origin->getAdjacent(i) == territoryId && gameMap->getTerritory(territoryId)->getOwner() == player->getName()) {
+			return true;
+		}
+	}
+	//not neighbours, loop never found neighbour
+	cout << "!!Selected target is not a neighbour of " << origin->getName() << endl;
+	return false;
+}
+
+bool GameEngine::validTerritoryAttack(string selection, Player* player) {
+	int territoryId = 0;
+	//attempt to parse user input into int
+	try {
+		territoryId = stoi(selection);
+	}
+	catch (const std::exception&) {
+		cout << "!Not a territory ID" << endl;
+		return false;
+	}
+	//check if within territory ids range
+	if (territoryId > gameMap->getNumTerritories() || territoryId < 0) {
+		cout << "!!Invalid territory ID." << endl;
+		return false;
+	}
+	//check that there are enough troops to move
+	if (gameMap->getTerritory(territoryId)->getVirtualArmy() < 1) {
+		cout << "Not enough troops to attack";
+		return false;
+	}
+	//Check that the selected origin has a target for attack (does one of the neighbours belong to a different player)
+	for (int i = 0; i < gameMap->getTerritory(territoryId)->getNumberAdj(); i++) {
+		if (gameMap->getTerritory(gameMap->getTerritory(territoryId)->getAdjacent(i))->getOwner() != player->getName()) {
+			return true;
+		}
+	}
+	cout << "!!Not a valid territory to attack from" << endl;
+	return false;
+}
+
+bool GameEngine::validTerritoryAttackTarget(string selection, Territory* origin, Player* player) {
+	int territoryId = 0;
+	//attempt to parse user input into int
+	try {
+		territoryId = stoi(selection);
+	}
+	catch (const std::exception&) {
+		cout << "!!Not a territory ID" << endl;
+		return false;
+	}
+	//has to be within range of territory ids
+	if (territoryId > gameMap->getNumTerritories() || territoryId < 0) {
+		cout << "!!Invalid territory ID." << endl;
+		return false;
+	}
+	//is the target actually a neighbour of the origin of attack
+	for (int i = 0; i < origin->getNumberAdj(); i++) {
+		if (origin->getAdjacent(i) == territoryId && gameMap->getTerritory(territoryId)->getOwner() != player->getName()) {
+			return true;
+		}
+	}
+	cout << "!!Selected target is not a neighbour of " << origin->getName() << endl;
+	return false;
+}
+
 bool GameEngine::validReinforceAmount(string amount, Player* player) {
-	int qty;
+	int qty = 0;
+	//attempt to parse user input into int
 	try {
 		qty = stoi(amount);
 	}
 	catch (const std::exception&) {
-		cout << "Not a valid number" << endl;
+		cout << "!!Not a valid number" << endl;
 		return false;
 	}
-	if (qty > player->getPlayerArmySize() || qty < 1) {
-		cout << "Can't reinforce by " << qty << " troops." << endl;
+	//amount cannot be larger than available
+	if (qty > player->getPlayerArmySize() || qty == 0) {
+		cout << "!!Can't reinforce by " << qty << " troops." << endl;
+		return false;
+	}
+	//if below 0, warn user that committing war crimes is not permitted in this game, even if it's to better feed your populace
+	else if(qty < 0){
+		cout << "!!Genocide is sanctioned by the Geneva conventions, and therefore not allowed." << endl;
 		return false;
 	}
 	else {
 		return true;
+	}
+}
+
+bool GameEngine::validAdvanceAmount(string amount, Territory* origin) {
+	int qty = 0;
+	//attempt to parse user input into int
+	try {
+		qty = stoi(amount);
+	}
+	catch (const std::exception&) {
+		cout << "!!Not a valid number" << endl;
+	}
+	//Verify that we're allowed to actually advance troops from there
+	if (qty >= origin->getVirtualArmy() || qty < 1) {
+		return false;
+	}
+	else {
+		return true;
+	}
+}
+
+bool GameEngine::validOrder(string input, Player* player) {
+	int choice = 0;
+	//attempt to parse user input into int
+	try {
+		choice = stoi(input);
+	}
+	catch (const std::exception&) {
+		cout << "Not a valid choice" << endl;
+		return false;
+	}
+	switch (choice) {
+		//No validation needed for these options
+	case OrdersList::RemoveOrder:
+	case OrdersList::ChangeOrder:
+	case 0:
+		return true;
+		//Need to validate if there are territories that can allow any advances
+	case Order::Advance:
+		for (int i = 0; i < player->territories.size(); i++) {
+			if (player->territories[i]->getVirtualArmy() > 1) {
+				return true;
+			}
+		}
+		cout << "Cannot advance from any territory";
+		return false;
+	case Order::Bomb:
+		cout << "Order cannot be used without a bomb card" << endl;
+		return false;
+	case Order::Blockade:
+		cout << "Order cannot be used without a blockade card" << endl;
+		return false;
+	case Order::Airlift:
+		cout << "Order cannot be used without an airlift card" << endl;
+		return false;
+	case Order::Negotiate:
+		cout << "Order cannot be used without a negotiate card" << endl;
+		return false;
+	default:
+		cout << "Not a choice" << endl;
+		return false;
 	}
 }

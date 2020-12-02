@@ -31,6 +31,9 @@ public:
 	void toAttack();
 	void toDefend();
 	void issueOrder(int orderType, Order* order);
+	void executeOrder(int i);
+	Order* getFirstOrder();
+	int numberOfOrders();
 	//Name accessors
 	void setName(string n);
 	string getName();

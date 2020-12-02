@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Map.h";
-
+#include "Map.h"
 #include <iostream>
 
 //Order superclass
@@ -17,6 +16,7 @@ public:
 	virtual void execute() = 0;
 	virtual bool validate() = 0;
 	virtual Order* clone() = 0;
+	int getType();
 	//Operator overloads
 	Order& operator = (const Order& order);
 	friend std::ostream& operator << (std::ostream& out, const Order& order);
@@ -29,6 +29,7 @@ protected:
 //Class for Order Lists (lists by player)
 class OrdersList {
 public:
+	enum OrderListCommands{RemoveOrder = 8, ChangeOrder = 9};
 	//Constructors
 	OrdersList();
 	OrdersList(const OrdersList& originalList);
@@ -75,6 +76,7 @@ private:
 class Advance : public Order {
 public:
 	Advance();
+	Advance(Territory* _origin, Territory* _destination, int _qty, string _playerO, string _playerD);
 	Advance(const Advance& original);
 	~Advance();
 	void execute();
@@ -82,6 +84,12 @@ public:
 	Order* clone();
 	Advance& operator= (const Advance& advance);
 	friend std::ostream& operator << (std::ostream& out, const Advance& deploy);
+private:
+	Territory* origin;
+	Territory* destination;
+	int qty;
+	string playerO;
+	string playerD;
 };
 
 class Bomb : public Order {
