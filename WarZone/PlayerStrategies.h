@@ -17,14 +17,14 @@ public:
     virtual string toDefend() = 0;
     virtual string issueOrder() = 0;*/
 
-    virtual void toAttack(string name, vector<struct Territory *> territories, Map *gameMap) = 0;
-    virtual void toDefend(string name, vector<struct Territory *> territories, Map *gameMap) = 0;
+    virtual void toAttack(string name, vector<struct Territory *> territories, Map *gameMap, list<string> orders) = 0;
+    virtual void toDefend(string name, vector<struct Territory *> territories, Map *gameMap, list<string> orders) = 0;
     virtual void issueOrder(string name, vector<struct Territory *> territories, Map *gameMap, list<string> orders) = 0;
 };
 
 class HumanPlayerStrategy: public PlayerStrategy{
 public:
-    virtual void toAttack(string name, vector<struct Territory *> territories, Map *gameMap){
+    virtual void toAttack(string name, vector<struct Territory *> territories, Map *gameMap,list<string> orders){
         cout << "**HumanPlayerStrategy** toAttack" << endl;
         cout << "The territories you can attack are: " << endl;
         for (int i = 0; i < territories.size(); i++) {
@@ -45,7 +45,7 @@ public:
         cout << "--------" << endl;
     }
 
-    virtual void toDefend(string name, vector<struct Territory *> territories, Map *gameMap, list<string> list) {
+    virtual void toDefend(string name, vector<struct Territory *> territories, Map *gameMap,list<string> orders) {
         cout << "**HumanPlayerStrategy** toDefend"<< endl;
 
         cout << "Your territories to defend: " << endl;
@@ -55,7 +55,7 @@ public:
         cout << "--------" << endl;
 
     }
-    virtual void issueOrder(string name, vector<struct Territory *> territories, Map *gameMap){
+    virtual void issueOrder(string name, vector<struct Territory *> territories, Map *gameMap, list<string> orders){
         cout << "**HumanPlayerStrategy** IssueOrder"<< endl;
         int j = 1;
 
@@ -81,17 +81,17 @@ public:
 class AggressivePlayerStrategy: public PlayerStrategy{
 public:
 
-    virtual void toAttack() {
+    virtual void toAttack(string name, vector<struct Territory *> territories, Map *gameMap,list<string> orders) {
         cout << "**AggressivePlayerStrategy** toAttack"<< endl;
         cout << "Reinforce Strongest country, then attacks with it until it cannot anymore, then fortifies to maximize armies in one country" << endl;
     }
 
-    virtual void toDefend(string name, vector<struct Territory *> territories, Map *gameMap, list<string> list) {
+    virtual void toDefend(string name, vector<struct Territory *> territories, Map *gameMap,list<string> orders) {
         cout << "**AggressivePlayerStrategy** toDefend"<< endl;
         cout << "Reinforce Strongest country, then attacks with it until it cannot anymore, then fortifies to maximize armies in one country" << endl;
     }
 
-    virtual void issueOrder(){
+    virtual void issueOrder(string name, vector<struct Territory *> territories, Map *gameMap,list<string> orders){
         cout << "**AggressivePlayerStrategy** IssueOrder"<< endl;
         cout << "Reinforce Strongest country, then attacks with it until it cannot anymore, then fortifies to maximize armies in one country" << endl;
     }
@@ -99,18 +99,18 @@ public:
 
 class BenevolentPlayerStrategy: public PlayerStrategy{
 public:
-    virtual void toAttack() {
+    virtual void toAttack(string name, vector<struct Territory *> territories, Map *gameMap,list<string> orders) {
         cout << "**BenevolentPlayerStrategy** toAttack"<< endl;
         cout << "Protect weakest country, never attacks, then fortifies to move armies to weaker coutnries" << endl;
     }
 
-    virtual void toDefend(string name, vector<struct Territory *> territories, Map *gameMap, list<string> list) {
+    virtual void toDefend(string name, vector<struct Territory *> territories, Map *gameMap,list<string> orders) {
         cout << "**BenevolentPlayerStrategy** toDefend"<< endl;
         cout << "Protect weakest country, never attacks, then fortifies to move armies to weaker coutnries" << endl;
         /*   cout << "Inside player strat " << name;*/
     }
 
-    virtual void issueOrder(){
+    virtual void issueOrder(string name, vector<struct Territory *> territories, Map *gameMap,list<string> orders){
         cout << "**BenevolentPlayerStrategy** IssueOrder"<< endl;
         cout << "Protect weakest country, never attacks, then fortifies to move armies to weaker coutnries" << endl;
     }
@@ -119,16 +119,16 @@ public:
 class NeutralPlayerStrategy: public PlayerStrategy{
 public:
 
-    virtual void toAttack() {
+    virtual void toAttack(string name, vector<struct Territory *> territories, Map *gameMap,list<string> orders) {
         cout << "**NeutralPlayerStrategy** toAttack"<< endl;
         cout << "Never issues orders" << endl;
     }
 
-    virtual void toDefend(string name, vector<struct Territory *> territories, Map *gameMap, list<string> list) {
+    virtual void toDefend(string name, vector<struct Territory *> territories, Map *gameMap,list<string> orders) {
         cout << "**NeutralPlayerStrategy** toDefend"<< endl;
     }
 
-    virtual void issueOrder(){
+    virtual void issueOrder(string name, vector<struct Territory *> territories, Map *gameMap,list<string> orders){
         cout << "**NeutralPlayerStrategy** IssueOrder"<< endl;
     }
 };

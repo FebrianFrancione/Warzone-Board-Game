@@ -59,17 +59,17 @@ void Player::setPlayerStrategy(PlayerStrategy* strat){
 
 // Displays a list of surrounding territories the player can attack
 void Player::toAttack() {
-    this->playerstrat->toAttack();
+    this->playerstrat->toAttack(this->name, this->territories, this->gameMap, this->orders);
 }
 
 void Player::toDefend() {
-    this->playerstrat->toDefend(this->name, this->territories,this->orders);
+    this->playerstrat->toDefend(this->name, this->territories, this->gameMap, this->orders);
     cout << " Inside player class Player name: " << this;
 }
 
 //Adds an order to the order list and displays all current orders
 void Player::issueOrder() {
-    this->playerstrat->issueOrder();
+    this->playerstrat->issueOrder(this->name, this->territories, this->gameMap, this->orders);
 }
 
 
