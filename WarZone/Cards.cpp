@@ -4,6 +4,7 @@
 using namespace std;
 
 Cards::Cards() {
+    //default card name
 	type = "Default Card";
 }
 
@@ -17,12 +18,12 @@ Cards::Cards(const Cards& obj) {
 	cout << "copy constructor allocating ptr" << endl;
 	type = obj.type; // copy the value using deep copy
 }
-
+//destructor
 Cards::~Cards(void) {
 	cout << "Freeing Card Memory" << endl;
 }
 
-
+//ostream overrride
 std::ostream& operator<<(ostream& os, const Cards& data)
 {
 	os << data.type;
@@ -51,18 +52,15 @@ DiplomacyCard::DiplomacyCard() {
 	type = "Diplomacy Card ";
 }
 
-
-/*Hand::~Hand(void) {
-	cout << "Freeing Hand Memory" << endl;
-}*/
-
 Deck::Deck() {
 
 }
+
 void Deck::generateDeck() {
     int max_deck_size = 52;
 	//generating deck
 	std::vector<Cards*> playing_deck;
+	//push back one of every card classes to he Csrd vector
 	while (playing_deck.size() <= max_deck_size) {
 
 		playing_deck.push_back(new BombCard());
@@ -75,37 +73,11 @@ void Deck::generateDeck() {
 
 		playing_deck.push_back(new AirliftCard());
 
-
-		/*	if (max_deck_size - playing_deck.size() < 5) {
-				extra = max_deck_size - playing_deck.size();
-				switch (extra) {
-				case 1:
-					playing_deck.push_back(new Bomb());
-
-					playing_deck.push_back(new Reinforcement());
-
-					playing_deck.push_back(new Blockade());
-
-					playing_deck.push_back(new Diplomacy());
-				case 2:
-					playing_deck.push_back(new Bomb());
-
-					playing_deck.push_back(new Reinforcement());
-
-					playing_deck.push_back(new Blockade());
-				case 3:
-					playing_deck.push_back(new Bomb());
-
-					playing_deck.push_back(new Reinforcement());
-				case 4:
-					playing_deck.push_back(new Bomb());
-				}
-			}*/
-
 	}
 	while (playing_deck.size() > max_deck_size) {
 		playing_deck.pop_back();
 	}
+	//set deck to playing-deck vector
 	deck = playing_deck;
 	cout << "Deck generated" << endl;
 }
@@ -129,7 +101,7 @@ std::vector<Cards*> Deck::Draw(std::vector <Cards*> player_deck) {
 }
 
 void Deck::shuffle(){
-    //shuffle the card
+    //shuffle the card using time based random seed
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     std::shuffle(std::begin(deck), deck.end(), std::default_random_engine(seed));
 
@@ -149,6 +121,10 @@ Deck::~Deck(void) {
 void Cards::Play(){
     cout << "Default play Card" << endl;
 }
+//
+//Cards are missing the implementation and effects when called, basic essage showing that cards can be stored is shown instead.
+//
+
 //Bomb::Play(Player player1, Player player2, Territory thisTerr, Territory otherTerr){
 void BombCard::Play(){
 /*otherTerr.setArmies(troopsRemain);

@@ -17,6 +17,7 @@
 class Cards {
 
 public:
+    //Card class will be inherited by the other subCards
 	std::string type;
 	//Card methods need to be here
 	Cards();
@@ -82,17 +83,7 @@ private:
 
 };
 
-/*class Hand {
-
-public:
-	Hand();
-	Hand(const Hand& otherHand);
-	~Hand();
-private:
-	vector<Card*> hand;
-};*/
-
-
+//calss of Decks use to store Cards
 class Deck {
 public:
 	//aiming ot h
@@ -100,6 +91,7 @@ public:
 	Deck();
 	Deck(Deck& otherDeck);
 	~Deck();
+	//vector of Card Objects can hold any of the implemented subClasses of Cards
     std::vector<Cards*> deck;
     void shuffle();
 	/*void draw(Card hand[]);*/
@@ -107,58 +99,3 @@ public:
 
     std::vector<Cards*> Draw(std::vector <Cards*> player_deck);
 };
-
-
-
-/*
-class Player
-{
-public:
-    Player();
-*/
-/* extern settings_t ESPdata;*//*
-
-
-//Constructors
-
-    Player(std::string n, int id, int army);
-
-    //Player(std::string n, int id, int army, list<string> t, int h);
-
-    //copy
-    Player(const Player& p);
-    */
-/*Player(list<string> t, int h);*//*
-
-    ~Player();
-
-    //methods to attack, defend, and issue orders
-    void toAttack();
-    void toDefend();
-    void issueOrder();
-
-    void setName(std::string n);
-    std::string getName();
-
-    void setPlayerTurnId(int id);
-    int getPlayerTurnId();
-
-    void setPlayerArmySize(int army);
-    int getPlayerArmySize();
-
-    */
-/*vector<string> playerTerritories;*//*
-
-    std::list<std::string> territories;
-    std::vector<Cards*> player_hand;
-    Cards* cards = new Cards;
-
-private:
-    int armySize;
-    std::string name;
-    int playerTurnId;
-
-    int hand;
-    std::list<std::string> orders;
-};
-*/

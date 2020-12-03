@@ -16,6 +16,7 @@ using namespace std;
 //================================
 //	GameEngine
 //================================
+//default gameengine constructor
 GameEngine::GameEngine(){
 	num_players = 0;
 	gameMap = new Map("");
@@ -33,7 +34,7 @@ bool GameEngine::initializeGameValues() {
 
 	//For reading in input
 	string input;
-	//Game start greeting
+	//Game start greeting - what else would it be?
 	cout << "---------------- Warzone game : Conquer All Worlds ----------------" << endl;
 	cout << endl;
 	//LOAD MAP
@@ -44,17 +45,16 @@ bool GameEngine::initializeGameValues() {
 		std::cout << entry.path() << std::endl;*/
 
 
-/*	cout << "Default available: \"canada.map\"" << endl << ">> ";
-	getline(cin, input);*/
+	cout << "Default available: \"canada.map\"" << endl << ">> ";
+	getline(cin, input);
 	//temp
-	input = "canada.map";
+	/*input = "canada.map";*/
 	mapName = path + input;
 	//GET PLAYERS
-/*	cout << "Enter number of players (2-5)" << endl << ">> ";
+	cout << "Enter number of players (2-5)" << endl << ">> ";
 	getline(cin, input);
 	try {
-		*//*num_players = stoi(input);*//*
-
+		num_players = stoi(input);
 		if (num_players > 5 || num_players < 2) {
 			throw exception();
 		}
@@ -62,11 +62,10 @@ bool GameEngine::initializeGameValues() {
 	catch (const std::exception&) {
 		cout << "Invalid player number. Game closing" << endl;
 		return false;
-	}*/
-
+	}
 
     //temp
-    num_players = 2;
+   /* num_players = 2;*/
 
 
 	//statistic observer on/off
