@@ -32,18 +32,4 @@ public:
 	void mainGameLoop();
 	//Name check function (player unique names)
 	bool validName(string name);
-	//Validates whether the territory belongs to the player
-	bool validTerritoryDefend(string selection, Player* player);
-	//Valid target to transfer to
-	bool validTerritoryTransferTarget(string selection, Territory* origin, Player* player);
-	//Validate whether the territory belongs to the player, and has an attack target
-	bool validTerritoryAttack(string selection, Player* player);
-	//Validate whether the target of an attack is the neighbour of the origin
-	bool validTerritoryAttackTarget(string selection, Territory* origin, Player* player);
-	//Valid reinforcment troop count for deploy
-	bool validReinforceAmount(string amount, Player* player);
-	//Valid amount of troops to advance with (attack or transfer)
-	bool validAdvanceAmount(string amount, Territory* origin);
-	//
-	bool validOrder(string input, Player* player);
 };

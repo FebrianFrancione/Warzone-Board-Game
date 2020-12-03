@@ -26,8 +26,11 @@ public:
 	int getArmyCount();
 	void addTroops(int qty);
 	void removeTroops(int qty);
+	//virtual army for display before orders are executed
 	void setVirtualArmy(int qty);
 	int getVirtualArmy();
+	void addVirtualTroops(int qty);
+	void removeVirtualTroops(int qty);
 	//setting adjacent territories
 	void addAdjacent(int id);
 	bool isAdjacent(int id);
@@ -102,6 +105,7 @@ private:
 //Implemented as a sort of modified edge list structure
 class Map {
 public:
+    //needs default constructor?
 	Map(string name);
 	Map(const Map& original);
 	~Map();
