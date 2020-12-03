@@ -21,7 +21,7 @@ void HumanPlayerStrategy::toAttack(Player* player, Map* gameMap) {
 	bool hasAtLeastOneTarget = false;
 	//Outter loop i -> index of the players own territories
 	for (int i = 0; i < player->territories.size(); i++) {
-		if (gameMap->getTerritory(i)->getVirtualArmy() < 2) {
+		if (gameMap->getTerritory(player->territories[i]->getId())->getVirtualArmy() < 2) {
 			continue;
 		}
 		hasAtLeastOneTarget = true;
@@ -86,7 +86,7 @@ void HumanPlayerStrategy::toDefend(Player* player, Map* gameMap) {
 	bool hasAtLeastOneTarget = false;
 	//Outter loop i -> index of the players own territories
 	for (int i = 0; i < player->territories.size(); i++) {
-		if (gameMap->getTerritory(i)->getVirtualArmy() < 2) {
+		if (gameMap->getTerritory(player->territories[i]->getId())->getVirtualArmy() < 2) {
 			continue;
 		}
 		hasAtLeastOneTarget = true;
@@ -252,10 +252,11 @@ void AggressivePlayerStrategy::toAttack(Player* player, Map* gameMap) {
 	cout << "The territories you can attack are: " << endl;
 	int idBiggestArmy = 0;
 	int biggestArmy = 0;
+	int enemies = 0;
 	bool hasAtLeastOneTarget = false;
 	//Outter loop i -> index of the players own territories
 	for (int i = 0; i < player->territories.size(); i++) {
-		if (gameMap->getTerritory(i)->getVirtualArmy() < 2) {
+		if (gameMap->getTerritory(player->territories[i]->getId())->getVirtualArmy() < 2) {
 			continue;
 		}
 		hasAtLeastOneTarget = true;
@@ -263,6 +264,7 @@ void AggressivePlayerStrategy::toAttack(Player* player, Map* gameMap) {
 		if (player->territories[i]->getArmyCount() > biggestArmy) {
 			biggestArmy = player->territories[i]->getArmyCount();
 			idBiggestArmy = player->territories[i]->getId();
+			enemies = 0;
 		}
 		//inner loop j -> index of the territories adjacent to territory[i]
 		for (int j = 0; j < player->territories[i]->getNumberAdj(); j++) {
@@ -279,12 +281,47 @@ void AggressivePlayerStrategy::toAttack(Player* player, Map* gameMap) {
 				cout << " (" << setw(2) << player->territories[i]->getId() << ")";//id
 				cout << " (" << "Troops: " << setw(3) << player->territories[i]->getVirtualArmy() << ")";//troop count
 				cout << endl;
+				//increment the number of enemies next to biggest dickus;
+				if (idBiggestArmy == player->territories[i]->getId()) {
+					enemies++;
+				}
 			}
 		}
 	}
 	cout << "--------" << endl;
 	if (hasAtLeastOneTarget) {
-		int qty = player->territories[idBiggestArmy]->getArmyCount();
+		//how many troops can we attack with
+		int qty = gameMap->getTerritory(idBiggestArmy)->getVirtualArmy() - 1;
+		//if there are more targets than troops to attack with
+		if (qty < enemies) {
+			//find one neighbour to attack and attack em
+			for (int i = 0; i < gameMap->getTerritory(idBiggestArmy)->getNumberAdj(); i++) {
+				//attack first enemy found
+				if (gameMap->getTerritory(player->territories[idBiggestArmy]->getAdjacent(i))->getOwner() != player->getName()) {
+					player->addOrder(new Advance(
+						gameMap->getTerritory(idBiggestArmy), 
+						gameMap->getTerritory(player->territories[idBiggestArmy]->getAdjacent(i)), 
+						qty, 
+						player->getName(), 
+						gameMap->getTerritory(player->territories[idBiggestArmy]->getAdjacent(i))->getOwner()));
+					break;
+				}
+			}
+		}
+		//If we have enough troops to attack
+		else {
+			qty = (qty - (qty % enemies)) / enemies;
+			for (int i = 0; i < gameMap->getTerritory(idBiggestArmy)->getNumberAdj(); i++) {
+				if (gameMap->getTerritory(gameMap->getTerritory(idBiggestArmy)->getAdjacent(i))->getOwner() != player->getName()) {
+					player->addOrder(new Advance(
+						gameMap->getTerritory(idBiggestArmy),
+						gameMap->getTerritory(player->territories[idBiggestArmy]->getAdjacent(i)),
+						qty,
+						player->getName(),
+						gameMap->getTerritory(player->territories[idBiggestArmy]->getAdjacent(i))->getOwner()));
+				}
+			}
+		}
 		//Territory* origin;
 		//Territory* destination;
 		//Create the advance order
@@ -335,6 +372,7 @@ void AggressivePlayerStrategy::toDeploy(Player* player, Map* gameMap) {
 		gameMap->getTerritory(strongest[0])->addVirtualTroops(qty);
 		//Add the deploy order to the list of orders
 		player->addOrder(new Deploy(gameMap->getTerritory(strongest[0]), qty));
+		player->subtractReinforcements(qty);
 	}
 	else {
 		//Output message for each territory from the big pp squad
@@ -352,9 +390,8 @@ void AggressivePlayerStrategy::toDeploy(Player* player, Map* gameMap) {
 
 void AggressivePlayerStrategy::issueOrder(Player* player, Map* gameMap) {
 	cout << "**AggressivePlayerStrategy** IssueOrder" << endl;
-	cout
-		<< "Reinforce Strongest country, then attacks with it until it cannot anymore, then fortifies to maximize armies in one country"
-		<< endl;
+	player->toAttack();
+	player->toDefend();
 }
 
 void BenevolentPlayerStrategy::toAttack(Player* player, Map* gameMap) {
