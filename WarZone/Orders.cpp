@@ -286,20 +286,42 @@ void Advance::execute() {
 	if (this->validate()) {
 		//cout << "Executing advance order.\n";
 		int result = 0;
+		//Attack
 		if (playerO != playerD) {
 			cout << right << setw(36) << playerO << " attacking " << left << setw(36) << playerD << endl;
 			cout << right << setw(36) << origin->getName() << " attacking " << left << setw(36) << destination->getName();
-			cout << right << setw(36) << origin->getArmyCount() << " vs. " << left << setw(36) << destination->getArmyCount();
-			while (origin->getArmyCount() > 1 && destination->getArmyCount() > 0) {
+			cout << right << setw(36) << qty << " vs. " << left << setw(36) << destination->getArmyCount();
+			while (qty > 1 && destination->getArmyCount() > 0) {
 				result = rand() % 10;
 				if (result < 6) {
 					destination->removeTroops(1);
 				}
+				//if you happen to kill the last remaining troop now, they cant kill you anymore
+				if (destination->getArmyCount() == 0) {
+					break;
+				}
 				result = rand() % 10;
 				if (result < 7) {
 					origin->removeTroops(1);
+					qty--;
 				}
 			}
+			//Yay you won the battle
+			if (origin->getArmyCount() > 1) {
+				cout << playerO << " won the battle. Conquers: " << destination->getName() << " from " << playerD << endl;
+				destination->setOwner(origin->getOwner());
+				destination->setArmyCount(qty);
+			}
+			//HAHA SIKE HE ROLLED ONLY 6
+			else {
+				cout << playerO << " lost the battle and failed to beat " << playerD << " on " << destination->getName();
+			}
+		}
+		//Transfer
+		else {
+			cout << "Transfering " << qty << " troops from " << origin->getName() << " to " << destination->getName() << endl;
+			origin->removeTroops(qty);
+			destination->addTroops(qty);
 		}
 	}
 	else {
@@ -316,9 +338,13 @@ bool Advance::validate() {
 	if (destination->getOwner() != playerD) {
 		return false;
 	}
-	//Player lost the original troop count
+	//Player lost the original troop count, not enough troops left
 	if (origin->getArmyCount() < 2) {
 		return false;
+	}
+	//Theres enough troops left to do something, but less than originally stated
+	if (origin->getArmyCount() < qty && origin->getArmyCount() > 1) {
+		qty = origin->getArmyCount() - 1;
 	}
 	//Return false if order already executed
 	return !executed;

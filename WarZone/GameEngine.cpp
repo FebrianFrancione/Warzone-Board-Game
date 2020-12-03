@@ -312,6 +312,7 @@ void GameEngine::executeOrdersPhase() {
 			//next players first order
 		}
 	}
+	//After all orders are executed, update the virtual army counts from the actual army counts
 }
 
 //================================

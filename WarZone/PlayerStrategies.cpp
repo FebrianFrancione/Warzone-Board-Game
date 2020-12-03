@@ -235,43 +235,6 @@ void HumanPlayerStrategy::issueOrder(Player* player, Map* gameMap) {
 			break;
 		}
 	}
-	//string type;
-	//switch (orderType) {
-	//case Order::Deploy:
-	//	//orders->add(new Deploy());
-	//	type = "Deploy";
-	//	break;
-	//case Order::Advance:
-	//	//orders->add(new Advance());
-	//	type = "Advance";
-	//	break;
-	//case Order::Bomb:
-	//	//orders->add(new Bomb());
-	//	type = "Bomb";
-	//	break;
-	//case Order::Blockade:
-	//	//orders->add(new Blockade());
-	//	type = "Blockade";
-	//	break;
-	//case Order::Airlift:
-	//	//orders->add(new Airlift());
-	//	type = "Airlift";
-	//	break;
-	//case Order::Negotiate:
-	//	//orders->add(new Negotiate());
-	//	type = "Negotiate";
-	//	break;
-	//default:
-	//	cout << "Invalid Order type" << endl;
-	//	break;
-	//}
-	//orders->add(order);
-	//cout << type << " order added to " << name << "'s list" << endl;
-	//cout << "List of all orders:" << endl;
-	//for (int i = 0; i < orders->getSize(); i++) {
-	//	cout << i + 1 << ": " << *(orders->get(i)) << endl;
-	//}
-	//cout << endl;
 }
 
 void AggressivePlayerStrategy::toAttack(Player* player, Map* gameMap) {
@@ -289,7 +252,41 @@ void AggressivePlayerStrategy::toDefend(Player* player, Map* gameMap) {
 }
 
 void AggressivePlayerStrategy::toDeploy(Player* player, Map* gameMap) {
-	
+	cout << "**AggressivePlayerStrategy** toDeploy" << endl;
+	//while there are troops left to deploy
+	cout << player->getPlayerArmySize() << " troops left to deploy." << endl;
+	//Vector storing ID of biggest territories
+	vector<int> strongest;
+	//LArgest army found
+	int max = 0;
+	for (int i = 0; i < player->territories.size(); i++) {
+		//If we find a new biggest one
+		if (gameMap->getTerritory(player->territories[i]->getId())->getArmyCount() > max) {
+			//store this new big army
+			max = gameMap->getTerritory(player->territories[i]->getId())->getArmyCount();
+			//clear the list of territories with biggest army
+			strongest.clear();
+			//Add the current biggest dickus territorius
+			strongest.push_back(player->territories[i]->getId());
+		}
+		else if(gameMap->getTerritory(player->territories[i]->getId())->getArmyCount() == max) {
+			//if we found one with equal army size, add it to the list of big pp squad
+			strongest.push_back(player->territories[i]->getId());
+		}
+	}
+	//Distribute the troops equally rounded down
+	//Any remains will be redistributed later again
+	int qty = player->getPlayerArmySize() / strongest.size();
+	//Output message for each territory from the big pp squad
+	for (int i = 0; i < strongest.size(); i++) {
+		cout << "Adding " << qty << " troops to " << gameMap->getTerritory(strongest[i])->getName() << endl;
+		//update virtual troops count
+		gameMap->getTerritory(strongest[i])->addVirtualTroops(qty);
+		//Add the deploy order to the list of orders
+		player->addOrder(new Deploy(gameMap->getTerritory(strongest[i]), qty));
+	}
+	//Update reinforcement pool number by removing all the boys were deploying
+	player->subtractReinforcements(qty * strongest.size());
 }
 
 void AggressivePlayerStrategy::issueOrder(Player* player, Map* gameMap) {
