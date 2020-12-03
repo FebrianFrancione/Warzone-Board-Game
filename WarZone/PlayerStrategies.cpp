@@ -254,7 +254,7 @@ void AggressivePlayerStrategy::toAttack(Player* player, Map* gameMap) {
 	int biggestArmy = 0;
 	int enemies = 0;
 	bool hasAtLeastOneTarget = false;
-	//Outter loop i -> index of the players own territories
+	//Outer loop i -> index of the players own territories
 	for (int i = 0; i < player->territories.size(); i++) {
 		if (gameMap->getTerritory(player->territories[i]->getId())->getVirtualArmy() < 2) {
 			continue;
@@ -352,7 +352,7 @@ void AggressivePlayerStrategy::toDeploy(Player* player, Map* gameMap) {
 	cout << player->getPlayerArmySize() << " troops left to deploy." << endl;
 	//Vector storing ID of biggest territories
 	vector<int> strongest;
-	//LArgest army found
+	//Largest army found
 	int max = 0;
 	for (int i = 0; i < player->territories.size(); i++) {
 		//If we find a new biggest one
@@ -361,7 +361,7 @@ void AggressivePlayerStrategy::toDeploy(Player* player, Map* gameMap) {
 			max = gameMap->getTerritory(player->territories[i]->getId())->getArmyCount();
 			//clear the list of territories with biggest army
 			strongest.clear();
-			//Add the current biggest dickus territorius
+			//Add the current biggus dickus territorius
 			strongest.push_back(player->territories[i]->getId());
 		}
 		else if(gameMap->getTerritory(player->territories[i]->getId())->getArmyCount() == max) {
@@ -436,3 +436,39 @@ void NeutralPlayerStrategy::toDeploy(Player* player, Map* gameMap) {
 void NeutralPlayerStrategy::issueOrder(Player* player, Map* gameMap) {
 	cout << "**NeutralPlayerStrategy** IssueOrder" << endl;
 }
+
+
+///*    cout << "**AggressivePlayerStrategy** toAttack" << endl;
+//    cout
+//            << "Reinforce Strongest country, then attacks with it until it cannot anymore, then fortifies to maximize armies in one country"
+//            << endl;
+//
+//    cout << "**HumanPlayerStrategy** toAttack" << endl;
+//    cout << "The territories you can attack are: " << endl;
+//    //Outter loop i -> index of the players own territories
+//    int largest;
+//    string largest_name;
+//    int temp;
+//        for (int i = 0; i < player->territories.size(); i++) {
+//      /*      if (gameMap->getTerritory(i)->getVirtualArmy() < 2) {
+//                continue;
+//            }*/
+//            //inner loop j -> index of the territories adjacent to territory[i]
+//                //for each neighbour, if it belongs to an enemy
+//                if (player->territories[i]->getOwner() == player->getName()) {
+//                    //Output full line
+//                    cout << "Owner: " << player->territories[i]->getOwner();//enemy territory
+//                    cout << "(" <<player->territories[i]->getArmyCount() << ")";//id of enemy territory
+//                }
+//
+//        if (i == 0) {
+//            largest = player->territories[0]->getArmyCount();
+//            break;
+//        } else if (player->territories[i]->getArmyCount() > largest) {
+//            largest = player->territories[i]->getArmyCount();
+//        }
+//
+//    }
+//
+//
+//    cout << "Largest army count" << largest<< endl;*/

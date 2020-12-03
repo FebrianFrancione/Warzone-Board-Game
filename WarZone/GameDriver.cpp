@@ -1,9 +1,5 @@
 #include "Cards.h"
 #include "GameEngine.h"
-#include "Map.h"
-#include "MapLoader.h"
-#include "Orders.h"
-#include "Player.h"
 
 int main() {
 	GameEngine game = GameEngine();
@@ -17,5 +13,6 @@ int main() {
 	cout << "The game has been initialized. Game Start" << endl;
 	cout << "=========================================" << endl;
 	cout << endl;
+	//call the main game loop after intiatng the startup phase.
 	game.mainGameLoop();
 }

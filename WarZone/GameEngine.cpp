@@ -16,6 +16,7 @@ using namespace std;
 //================================
 //	GameEngine
 //================================
+//default gameengine constructor
 GameEngine::GameEngine(){
 	num_players = 0;
 	gameMap = new Map("");
@@ -33,8 +34,9 @@ bool GameEngine::initializeGameValues() {
 
 	//For reading in input
 	string input;
-	//Game start greeting
+	//Game start greeting - what else would it be?
 	cout << "---------------- Warzone game : Conquer All Worlds ----------------" << endl;
+	cout << "----------------------Game is far from over.-----------------------" << endl;
 	cout << endl;
 	//LOAD MAP
 	cout << "Type in name of map to play on: (you may have to check manually in the directory)" << endl;
@@ -44,17 +46,17 @@ bool GameEngine::initializeGameValues() {
 		std::cout << entry.path() << std::endl;*/
 
 
-/*	cout << "Default available: \"canada.map\"" << endl << ">> ";
-	getline(cin, input);*/
+    //noly have canada.map as a default map to load, can possibly use others by calling the name. Validity is not ensured.
+	cout << "Default available: \"canada.map\"" << endl << ">> ";
+	getline(cin, input);
 	//temp
-	input = "canada.map";
+	/*input = "canada.map";*/
 	mapName = path + input;
 	//GET PLAYERS
-/*	cout << "Enter number of players (2-5)" << endl << ">> ";
+	cout << "Enter number of players (2-5)" << endl << ">> ";
 	getline(cin, input);
 	try {
-		*//*num_players = stoi(input);*//*
-
+		num_players = stoi(input);
 		if (num_players > 5 || num_players < 2) {
 			throw exception();
 		}
@@ -62,11 +64,10 @@ bool GameEngine::initializeGameValues() {
 	catch (const std::exception&) {
 		cout << "Invalid player number. Game closing" << endl;
 		return false;
-	}*/
-
+	}
 
     //temp
-    num_players = 2;
+   /* num_players = 2;*/
 
 
 	//statistic observer on/off
@@ -105,7 +106,7 @@ bool GameEngine::initializeGameValues() {
 		loader.printMap();
 		return true;
 	}
-	//If this threw, it just really confirms how dogshit I(calvin) am heh
+	//If this threw, it just really confirms how *Wonderful* I(Calvin) am heh
 	throw exception();
 }
 
@@ -117,12 +118,14 @@ void GameEngine::startupPhase() {
 	string input = "";
 	//Initialize players
 	int initialArmies = 0;
+	// depending on amount of players, will assign an army size.
 	switch (num_players) {
 	case 2: initialArmies = 40; break;
 	case 3: initialArmies = 35; break;
 	case 4: initialArmies = 30; break;
 	case 5: initialArmies = 25; break;
 	}
+
 	for (int i = 0; i < num_players; i++) {
 		cout << "Enter player " << i + 1 << "'s name >> ";
 		getline(cin, input);
@@ -139,6 +142,7 @@ void GameEngine::startupPhase() {
         //sanity check
         //strategy before or after
         int strat_id {0};
+        // the wide variety of (non) working player strategies. The ambition was there.
         cout << "Enter " << input << "'s type: " << endl << 
 			"1. Human " << endl << 
 			"2. Aggro " << endl <<
@@ -156,18 +160,13 @@ void GameEngine::startupPhase() {
 			exit(1003);
 		}
         //cout << strat_id;
+        //setPlayer Strategy depending on the selected Strategy.
         switch (strat_id) {
         case 1: players[i]->setPlayerStrategy(new HumanPlayerStrategy());break;
         case 2: players[i]->setPlayerStrategy(new AggressivePlayerStrategy());break;
         case 3: players[i]->setPlayerStrategy(new BenevolentPlayerStrategy());break;
         case 4: players[i]->setPlayerStrategy(new NeutralPlayerStrategy());break;
         }
-        //these will be removed
- /*       cout << "Strat set!" << endl;
-        players[i]->toAttack();
-        players[i]->issueOrder();
-
-        cout << "Continue" << endl;*/
 	}
 
 	//Shuffle the vector to randomize play order
