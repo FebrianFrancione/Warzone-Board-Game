@@ -121,7 +121,7 @@ void HumanPlayerStrategy::toDefend(Player* player, Map* gameMap) {
 		}
 		origin = gameMap->getTerritory(stoi(input));
 		//Select target of transfer
-		cout << "Select territory to transfer to>>";
+		cout << "Select territory to transfer to >> ";
 		getline(cin, input);
 		while (!player->validTerritoryTransferTarget(input, origin)) {
 			cout << "!!Enter a valid territory ID to transfer too >> ";
@@ -198,7 +198,7 @@ void HumanPlayerStrategy::issueOrder(Player* player, Map* gameMap) {
 		//get user choice and validate it
 		getline(cin, input);
 		while (!player->validOrder(input)) {
-			cout << " >> ";
+			cout << "Please make a different Order choice >> ";
 			getline(cin, input);
 		}
 		option = stoi(input);
@@ -249,7 +249,7 @@ void HumanPlayerStrategy::issueOrder(Player* player, Map* gameMap) {
 //===================================
 void AggressivePlayerStrategy::toAttack(Player* player, Map* gameMap) {
 	cout << "**AggressivePlayerStrategy** toAttack" << endl;
-	cout << "The territories you can attack are: " << endl;
+	//cout << "The territories you can attack are: " << endl;
 	int idBiggestArmy = 0;
 	int biggestArmy = 0;
 	int enemies = 0;
@@ -261,8 +261,8 @@ void AggressivePlayerStrategy::toAttack(Player* player, Map* gameMap) {
 		}
 		hasAtLeastOneTarget = true;
 		//If this territory that has a target is the biggest yet
-		if (player->territories[i]->getArmyCount() > biggestArmy) {
-			biggestArmy = player->territories[i]->getArmyCount();
+		if (player->territories[i]->getVirtualArmy() > biggestArmy) {
+			biggestArmy = player->territories[i]->getVirtualArmy();
 			idBiggestArmy = player->territories[i]->getId();
 			enemies = 0;
 		}
@@ -304,6 +304,14 @@ void AggressivePlayerStrategy::toAttack(Player* player, Map* gameMap) {
 						qty, 
 						player->getName(), 
 						gameMap->getTerritory(player->territories[idBiggestArmy]->getAdjacent(i))->getOwner()));
+					cout <<
+						player->getName() << " attacking " <<
+						gameMap->getTerritory(player->territories[idBiggestArmy]->getAdjacent(i))->getOwner() <<
+						" from " <<
+						gameMap->getTerritory(idBiggestArmy)->getName() <<
+						" to " <<
+						gameMap->getTerritory(player->territories[idBiggestArmy]->getAdjacent(i))->getName() <<
+						endl;
 					break;
 				}
 			}

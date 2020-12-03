@@ -289,8 +289,8 @@ void Advance::execute() {
 		//Attack
 		if (playerO != playerD) {
 			cout << right << setw(36) << playerO << " attacking " << left << setw(36) << playerD << endl;
-			cout << right << setw(36) << origin->getName() << " attacking " << left << setw(36) << destination->getName();
-			cout << right << setw(36) << qty << " vs. " << left << setw(36) << destination->getArmyCount();
+			cout << right << setw(36) << origin->getName() << " attacking " << left << setw(36) << destination->getName() << endl;
+			cout << right << setw(36) << qty << " vs. " << left << setw(36) << destination->getArmyCount() << endl;
 			while (qty > 1 && destination->getArmyCount() > 0) {
 				result = rand() % 10;
 				if (result < 6) {

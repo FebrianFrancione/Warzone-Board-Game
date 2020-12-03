@@ -291,6 +291,8 @@ void GameEngine::issueOrdersPhase() {
 //	Execute Orders Phase
 //================================
 void GameEngine::executeOrdersPhase() {
+	cout << endl << "-------------------------" << endl;
+	cout << "EXECUTING ALL PLAYER ORDERS IN ORDER " << endl;
 	int totalNumberOfOrder = 0;
 	for (int i = 0; i < num_players; i++) {
 		while (players[i]->numberOfOrders() > 0 && players[i]->getFirstOrder()->getType() == Order::Deploy) {
@@ -313,6 +315,9 @@ void GameEngine::executeOrdersPhase() {
 		}
 	}
 	//After all orders are executed, update the virtual army counts from the actual army counts
+	for (int i = 0; i < gameMap->getNumTerritories(); i++) {
+		gameMap->getTerritory(i)->setVirtualArmy(gameMap->getTerritory(i)->getArmyCount());
+	}
 }
 
 //================================
@@ -353,6 +358,7 @@ void GameEngine::mainGameLoop() {
 			cout << "Turn limit reached. No one won";
 			victory = true;
 		}
+		turnCounter++;
 	}
 }
 
