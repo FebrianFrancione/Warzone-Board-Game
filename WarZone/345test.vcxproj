@@ -147,6 +147,7 @@
     <ClInclude Include="MapLoader.h" />
     <ClInclude Include="orders.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerStrategies.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Cards.cpp" />
@@ -156,6 +157,7 @@
     <ClCompile Include="MapLoader.cpp" />
     <ClCompile Include="orders.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerStrategies.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Maps\canada.map" />

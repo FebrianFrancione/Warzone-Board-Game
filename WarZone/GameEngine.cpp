@@ -3,16 +3,15 @@
 #include "Map.h"
 #include "MapLoader.h"
 
-
 #include <iostream>
 //#include <filesystem> //ENABLE IF PROJECT IS SET FOR C++17, IF NOT CANNOT READ FILES FROM DIRECTORY
 #include <filesystem>
 using namespace std;
 
-AggressivePlayerStrategy aggroStrat;
-HumanPlayerStrategy humanStrat;
-BenevolentPlayerStrategy benevolentStrat;
-NeutralPlayerStrategy neutralStrat;
+//AggressivePlayerStrategy aggroStrat;
+//HumanPlayerStrategy humanStrat;
+//BenevolentPlayerStrategy benevolentStrat;
+//NeutralPlayerStrategy neutralStrat;
 
 //================================
 //	GameEngine
@@ -132,7 +131,6 @@ void GameEngine::startupPhase() {
 			getline(cin, input);
 		}
 
-
 		//gameMap is a pointer, and we're giving each player direct access to the map object because I didn't
 		//implement the graph data structure properly and now it's kinda too late to rewrite that whole thing
 		//so we're doing some ------****epic****------ cheating.
@@ -148,10 +146,10 @@ void GameEngine::startupPhase() {
         cin >> strat_id;
         cout << strat_id;
         switch (strat_id) {
-        case 1: players[i]->setPlayerStrategy(&humanStrat);break;
-        case 2: players[i]->setPlayerStrategy(&aggroStrat);break;
-        case 3: players[i]->setPlayerStrategy(&benevolentStrat);break;
-        case 4: players[i]->setPlayerStrategy(&neutralStrat);break;
+        case 1: players[i]->setPlayerStrategy(new HumanPlayerStrategy());break;
+        case 2: players[i]->setPlayerStrategy(new AggressivePlayerStrategy());break;
+        case 3: players[i]->setPlayerStrategy(new BenevolentPlayerStrategy());break;
+        case 4: players[i]->setPlayerStrategy(new NeutralPlayerStrategy());break;
         }
         //these will be removed
  /*       cout << "Strat set!" << endl;
@@ -286,15 +284,27 @@ void GameEngine::issueOrdersPhase() {
 //	Execute Orders Phase
 //================================
 void GameEngine::executeOrdersPhase() {
+	int totalNumberOfOrder = 0;
 	for (int i = 0; i < num_players; i++) {
 		while (players[i]->numberOfOrders() > 0 && players[i]->getFirstOrder()->getType() == Order::Deploy) {
 			players[i]->executeOrder(0);
 		}
+		//Adds the number of remaining orders to execute from this player
+		totalNumberOfOrder += players[i]->numberOfOrders();
 	}
-	/*for (int i = 0; i < num_players; i++) {
-		players[i]->toAttack();
-		players[i]->toDefend();
-	}*/
+	//While there are orders to execute
+	while (totalNumberOfOrder > 0) {
+		//For each player, get the current first order of the list
+		for (int i = 0; i < num_players; i++) {
+			//If this player still has an order to execute
+			if (players[i]->numberOfOrders() > 0) {
+				//play it
+				players[i]->executeOrder(0);
+				totalNumberOfOrder--; //decrement the counter
+			}
+			//next players first order
+		}
+	}
 }
 
 //================================
@@ -302,7 +312,7 @@ void GameEngine::executeOrdersPhase() {
 //================================
 void GameEngine::mainGameLoop() {
 
-	reinforcementPhase();
+	/*reinforcementPhase();
 	issueOrdersPhase();
 	executeOrdersPhase();
 	for (int i = 0; i < num_players; i++) {
@@ -311,13 +321,30 @@ void GameEngine::mainGameLoop() {
         players[i]->toDefend();
         cout << players[i]->getName() << "'s Attack: " << endl;
         players[i]->toAttack();
-    }
+    }*/
 	bool victory = false;
+	int turnCounter = 0;
 	while (!victory) {
 		reinforcementPhase();
 		issueOrdersPhase();
 		executeOrdersPhase();
-		victory = true;
+		for (int i = 0; i < num_players; i++) {
+			if (players[i]->territories.size() == gameMap->getNumTerritories()) {
+				victory = true;
+				cout << "================================" << endl;
+				cout << "            --------            " << endl;
+				cout << " ** **  **  ++++++++  **  ** ** " << endl;
+				cout << setw(32) << (players[i]->getName() + " has won the game.") << endl;
+				cout << " ** **  **  ++++++++  **  ** ** " << endl;
+				cout << "            --------            " << endl;
+				cout << "================================" << endl;
+			}
+		}
+		//fail safe for testing
+		if (turnCounter == 5) {
+			cout << "Turn limit reached. No one won";
+			victory = true;
+		}
 	}
 }
 
@@ -338,201 +365,3 @@ bool GameEngine::validName(string name) {
 	}
 	return true;
 }
-
-bool GameEngine::validTerritoryDefend(string selection, Player* player) {
-	int territoryId = 0;
-	//attempt to parse user input into int
-	try {
-		territoryId = stoi(selection);
-	}
-	catch (const std::exception&) {
-		cout << "!!Not a territory ID" << endl;
-		return false;
-	}
-	//within territory id ranges
-	if (territoryId > gameMap->getNumTerritories() || territoryId < 0) {
-		cout << "!!Invalid territory ID." << endl;
-		return false;
-	}
-	//check that there are enough troops to move
-	if (gameMap->getTerritory(territoryId)->getVirtualArmy() < 1) {
-		cout << "Not enough troops to transfer";
-		return false;
-	}
-	//check if belongs to the player
-	if (gameMap->getTerritory(territoryId)->getOwner() != player->getName()) {
-		cout << "!!This territory does not belong to you." << endl;
-		return false;
-
-	}
-	else {
-		return true;
-	}
-}
-
-bool GameEngine::validTerritoryTransferTarget(string selection, Territory* origin, Player* player) {
-	int territoryId = 0;
-	//attempt to parse user input into int
-	try {
-		territoryId = stoi(selection);
-	}
-	catch (const std::exception&) {
-		cout << "!!Not a territory ID" << endl;
-		return false;
-	}
-	//within territory ids range
-	if (territoryId > gameMap->getNumTerritories() || territoryId < 0) {
-		cout << "!!Invalid territory ID." << endl;
-		return false;
-	}
-	//for each neighbour of the origin, check if one of them is a target
-	for (int i = 0; i < origin->getNumberAdj(); i++) {
-		if (origin->getAdjacent(i) == territoryId && gameMap->getTerritory(territoryId)->getOwner() == player->getName()) {
-			return true;
-		}
-	}
-	//not neighbours, loop never found neighbour
-	cout << "!!Selected target is not a neighbour of " << origin->getName() << endl;
-	return false;
-}
-
-bool GameEngine::validTerritoryAttack(string selection, Player* player) {
-	int territoryId = 0;
-	//attempt to parse user input into int
-	try {
-		territoryId = stoi(selection);
-	}
-	catch (const std::exception&) {
-		cout << "!Not a territory ID" << endl;
-		return false;
-	}
-	//check if within territory ids range
-	if (territoryId > gameMap->getNumTerritories() || territoryId < 0) {
-		cout << "!!Invalid territory ID." << endl;
-		return false;
-	}
-	//check that there are enough troops to move
-	if (gameMap->getTerritory(territoryId)->getVirtualArmy() < 1) {
-		cout << "Not enough troops to attack";
-		return false;
-	}
-	//Check that the selected origin has a target for attack (does one of the neighbours belong to a different player)
-	for (int i = 0; i < gameMap->getTerritory(territoryId)->getNumberAdj(); i++) {
-		if (gameMap->getTerritory(gameMap->getTerritory(territoryId)->getAdjacent(i))->getOwner() != player->getName()) {
-			return true;
-		}
-	}
-	cout << "!!Not a valid territory to attack from" << endl;
-	return false;
-}
-
-bool GameEngine::validTerritoryAttackTarget(string selection, Territory* origin, Player* player) {
-	int territoryId = 0;
-	//attempt to parse user input into int
-	try {
-		territoryId = stoi(selection);
-	}
-	catch (const std::exception&) {
-		cout << "!!Not a territory ID" << endl;
-		return false;
-	}
-	//has to be within range of territory ids
-	if (territoryId > gameMap->getNumTerritories() || territoryId < 0) {
-		cout << "!!Invalid territory ID." << endl;
-		return false;
-	}
-	//is the target actually a neighbour of the origin of attack
-	for (int i = 0; i < origin->getNumberAdj(); i++) {
-		if (origin->getAdjacent(i) == territoryId && gameMap->getTerritory(territoryId)->getOwner() != player->getName()) {
-			return true;
-		}
-	}
-	cout << "!!Selected target is not a neighbour of " << origin->getName() << endl;
-	return false;
-}
-
-//bool GameEngine::validReinforceAmount(string amount, Player* player) {
-//	int qty = 0;
-//	//attempt to parse user input into int
-//	try {
-//		qty = stoi(amount);
-//	}
-//	catch (const std::exception&) {
-//		cout << "!!Not a valid number" << endl;
-//		return false;
-//	}
-//	//amount cannot be larger than available
-//	if (qty > player->getPlayerArmySize() || qty == 0) {
-//		cout << "!!Can't reinforce by " << qty << " troops." << endl;
-//		return false;
-//	}
-//	//if below 0, warn user that committing war crimes is not permitted in this game, even if it's to better feed your populace
-//	else if(qty < 0){
-//		cout << "!!Genocide is sanctioned by the Geneva conventions, and therefore not allowed." << endl;
-//		return false;
-//	}
-//	else {
-//		return true;
-//	}
-//}
-
-bool GameEngine::validAdvanceAmount(string amount, Territory* origin) {
-	int qty = 0;
-	//attempt to parse user input into int
-	try {
-		qty = stoi(amount);
-	}
-	catch (const std::exception&) {
-		cout << "!!Not a valid number" << endl;
-	}
-	//Verify that we're allowed to actually advance troops from there
-	if (qty >= origin->getVirtualArmy() || qty < 1) {
-		return false;
-	}
-	else {
-		return true;
-	}
-}
-
-//bool GameEngine::validOrder(string input, Player* player) {
-//	int choice = 0;
-//	//attempt to parse user input into int
-//	try {
-//		choice = stoi(input);
-//	}
-//	catch (const std::exception&) {
-//		cout << "Not a valid choice" << endl;
-//		return false;
-//	}
-//	switch (choice) {
-//		//No validation needed for these options
-//	case OrdersList::RemoveOrder:
-//	case OrdersList::ChangeOrder:
-//	case 0:
-//		return true;
-//		//Need to validate if there are territories that can allow any advances
-//	case Order::Advance:
-//		for (int i = 0; i < player->territories.size(); i++) {
-//			if (player->territories[i]->getVirtualArmy() > 1) {
-//				return true;
-//			}
-//		}
-//		cout << "Cannot advance from any territory";
-//		return false;
-//	case Order::Bomb:
-//		cout << "Order cannot be used without a bomb card" << endl;
-//		return false;
-//	case Order::Blockade:
-//		cout << "Order cannot be used without a blockade card" << endl;
-//		return false;
-//	case Order::Airlift:
-//		cout << "Order cannot be used without an airlift card" << endl;
-//		return false;
-//	case Order::Negotiate:
-//		cout << "Order cannot be used without a negotiate card" << endl;
-//		return false;
-//	default:
-//		cout << "Not a choice" << endl;
-//		return false;
-//	}
-//}

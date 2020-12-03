@@ -89,6 +89,14 @@ int Territory::getVirtualArmy() {
 	return virtualArmyCount;
 }
 
+void Territory::addVirtualTroops(int qty) {
+	virtualArmyCount += qty;
+}
+
+void Territory::removeVirtualTroops(int qty) {
+	virtualArmyCount -= qty;
+}
+
 void Territory::addAdjacent(int id) {
 	numAdj++;
 	int* newList = new int[numAdj];
