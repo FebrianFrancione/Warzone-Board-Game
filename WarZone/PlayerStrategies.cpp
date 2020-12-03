@@ -277,16 +277,27 @@ void AggressivePlayerStrategy::toDeploy(Player* player, Map* gameMap) {
 	//Distribute the troops equally rounded down
 	//Any remains will be redistributed later again
 	int qty = player->getPlayerArmySize() / strongest.size();
-	//Output message for each territory from the big pp squad
-	for (int i = 0; i < strongest.size(); i++) {
-		cout << "Adding " << qty << " troops to " << gameMap->getTerritory(strongest[i])->getName() << endl;
+	//If we have less troops than territories, just give all to first come first serve
+	if (qty == 0) {
+		qty = player->getPlayerArmySize();
+		cout << "Adding " << qty << " troops to " << gameMap->getTerritory(strongest[0])->getName() << endl;
 		//update virtual troops count
-		gameMap->getTerritory(strongest[i])->addVirtualTroops(qty);
+		gameMap->getTerritory(strongest[0])->addVirtualTroops(qty);
 		//Add the deploy order to the list of orders
-		player->addOrder(new Deploy(gameMap->getTerritory(strongest[i]), qty));
+		player->addOrder(new Deploy(gameMap->getTerritory(strongest[0]), qty));
 	}
-	//Update reinforcement pool number by removing all the boys were deploying
-	player->subtractReinforcements(qty * strongest.size());
+	else {
+		//Output message for each territory from the big pp squad
+		for (int i = 0; i < strongest.size(); i++) {
+			cout << "Adding " << qty << " troops to " << gameMap->getTerritory(strongest[i])->getName() << endl;
+			//update virtual troops count
+			gameMap->getTerritory(strongest[i])->addVirtualTroops(qty);
+			//Add the deploy order to the list of orders
+			player->addOrder(new Deploy(gameMap->getTerritory(strongest[i]), qty));
+			//Update reinforcement pool number by removing all the boys were deploying
+			player->subtractReinforcements(qty * strongest.size());
+		}
+	}
 }
 
 void AggressivePlayerStrategy::issueOrder(Player* player, Map* gameMap) {
