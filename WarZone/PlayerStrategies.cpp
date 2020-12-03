@@ -10,6 +10,11 @@ using namespace std;
 
 class Player;
 
+//===================================
+//-----------------------------------
+//	HUMAN
+//-----------------------------------
+//===================================
 void HumanPlayerStrategy::toAttack(Player* player, Map* gameMap) {
 	cout << "**HumanPlayerStrategy** toAttack" << endl;
 	cout << "The territories you can attack are: " << endl;
@@ -237,11 +242,56 @@ void HumanPlayerStrategy::issueOrder(Player* player, Map* gameMap) {
 	}
 }
 
+//===================================
+//-----------------------------------
+//	AGGRESIVE
+//-----------------------------------
+//===================================
 void AggressivePlayerStrategy::toAttack(Player* player, Map* gameMap) {
 	cout << "**AggressivePlayerStrategy** toAttack" << endl;
-	cout
-		<< "Reinforce Strongest country, then attacks with it until it cannot anymore, then fortifies to maximize armies in one country"
-		<< endl;
+	cout << "The territories you can attack are: " << endl;
+	int idBiggestArmy = 0;
+	int biggestArmy = 0;
+	bool hasAtLeastOneTarget = false;
+	//Outter loop i -> index of the players own territories
+	for (int i = 0; i < player->territories.size(); i++) {
+		if (gameMap->getTerritory(i)->getVirtualArmy() < 2) {
+			continue;
+		}
+		hasAtLeastOneTarget = true;
+		//If this territory that has a target is the biggest yet
+		if (player->territories[i]->getArmyCount() > biggestArmy) {
+			biggestArmy = player->territories[i]->getArmyCount();
+			idBiggestArmy = player->territories[i]->getId();
+		}
+		//inner loop j -> index of the territories adjacent to territory[i]
+		for (int j = 0; j < player->territories[i]->getNumberAdj(); j++) {
+			//for each neighbour, if it belongs to an enemy
+			if (gameMap->getTerritory(player->territories[i]->getAdjacent(j))->getOwner() != player->getName()) {
+				//Output full line
+				cout << right << setw(36) << gameMap->getTerritory(player->territories[i]->getAdjacent(j))->getName();//enemy territory
+				cout << " (" << setw(2) << player->territories[i]->getAdjacent(j) << ")";//id of enemy territory
+				cout << " (" << "Troops: " << setw(3) << gameMap->getTerritory(player->territories[i]->getAdjacent(j))->getVirtualArmy() << ")";//troop count
+				cout << setw(20) << " belonging to ";
+				cout << left << setw(20) << gameMap->getTerritory(player->territories[i]->getAdjacent(j))->getOwner();//owner of enemy territory
+				cout << " from ";
+				cout << right << setw(36) << player->territories[i]->getName();//your territory
+				cout << " (" << setw(2) << player->territories[i]->getId() << ")";//id
+				cout << " (" << "Troops: " << setw(3) << player->territories[i]->getVirtualArmy() << ")";//troop count
+				cout << endl;
+			}
+		}
+	}
+	cout << "--------" << endl;
+	if (hasAtLeastOneTarget) {
+		int qty = player->territories[idBiggestArmy]->getArmyCount();
+		//Territory* origin;
+		//Territory* destination;
+		//Create the advance order
+		//player->addOrder(new Advance(origin, destination, qty, player->getName(), destination->getOwner()));
+		//Update virtual army count
+		//origin->removeVirtualTroops(qty);
+	}
 }
 
 void AggressivePlayerStrategy::toDefend(Player* player, Map* gameMap) {
@@ -276,7 +326,7 @@ void AggressivePlayerStrategy::toDeploy(Player* player, Map* gameMap) {
 	}
 	//Distribute the troops equally rounded down
 	//Any remains will be redistributed later again
-	int qty = player->getPlayerArmySize() / strongest.size();
+	int qty = (player->getPlayerArmySize() - (player->getPlayerArmySize() % strongest.size())) / strongest.size();
 	//If we have less troops than territories, just give all to first come first serve
 	if (qty == 0) {
 		qty = player->getPlayerArmySize();
@@ -295,8 +345,8 @@ void AggressivePlayerStrategy::toDeploy(Player* player, Map* gameMap) {
 			//Add the deploy order to the list of orders
 			player->addOrder(new Deploy(gameMap->getTerritory(strongest[i]), qty));
 			//Update reinforcement pool number by removing all the boys were deploying
-			player->subtractReinforcements(qty * strongest.size());
 		}
+		player->subtractReinforcements(qty * strongest.size());
 	}
 }
 
