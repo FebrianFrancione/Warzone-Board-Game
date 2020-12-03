@@ -105,6 +105,7 @@ private:
 //Implemented as a sort of modified edge list structure
 class Map {
 public:
+    //needs default constructor?
 	Map(string name);
 	Map(const Map& original);
 	~Map();
