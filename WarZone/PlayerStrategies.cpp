@@ -13,8 +13,13 @@ class Player;
 void HumanPlayerStrategy::toAttack(Player* player, Map* gameMap) {
 	cout << "**HumanPlayerStrategy** toAttack" << endl;
 	cout << "The territories you can attack are: " << endl;
+	bool hasAtLeastOneTarget = false;
 	//Outter loop i -> index of the players own territories
 	for (int i = 0; i < player->territories.size(); i++) {
+		if (gameMap->getTerritory(i)->getVirtualArmy() < 2) {
+			continue;
+		}
+		hasAtLeastOneTarget = true;
 		//inner loop j -> index of the territories adjacent to territory[i]
 		for (int j = 0; j < player->territories[i]->getNumberAdj(); j++) {
 			//for each neighbour, if it belongs to an enemy
@@ -34,12 +39,52 @@ void HumanPlayerStrategy::toAttack(Player* player, Map* gameMap) {
 		}
 	}
 	cout << "--------" << endl;
+	if (hasAtLeastOneTarget) {
+		string input;
+		int qty;
+		Territory* origin;
+		Territory* destination;
+		//select origin
+		cout << "Select territory to attack from >> ";
+		getline(cin, input);
+		while (!player->validTerritoryAttack(input)) {
+			cout << "!!Enter a valid territory ID to attack from >> ";
+			getline(cin, input);
+		}
+		origin = gameMap->getTerritory(stoi(input));
+		//select target
+		cout << "Select territory to target for attack >> ";
+		getline(cin, input);
+		while (!player->validTerritoryAttackTarget(input, origin)) {
+			cout << "!!Enter a valid territory ID to target for attack >> ";
+			getline(cin, input);
+		}
+		destination = gameMap->getTerritory(stoi(input));
+		cout << "Number of troops to attack with >> ";
+		//Get number of troops to transfer
+		getline(cin, input);
+		while (!player->validAdvanceAmount(input, origin)) {
+			cout << "Enter a valid number of troops >> ";
+			getline(cin, input);
+		}
+		qty = stoi(input);
+		//Create the advance order
+		player->addOrder(new Advance(origin, destination, qty, player->getName(), destination->getOwner()));
+		//Update virtual army count
+		origin->removeVirtualTroops(qty);
+	}
 }
 
 void HumanPlayerStrategy::toDefend(Player* player, Map* gameMap) {
 	cout << "**HumanPlayerStrategy** toDefend" << endl;
+	cout << "The territories you can transfer between are: " << endl;
+	bool hasAtLeastOneTarget = false;
 	//Outter loop i -> index of the players own territories
 	for (int i = 0; i < player->territories.size(); i++) {
+		if (gameMap->getTerritory(i)->getVirtualArmy() < 2) {
+			continue;
+		}
+		hasAtLeastOneTarget = true;
 		//inner loop j -> index of the territories adjacent to territory[i]
 		for (int j = 0; j < player->territories[i]->getNumberAdj(); j++) {
 			//for each neighbour, if it belongs to yourself
@@ -57,6 +102,40 @@ void HumanPlayerStrategy::toDefend(Player* player, Map* gameMap) {
 		}
 	}
 	cout << "--------" << endl;
+	if (hasAtLeastOneTarget) {
+		string input;
+		int qty;
+		Territory* origin;
+		Territory* destination;
+		//Select origin of transfer
+		cout << "Select territory to transfer from >> ";
+		getline(cin, input);
+		while (!player->validTerritoryDefend(input)) {
+			cout << "!!Enter a valid territory ID to transfer from >> ";
+			getline(cin, input);
+		}
+		origin = gameMap->getTerritory(stoi(input));
+		//Select target of transfer
+		cout << "Select territory to transfer to>>";
+		getline(cin, input);
+		while (!player->validTerritoryTransferTarget(input, origin)) {
+			cout << "!!Enter a valid territory ID to transfer too >> ";
+			getline(cin, input);
+		}
+		destination = gameMap->getTerritory(stoi(input));
+		cout << "Number of troops to transfer >> ";
+		//Get number of troops to transfer
+		getline(cin, input);
+		while (!player->validAdvanceAmount(input, origin)) {
+			cout << "Enter a valid number of troops >> ";
+			getline(cin, input);
+		}
+		qty = stoi(input);
+		//Create the advance order
+		player->addOrder(new Advance(origin, destination, qty, player->getName(), destination->getOwner()));
+		//Update virtual army count
+		origin->removeVirtualTroops(qty);
+	}
 }
 
 void HumanPlayerStrategy::toDeploy(Player* player, Map* gameMap) {
@@ -130,63 +209,15 @@ void HumanPlayerStrategy::issueOrder(Player* player, Map* gameMap) {
 			//attack
 			if (input == "a" || input == "A") {
 				player->toAttack();
-				//select origin
-				cout << "Select territory to attack from >> ";
-				getline(cin, input);
-				while (!player->validTerritoryAttack(input)) {
-					cout << "!!Enter a valid territory ID to attack from >> ";
-					getline(cin, input);
-				}
-				origin = gameMap->getTerritory(stoi(input));
-				//select target
-				cout << "Select territory to target for attack >> ";
-				getline(cin, input);
-				while (!player->validTerritoryAttackTarget(input, origin)) {
-					cout << "!!Enter a valid territory ID to target for attack >> ";
-					getline(cin, input);
-				}
-				destination = gameMap->getTerritory(stoi(input));
-				cout << "Number of troops to attack with >> ";
 			}
 			//transfer
 			else if (input == "t" || input == "T") {
 				player->toDefend();
-				//Select origin of transfer
-				cout << "Select territory to transfer from >> ";
-				getline(cin, input);
-				while (!player->validTerritoryDefend(input)) {
-					cout << "!!Enter a valid territory ID to transfer from >> ";
-					getline(cin, input);
-				}
-				origin = gameMap->getTerritory(stoi(input));
-				//Select target of transfer
-				cout << "Select territory to transfer to>>";
-				getline(cin, input);
-				while (!player->validTerritoryTransferTarget(input, origin)) {
-					cout << "!!Enter a valid territory ID to transfer too >> ";
-					getline(cin, input);
-				}
-				destination = gameMap->getTerritory(stoi(input));
-				cout << "Number of troops to transfer >> ";
 			}
 			//If the player didnt select attack or transfer, break out
 			else {
 				break;
 			}
-			//This reaches only if the player attacked or transfered successfully
-			//Get number of troops to transfer
-			getline(cin, input);
-			while (!player->validAdvanceAmount(input, origin)) {
-				cout << "Enter a valid number of troops >> ";
-				getline(cin, input);
-			}
-			qty = stoi(input);
-			//Create the advance order
-			//players[i]->issueOrder(Order::Advance, new Advance(origin, destination, qty, players[i]->getName(), destination->getOwner()));
-			//orders->add(new Advance(origin, destination, qty, name, destination->getOwner()));
-			player->addOrder(new Advance(origin, destination, qty, player->getName(), destination->getOwner()));
-			//Update virtual army count
-			origin->setVirtualArmy(origin->getVirtualArmy() - qty);
 			break;
 		case Order::Bomb:
 			break;
