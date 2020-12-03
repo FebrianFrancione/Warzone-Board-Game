@@ -74,35 +74,6 @@ void Player::printPlayerTerritories() {
 
 void Player::toDeploy() {
 	this->playerstrat->toDeploy(this, gameMap);
-	//string input;
-	//int selectId;
-	////while there are troops left to deploy
-	//cout << armySize << " troops left to deploy." << endl;
-	////List all owned territories
-	//printPlayerTerritories();
-	////Get id of territory to deploy to
-	//cout << "Enter a territory ID to deploy to >> ";
-	//getline(cin, input);
-	//while (!validTerritoryDeploy(input)) {
-	//	cout << "Enter a valid territory ID >> ";
-	//	getline(cin, input);
-	//}
-	//selectId = stoi(input);
-	////Get amount of troops to deploy
-	//cout << "Number of troops to deploy >> ";
-	//getline(cin, input);
-	//while (!validReinforceAmount(input)) {
-	//	cout << "Enter a valid number of troops to deploy >> ";
-	//	getline(cin, input);
-	//}
-	////Output message
-	//cout << "Adding " << input << " troops to " << gameMap->getTerritory(selectId)->getName() << endl;
-	////Update reinforcement pool number of people
-	//armySize -= stoi(input);
-	////update virtual troops count
-	//gameMap->getTerritory(selectId)->setVirtualArmy(gameMap->getTerritory(selectId)->getVirtualArmy() + stoi(input));
-	////Add the deploy order to the list of orders
-	//orders->add(new Deploy(gameMap->getTerritory(selectId), stoi(input)));
 }
 
 //Iterates over a list of territories owned by the player and displays them
@@ -126,43 +97,23 @@ void Player::toDefend() {
 
 // Displays a list of surrounding territories the player can attack
 void Player::toAttack() {
-	Territory* origin = new Territory();
-	Territory* destination= new Territory();
-    this->playerstrat->toAttack(this, gameMap, origin, destination);
+    this->playerstrat->toAttack(this, gameMap);
 	//issue advance order with origin and destination after
 }
 
-	/*cout << "The territories you can attack are: " << endl;*/
-	//own territories loop
-/*  cout << "The territories you can attack are: " << endl;
-	for (int i = 0; i < territories.size(); i++) {
-		//adjacent territories of i loop
-		for (int j = 0; j < territories[i]->getNumberAdj(); j++) {
-			if (gameMap->getTerritory(territories[i]->getAdjacent(j))->getOwner() != name) {
-				cout << 
-					right << setw(36) << gameMap->getTerritory(territories[i]->getAdjacent(j))->getName() << 
-					" (ID:" << setw(2) << territories[i]->getAdjacent(j) << ")" <<
-					" (Troops:" << setw(3) << gameMap->getTerritory(territories[i]->getAdjacent(j))->getVirtualArmy() << ")" <<
-					setw(20) << " belonging to " <<
-					left << setw(20) << gameMap->getTerritory(territories[i]->getAdjacent(j))->getOwner() <<
-					" from " <<
-					right << setw(36) << territories[i]->getName() <<
-					" (ID:" << setw(2) << territories[i]->getId() << ")" <<
-					" (Troops:" << setw(3) << territories[i]->getVirtualArmy() << ")" <<
-					endl;
-			}
-		}
-	}
-	cout << "--------" << endl;*/
-
 void Player::toDefend() {
-    this->playerstrat->toDefend(this->name, this->territories, this->gameMap, this->orders);
-    cout << " Inside player class Player name: " << this;
+    this->playerstrat->toDefend(this, gameMap);
+    //cout << " Inside player class Player name: " << this;
 }
 
-//Adds an order to the order list and displays all current orders
+//Player can issue an order
 void Player::issueOrder() {
-    this->playerstrat->issueOrder(this->name, this->territories, this->gameMap, this->orders);
+    this->playerstrat->issueOrder(this, gameMap);
+}
+
+//Add order to the players orderlist
+void Player::addOrder(Order* order) {
+	orders->add(order);
 }
 
 void Player::executeOrder(int i) {

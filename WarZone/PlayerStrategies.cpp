@@ -10,55 +10,67 @@ using namespace std;
 
 class Player;
 
-void HumanPlayerStrategy::toAttack(Player* player, Map* gameMap, Territory* origin, Territory* destination) {
+void HumanPlayerStrategy::toAttack(Player* player, Map* gameMap) {
 	cout << "**HumanPlayerStrategy** toAttack" << endl;
 	cout << "The territories you can attack are: " << endl;
+	//Outter loop i -> index of the players own territories
 	for (int i = 0; i < player->territories.size(); i++) {
+		//inner loop j -> index of the territories adjacent to territory[i]
 		for (int j = 0; j < player->territories[i]->getNumberAdj(); j++) {
+			//for each neighbour, if it belongs to an enemy
 			if (gameMap->getTerritory(player->territories[i]->getAdjacent(j))->getOwner() != player->getName()) {
-				cout <<
-					right << setw(40) << gameMap->getTerritory(player->territories[i]->getAdjacent(j))->getName() <<
-					" (" << setw(2) << player->territories[i]->getAdjacent(j) << ")" <<
-					setw(20) << " belonging to " <<
-					left << setw(20) << gameMap->getTerritory(player->territories[i]->getAdjacent(j))->getOwner() <<
-					" from " <<
-					right << setw(40) << player->territories[i]->getName() <<
-					" (" << setw(2) << player->territories[i]->getId() << ")" <<
-					endl;
+				//Output full line
+				cout << right << setw(36) << gameMap->getTerritory(player->territories[i]->getAdjacent(j))->getName();//enemy territory
+				cout << " (" << setw(2) << player->territories[i]->getAdjacent(j) << ")";//id of enemy territory
+				cout << " (" << "Troops: " << setw(3) << gameMap->getTerritory(player->territories[i]->getAdjacent(j))->getVirtualArmy() << ")";//troop count
+				cout << setw(20) << " belonging to ";
+				cout << left << setw(20) << gameMap->getTerritory(player->territories[i]->getAdjacent(j))->getOwner();//owner of enemy territory
+				cout << " from ";
+				cout << right << setw(36) << player->territories[i]->getName();//your territory
+				cout << " (" << setw(2) << player->territories[i]->getId() << ")";//id
+				cout << " (" << "Troops: " << setw(3) << player->territories[i]->getVirtualArmy() << ")";//troop count
+				cout << endl;
 			}
 		}
 	}
 	cout << "--------" << endl;
 }
 
-void HumanPlayerStrategy::toDefend(string name, vector<Territory*> territories, Map* gameMap, OrdersList* orders) {
+void HumanPlayerStrategy::toDefend(Player* player, Map* gameMap) {
 	cout << "**HumanPlayerStrategy** toDefend" << endl;
-
-	cout << "Your territories to defend: " << endl;
-	for (int i = 0; i < territories.size(); i++) {
-		cout << setw(40) << territories[i]->getName() << endl;
-	}
-
-	cout << "***********************" << endl;
-	cout << "Enter the territory you want to Defend:" << endl;
-	for (int i = 0; i < territories.size(); i++) {
-		cout << territories[i]->getName() << endl;
+	//Outter loop i -> index of the players own territories
+	for (int i = 0; i < player->territories.size(); i++) {
+		//inner loop j -> index of the territories adjacent to territory[i]
+		for (int j = 0; j < player->territories[i]->getNumberAdj(); j++) {
+			//for each neighbour, if it belongs to yourself
+			if (gameMap->getTerritory(player->territories[i]->getAdjacent(j))->getOwner() == player->getName()) {
+				//Output full line
+				cout << right << setw(36) << gameMap->getTerritory(player->territories[i]->getAdjacent(j))->getName();//own neighbour 
+				cout << " (" << setw(2) << player->territories[i]->getAdjacent(j) << ")";//id
+				cout << " (" << "Troops: " << setw(3) << gameMap->getTerritory(player->territories[i]->getAdjacent(j))->getVirtualArmy() << ")";//troop count
+				cout << setw(25) << " can be reinforced from ";
+				cout << right << setw(36) << player->territories[i]->getName();//your territory origin
+				cout << " (" << setw(2) << player->territories[i]->getId() << ")";//id
+				cout << " (" << "Troops: " << setw(3) << player->territories[i]->getVirtualArmy() << ")";//troop count
+				cout << endl;
+			}
+		}
 	}
 	cout << "--------" << endl;
 }
 
-void HumanPlayerStrategy::toDeploy(Player* thePlayer, Map* gameMap) {
+void HumanPlayerStrategy::toDeploy(Player* player, Map* gameMap) {
 	cout << "**HumanPlayerStrategy** toDeploy" << endl;
 	string input;
 	int selectId;
 	//while there are troops left to deploy
-	cout << thePlayer->getPlayerArmySize() << " troops left to deploy." << endl;
+	cout << player->getPlayerArmySize() << " troops left to deploy." << endl;
 	//List all owned territories
-	thePlayer->printPlayerTerritories();
+	player->printPlayerTerritories();
 	//Get id of territory to deploy to
 	cout << "Enter a territory ID to deploy to >> ";
 	getline(cin, input);
-	while (!thePlayer->validTerritoryDeploy(input)) {
+	while (!player ->validTerritoryDeploy(input)) {
 		cout << "Enter a valid territory ID >> ";
 		getline(cin, input);
 	}
@@ -66,25 +78,25 @@ void HumanPlayerStrategy::toDeploy(Player* thePlayer, Map* gameMap) {
 	//Get amount of troops to deploy
 	cout << "Number of troops to deploy >> ";
 	getline(cin, input);
-	while (!thePlayer->validReinforceAmount(input)) {
+	while (!player->validReinforceAmount(input)) {
 		cout << "Enter a valid number of troops to deploy >> ";
 		getline(cin, input);
 	}
 	//Output message
 	cout << "Adding " << input << " troops to " << gameMap->getTerritory(selectId)->getName() << endl;
 	//Update reinforcement pool number of people
-	thePlayer->subtractReinforcements(stoi(input));
+	player->subtractReinforcements(stoi(input));
 	//update virtual troops count
 	gameMap->getTerritory(selectId)->addVirtualTroops(stoi(input));
 	//Add the deploy order to the list of orders
-	//player->orders->add(new Deploy(gameMap->getTerritory(selectId), stoi(input)));
+	player->addOrder(new Deploy(gameMap->getTerritory(selectId), stoi(input)));
 }
 
-void HumanPlayerStrategy::issueOrder(string name, vector<Territory*> territories, Map* gameMap, OrdersList* orders) {
+void HumanPlayerStrategy::issueOrder(Player* player, Map* gameMap) {
 	cout << "**HumanPlayerStrategy** IssueOrder" << endl;
 	string input;
 	cout << endl << "============" << endl;
-	cout << name << "'s turn to issue orders." << endl;
+	cout << player->getName() << "'s turn to issue orders." << endl;
 	//So long as the player isn't done and select option 0
 	int option = 1;
 	while (option != 0) {
@@ -101,10 +113,10 @@ void HumanPlayerStrategy::issueOrder(string name, vector<Territory*> territories
 		cout << " >> ";
 		//get user choice and validate it
 		getline(cin, input);
-		//while (!validOrder(input)) {
-		//	cout << " >> ";
-		//	getline(cin, input);
-		//}
+		while (!player->validOrder(input)) {
+			cout << " >> ";
+			getline(cin, input);
+		}
 		option = stoi(input);
 		Territory* origin = new Territory();
 		Territory* destination = new Territory();
@@ -117,43 +129,43 @@ void HumanPlayerStrategy::issueOrder(string name, vector<Territory*> territories
 			getline(cin, input);
 			//attack
 			if (input == "a" || input == "A") {
-				//toAttack();
+				player->toAttack();
 				//select origin
 				cout << "Select territory to attack from >> ";
 				getline(cin, input);
-				/*while (!validTerritoryAttack(input, players[i])) {
+				while (!player->validTerritoryAttack(input)) {
 					cout << "!!Enter a valid territory ID to attack from >> ";
 					getline(cin, input);
-				}*/
+				}
 				origin = gameMap->getTerritory(stoi(input));
 				//select target
 				cout << "Select territory to target for attack >> ";
 				getline(cin, input);
-				/*while (!validTerritoryAttackTarget(input, origin, players[i])) {
+				while (!player->validTerritoryAttackTarget(input, origin)) {
 					cout << "!!Enter a valid territory ID to target for attack >> ";
 					getline(cin, input);
-				}*/
+				}
 				destination = gameMap->getTerritory(stoi(input));
 				cout << "Number of troops to attack with >> ";
 			}
 			//transfer
 			else if (input == "t" || input == "T") {
-				//toDefend();
+				player->toDefend();
 				//Select origin of transfer
 				cout << "Select territory to transfer from >> ";
 				getline(cin, input);
-				/*while (!validTerritoryDefend(input, players[i])) {
+				while (!player->validTerritoryDefend(input)) {
 					cout << "!!Enter a valid territory ID to transfer from >> ";
 					getline(cin, input);
-				}*/
+				}
 				origin = gameMap->getTerritory(stoi(input));
 				//Select target of transfer
 				cout << "Select territory to transfer to>>";
 				getline(cin, input);
-				/*while (!validTerritoryTransferTarget(input, origin, players[i])) {
+				while (!player->validTerritoryTransferTarget(input, origin)) {
 					cout << "!!Enter a valid territory ID to transfer too >> ";
 					getline(cin, input);
-				}*/
+				}
 				destination = gameMap->getTerritory(stoi(input));
 				cout << "Number of troops to transfer >> ";
 			}
@@ -164,14 +176,15 @@ void HumanPlayerStrategy::issueOrder(string name, vector<Territory*> territories
 			//This reaches only if the player attacked or transfered successfully
 			//Get number of troops to transfer
 			getline(cin, input);
-			/*while (!validAdvanceAmount(input, origin)) {
+			while (!player->validAdvanceAmount(input, origin)) {
 				cout << "Enter a valid number of troops >> ";
 				getline(cin, input);
-			}*/
+			}
 			qty = stoi(input);
 			//Create the advance order
 			//players[i]->issueOrder(Order::Advance, new Advance(origin, destination, qty, players[i]->getName(), destination->getOwner()));
-			orders->add(new Advance(origin, destination, qty, name, destination->getOwner()));
+			//orders->add(new Advance(origin, destination, qty, name, destination->getOwner()));
+			player->addOrder(new Advance(origin, destination, qty, player->getName(), destination->getOwner()));
 			//Update virtual army count
 			origin->setVirtualArmy(origin->getVirtualArmy() - qty);
 			break;
@@ -230,14 +243,14 @@ void HumanPlayerStrategy::issueOrder(string name, vector<Territory*> territories
 	//cout << endl;
 }
 
-void AggressivePlayerStrategy::toAttack(Player* player, Map* gameMap, Territory* origin, Territory* destination) {
+void AggressivePlayerStrategy::toAttack(Player* player, Map* gameMap) {
 	cout << "**AggressivePlayerStrategy** toAttack" << endl;
 	cout
 		<< "Reinforce Strongest country, then attacks with it until it cannot anymore, then fortifies to maximize armies in one country"
 		<< endl;
 }
 
-void AggressivePlayerStrategy::toDefend(string name, vector<Territory*> territories, Map* gameMap, OrdersList* orders) {
+void AggressivePlayerStrategy::toDefend(Player* player, Map* gameMap) {
 	cout << "**AggressivePlayerStrategy** toDefend" << endl;
 	cout
 		<< "Reinforce Strongest country, then attacks with it until it cannot anymore, then fortifies to maximize armies in one country"
@@ -248,19 +261,19 @@ void AggressivePlayerStrategy::toDeploy(Player* player, Map* gameMap) {
 	
 }
 
-void AggressivePlayerStrategy::issueOrder(string name, vector<Territory*> territories, Map* gameMap, OrdersList* orders) {
+void AggressivePlayerStrategy::issueOrder(Player* player, Map* gameMap) {
 	cout << "**AggressivePlayerStrategy** IssueOrder" << endl;
 	cout
 		<< "Reinforce Strongest country, then attacks with it until it cannot anymore, then fortifies to maximize armies in one country"
 		<< endl;
 }
 
-void BenevolentPlayerStrategy::toAttack(Player* player, Map* gameMap, Territory* origin, Territory* destination) {
+void BenevolentPlayerStrategy::toAttack(Player* player, Map* gameMap) {
 	cout << "**BenevolentPlayerStrategy** toAttack" << endl;
 	cout << "Protect weakest country, never attacks, then fortifies to move armies to weaker coutnries" << endl;
 }
 
-void BenevolentPlayerStrategy::toDefend(string name, vector<Territory*> territories, Map* gameMap, OrdersList* orders) {
+void BenevolentPlayerStrategy::toDefend(Player* player, Map* gameMap) {
 	cout << "**BenevolentPlayerStrategy** toDefend" << endl;
 	cout << "Protect weakest country, never attacks, then fortifies to move armies to weaker coutnries" << endl;
 	/*   cout << "Inside player strat " << name;*/
@@ -269,23 +282,23 @@ void BenevolentPlayerStrategy::toDefend(string name, vector<Territory*> territor
 void BenevolentPlayerStrategy::toDeploy(Player* player, Map* gameMap) {
 }
 
-void BenevolentPlayerStrategy::issueOrder(string name, vector<Territory*> territories, Map* gameMap, OrdersList* orders) {
+void BenevolentPlayerStrategy::issueOrder(Player* player, Map* gameMap) {
 	cout << "**BenevolentPlayerStrategy** IssueOrder" << endl;
 	cout << "Protect weakest country, never attacks, then fortifies to move armies to weaker coutnries" << endl;
 }
 
-void NeutralPlayerStrategy::toAttack(Player* player, Map* gameMap, Territory* origin, Territory* destination) {
+void NeutralPlayerStrategy::toAttack(Player* player, Map* gameMap) {
 	cout << "**NeutralPlayerStrategy** toAttack" << endl;
 	cout << "Never issues orders" << endl;
 }
 
-void NeutralPlayerStrategy::toDefend(string name, vector<Territory*> territories, Map* gameMap, OrdersList* orders) {
+void NeutralPlayerStrategy::toDefend(Player* player, Map* gameMap) {
 	cout << "**NeutralPlayerStrategy** toDefend" << endl;
 }
 
 void NeutralPlayerStrategy::toDeploy(Player* player, Map* gameMap) {
 }
 
-void NeutralPlayerStrategy::issueOrder(string name, vector<Territory*> territories, Map* gameMap, OrdersList* orders) {
+void NeutralPlayerStrategy::issueOrder(Player* player, Map* gameMap) {
 	cout << "**NeutralPlayerStrategy** IssueOrder" << endl;
 }

@@ -17,40 +17,40 @@ public:
     virtual string toDefend() = 0;
     virtual string issueOrder() = 0;*/
 	
-	virtual void toAttack(Player* player, Map* gameMap, Territory* origin, Territory* destination) = 0;
-	virtual void toDefend(string name, vector<Territory*> territories, Map* gameMap, OrdersList* orders) = 0;
-	virtual void toDeploy(Player* thePlayer, Map* gameMap) = 0;
-	virtual void issueOrder(string name, vector<Territory*> territories, Map* gameMap, OrdersList* orders) = 0;
+	virtual void toAttack(Player* player, Map* gameMap) = 0;
+	virtual void toDefend(Player* player, Map* gameMap) = 0;
+	virtual void toDeploy(Player* player, Map* gameMap) = 0;
+	virtual void issueOrder(Player* player, Map* gameMap) = 0;
 };
 
 class HumanPlayerStrategy : public PlayerStrategy{
 public:
-	void toAttack(Player* player, Map* gameMap, Territory* origin, Territory* destination);
-	void toDefend(string name, vector<Territory*> territories, Map* gameMap, OrdersList* orders);
-	void toDeploy(Player* thePlayer, Map* gameMap);
-    void issueOrder(string name, vector<Territory*> territories, Map* gameMap, OrdersList* orders);
+	void toAttack(Player* player, Map* gameMap);
+	void toDefend(Player* player, Map* gameMap);
+	void toDeploy(Player* player, Map* gameMap);
+    void issueOrder(Player* player, Map* gameMap);
 };
 
 class AggressivePlayerStrategy : public PlayerStrategy {
 public:
-    void toAttack(Player* player, Map* gameMap, Territory* origin, Territory* destination);
-    void toDefend(string name, vector<Territory*> territories, Map* gameMap, OrdersList* orders);
+    void toAttack(Player* player, Map* gameMap);
+    void toDefend(Player* player, Map* gameMap);
     void toDeploy(Player* player, Map* gameMap);
-    void issueOrder(string name, vector<Territory*> territories, Map* gameMap, OrdersList* orders);
+    void issueOrder(Player* player, Map* gameMap);
 };
 
 class BenevolentPlayerStrategy : public PlayerStrategy {
 public:
-    void toAttack(Player* player, Map* gameMap, Territory* origin, Territory* destination);
-    void toDefend(string name, vector<Territory*> territories, Map* gameMap, OrdersList* orders);
+    void toAttack(Player* player, Map* gameMap);
+    void toDefend(Player* player, Map* gameMap);
     void toDeploy(Player* player, Map* gameMap);
-    void issueOrder(string name, vector<Territory*> territories, Map* gameMap, OrdersList* orders);
+    void issueOrder(Player* player, Map* gameMap);
 };
 
 class NeutralPlayerStrategy : public PlayerStrategy {
 public:
-    void toAttack(Player* player, Map* gameMap, Territory* origin, Territory* destination);
-    void toDefend(string name, vector<Territory*> territories, Map* gameMap, OrdersList* orders);
+    void toAttack(Player* player, Map* gameMap);
+    void toDefend(Player* player, Map* gameMap);
     void toDeploy(Player* player, Map* gameMap);
-    void issueOrder(string name, vector<Territory*> territories, Map* gameMap, OrdersList* orders);
+    void issueOrder(Player* player, Map* gameMap);
 };

@@ -136,15 +136,27 @@ void GameEngine::startupPhase() {
 		//so we're doing some ------****epic****------ cheating.
 		players.push_back(new Player(input, i, initialArmies, gameMap));
 
-
         //sanity check
         //strategy before or after
-
         int strat_id {0};
-
-        cout << "Enter player " << i + 1 << "'s Starting Strategy."<<endl<<"1.Human 2.Aggro 3.Benevolent 4.Neutral(AFK)" << endl;
-        cin >> strat_id;
-        cout << strat_id;
+		string input;
+        cout << "Enter " << input << "'s type: " << endl << 
+			"1. Human " << endl << 
+			"2. Aggro " << endl <<
+			"3. Benevolent " << endl <<
+			"4. Neutral(AFK) " << endl <<
+			" >> ";
+        //cin >> strat_id;
+		getline(cin, input);
+		try {
+			strat_id = stoi(input);
+		}
+		catch (const std::exception&) {
+			cout << "Invalid input";
+			//TODO WHILE LOOP CHECK
+			exit(1003);
+		}
+        //cout << strat_id;
         switch (strat_id) {
         case 1: players[i]->setPlayerStrategy(new HumanPlayerStrategy());break;
         case 2: players[i]->setPlayerStrategy(new AggressivePlayerStrategy());break;
@@ -158,8 +170,6 @@ void GameEngine::startupPhase() {
 
         cout << "Continue" << endl;*/
 	}
-
-
 
 	//Shuffle the vector to randomize play order
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
@@ -190,7 +200,6 @@ void GameEngine::startupPhase() {
 		gameMap->getTerritory(shuffleTerritories[i])->setArmyCount(1);
 		gameMap->getTerritory(shuffleTerritories[i])->setVirtualArmy(1);
 		players[i % num_players]->subtractReinforcements(1);
-		
 	}
 	//OUTPUT TO SCREEN
 	cout << "====================" << endl;

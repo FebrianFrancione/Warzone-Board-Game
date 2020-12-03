@@ -38,6 +38,7 @@ public:
 	//pwetty pwint
 	void printPlayerTerritories();
 	//Orders
+	void addOrder(Order* order);
 	void executeOrder(int i);
 	Order* getFirstOrder();
 	int numberOfOrders();
