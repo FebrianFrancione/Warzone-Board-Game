@@ -62,7 +62,7 @@ void HumanPlayerStrategy::toDefend(Player* player, Map* gameMap) {
 void HumanPlayerStrategy::toDeploy(Player* player, Map* gameMap) {
 	cout << "**HumanPlayerStrategy** toDeploy" << endl;
 	string input;
-	int selectId;
+	int selectId = 0;
 	//while there are troops left to deploy
 	cout << player->getPlayerArmySize() << " troops left to deploy." << endl;
 	//List all owned territories

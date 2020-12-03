@@ -139,7 +139,6 @@ void GameEngine::startupPhase() {
         //sanity check
         //strategy before or after
         int strat_id {0};
-		string input;
         cout << "Enter " << input << "'s type: " << endl << 
 			"1. Human " << endl << 
 			"2. Aggro " << endl <<
@@ -257,7 +256,7 @@ void GameEngine::reinforcementPhase() {
 	//Each player must assign all of their remaining troops
 	cout << endl << "++++++++++++++++++++" << endl;
 	cout << "Reinforcement Phase:" << endl;
-	int reinforcements;
+	int reinforcements = 0;
 	string input;
 	for (int playerIndex = 0; playerIndex < num_players; playerIndex++) {
 		cout << endl << "============" << endl;
@@ -270,7 +269,6 @@ void GameEngine::reinforcementPhase() {
 		//Add existing amount
 		players[playerIndex]->addReinforcements(reinforcements);
 		//Loop to deploy all troops
-		int selectId;
 		while (players[playerIndex]->getPlayerArmySize() > 0) {
 			players[playerIndex]->toDeploy();
 		}

@@ -71,29 +71,9 @@ void Player::printPlayerTerritories() {
 	cout << "--------" << endl;
 }
 
-
 void Player::toDeploy() {
 	this->playerstrat->toDeploy(this, gameMap);
 }
-
-//Iterates over a list of territories owned by the player and displays them
-/*
-void Player::toDefend() {
-    this->playerstrat->toDefend(this->name, this->territories, this->gameMap, this->orders);
-*/
-/*	cout << "Your territories: " << endl;
-	for (int i = 0; i < territories.size(); i++) {
-		cout <<
-			right << setw(36) << territories[i]->getName() <<
-			" (ID:" << setw(2) << territories[i]->getId() << ")" <<
-			" (Troops:" << setw(3) << territories[i]->getVirtualArmy() << ")" <<
-			endl;
-	}
-	cout << "--------" << endl;*//*
-
-}
-*/
-
 
 // Displays a list of surrounding territories the player can attack
 void Player::toAttack() {
@@ -168,6 +148,7 @@ void Player::subtractReinforcements(int r) {
 //	Input validation functions
 //====================================
 
+//Valid target to deploy troops to
 bool Player::validTerritoryDeploy(string input) {
 	int territoryId = 0;
 	//attempt to parse user input into int
@@ -179,7 +160,7 @@ bool Player::validTerritoryDeploy(string input) {
 		return false;
 	}
 	//within territory id ranges
-	if (territoryId > gameMap->getNumTerritories() || territoryId < 0) {
+	if (territoryId >= gameMap->getNumTerritories() || territoryId < 0) {
 		cout << "!!Invalid territory ID." << endl;
 		return false;
 	}
@@ -198,6 +179,7 @@ bool Player::validTerritoryDeploy(string input) {
 	}
 }
 
+//Valid target to get troops from for transfer
 bool Player::validTerritoryDefend(string selection) {
 	int territoryId = 0;
 	//attempt to parse user input into int
@@ -214,7 +196,7 @@ bool Player::validTerritoryDefend(string selection) {
 		return false;
 	}
 	//check that there are enough troops to move
-	if (gameMap->getTerritory(territoryId)->getVirtualArmy() < 1) {
+	if (gameMap->getTerritory(territoryId)->getVirtualArmy() < 2) {
 		cout << "Not enough troops to transfer";
 		return false;
 	}
@@ -222,7 +204,6 @@ bool Player::validTerritoryDefend(string selection) {
 	if (gameMap->getTerritory(territoryId)->getOwner() != name) {
 		cout << "!!This territory does not belong to you." << endl;
 		return false;
-
 	}
 	else {
 		return true;
@@ -244,6 +225,11 @@ bool Player::validTerritoryTransferTarget(string selection, Territory* origin) {
 		cout << "!!Invalid territory ID." << endl;
 		return false;
 	}
+	//check if the territory belongs to the player
+	if (gameMap->getTerritory(territoryId)->getOwner() != name) {
+		cout << "This territory does not belong to you" << endl;
+		return false;
+	}
 	//for each neighbour of the origin, check if one of them is a target
 	for (int i = 0; i < origin->getNumberAdj(); i++) {
 		if (origin->getAdjacent(i) == territoryId && gameMap->getTerritory(territoryId)->getOwner() == name) {
@@ -255,6 +241,7 @@ bool Player::validTerritoryTransferTarget(string selection, Territory* origin) {
 	return false;
 }
 
+//Check if the selected territory can launch an attack
 bool Player::validTerritoryAttack(string selection) {
 	int territoryId = 0;
 	//attempt to parse user input into int
@@ -271,8 +258,13 @@ bool Player::validTerritoryAttack(string selection) {
 		return false;
 	}
 	//check that there are enough troops to move
-	if (gameMap->getTerritory(territoryId)->getVirtualArmy() < 1) {
+	if (gameMap->getTerritory(territoryId)->getVirtualArmy() < 2) {
 		cout << "Not enough troops to attack";
+		return false;
+	}
+	//check if the territory belongs to the player
+	if (gameMap->getTerritory(territoryId)->getOwner() != name) {
+		cout << "This territory does not belong to you" << endl;
 		return false;
 	}
 	//Check that the selected origin has a target for attack (does one of the neighbours belong to a different player)
@@ -285,6 +277,7 @@ bool Player::validTerritoryAttack(string selection) {
 	return false;
 }
 
+//Is this a valid target for an attack
 bool Player::validTerritoryAttackTarget(string selection, Territory* origin) {
 	int territoryId = 0;
 	//attempt to parse user input into int
@@ -298,6 +291,11 @@ bool Player::validTerritoryAttackTarget(string selection, Territory* origin) {
 	//has to be within range of territory ids
 	if (territoryId > gameMap->getNumTerritories() || territoryId < 0) {
 		cout << "!!Invalid territory ID." << endl;
+		return false;
+	}
+	//check if the territory does not belongs to the player
+	if (gameMap->getTerritory(territoryId)->getOwner() == name) {
+		cout << "Committing genocide upon your farming nation is not cool." << endl;
 		return false;
 	}
 	//is the target actually a neighbour of the origin of attack
