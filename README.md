@@ -2,3 +2,4 @@
 
 Clean repo for final presentation of the warzone game. 
 
+Written by Calvin Lee & Febrian Francione
